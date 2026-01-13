@@ -31,11 +31,15 @@ get_stale_worktrees() {
     elif [[ "$line" == "branch "* ]]; then
       wt_branch="${line#branch refs/heads/}"
       if ! is_main_branch "$wt_branch"; then
-        if ! git ls-remote --heads origin "$wt_branch" 2>/dev/null | grep -q "$wt_branch"; then
-          if [ -n "$stale" ]; then
-            stale="$stale"$'\n'"$wt_path|$wt_branch"
-          else
-            stale="$wt_path|$wt_branch"
+        local remote
+        remote=$(git config --get "branch.$wt_branch.remote" 2>/dev/null)
+        if [ "$remote" = "origin" ]; then
+          if ! git ls-remote --heads origin "$wt_branch" 2>/dev/null | grep -q "$wt_branch"; then
+            if [ -n "$stale" ]; then
+              stale="$stale"$'\n'"$wt_path|$wt_branch"
+            else
+              stale="$wt_path|$wt_branch"
+            fi
           fi
         fi
       fi
@@ -47,40 +51,28 @@ get_stale_worktrees() {
   echo "$stale"
 }
 
-count_stale_worktrees() {
-  local stale
-  stale=$(get_stale_worktrees)
-  if [ -z "$stale" ]; then
-    echo 0
-  else
-    echo "$stale" | wc -l | tr -d ' '
-  fi
-}
-
 cleanup_stale_worktrees() {
   local stale
-  local removed=0
-  local skipped=0
-
   stale=$(get_stale_worktrees)
 
   if [ -z "$stale" ]; then
     return 0
   fi
 
+  local count
+  count=$(echo "$stale" | wc -l | tr -d ' ')
+  printf '\n🧹 Cleaning up %s stale worktree(s)...\n' "$count"
+
   while IFS='|' read -r wt_path wt_branch; do
     if [ -n "$wt_path" ]; then
       if git worktree remove "$wt_path" 2>/dev/null; then
         printf '  Removed: %s (branch %s was merged)\n' "$wt_path" "$wt_branch"
-        ((removed++))
       else
         printf '  Skipped: %s (has uncommitted changes)\n' "$wt_path"
-        ((skipped++))
       fi
     fi
   done <<< "$stale"
 
   git worktree prune 2>/dev/null
-
-  echo "$removed"
+  printf '\n'
 }

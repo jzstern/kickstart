@@ -31,6 +31,7 @@ git ls-remote --heads origin <branch-name>
 
 A worktree is "stale" if:
 - It tracks a branch (not detached HEAD)
+- The branch was set up to track origin (`git config --get branch.<name>.remote` returns "origin")
 - That branch no longer exists on the remote
 - It's not the main/master branch
 
