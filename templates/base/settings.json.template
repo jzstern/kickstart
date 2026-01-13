@@ -1,20 +1,44 @@
 {
-  "permissions": {
-    "allow": [
-      "Bash({{PACKAGE_MANAGER}} add:*)",
-      "Bash({{PACKAGE_MANAGER}} install:*)",
-      "Bash({{PACKAGE_MANAGER}} run dev:*)",
-      "Bash({{PACKAGE_MANAGER}} run build:*)",
-      "Bash({{PACKAGE_MANAGER}} run check:*)",
-      "Bash({{PACKAGE_MANAGER}} run lint:*)",
-      "Bash({{PACKAGE_MANAGER}} run test:*)",
-      "Bash({{PACKAGE_MANAGER_X}} playwright:*)",
-      "Bash(gh api:*)",
-      "Bash(gh pr view:*)",
-      "Bash(gh pr list:*)",
-      "Bash(gh pr diff:*)",
-      "Bash(gh issue view:*)",
-      "Bash(gh issue list:*)"
-    ]
-  }
+	"permissions": {
+		"allow": [
+			"Bash({{PACKAGE_MANAGER}} add:*)",
+			"Bash({{PACKAGE_MANAGER}} install:*)",
+			"Bash({{PACKAGE_MANAGER}} run dev:*)",
+			"Bash({{PACKAGE_MANAGER}} run build:*)",
+			"Bash({{PACKAGE_MANAGER}} run check:*)",
+			"Bash({{PACKAGE_MANAGER}} run lint:*)",
+			"Bash({{PACKAGE_MANAGER}} run test:*)",
+			"Bash({{PACKAGE_MANAGER_X}} playwright:*)",
+
+			"Bash(git status:*)",
+			"Bash(git branch:*)",
+			"Bash(git log:*)",
+			"Bash(git diff:*)",
+			"Bash(git show:*)",
+			"Bash(git fetch:*)",
+			"Bash(git pull:*)",
+			"Bash(git add:*)",
+			"Bash(git commit:*)",
+			"Bash(git push:*)",
+			"Bash(git checkout:*)",
+			"Bash(git switch:*)",
+			"Bash(git rebase:*)",
+			"Bash(git merge:*)",
+			"Bash(git stash:*)",
+			"Bash(git worktree:*)",
+			"Bash(git remote:*)",
+			"Bash(git tag:*)",
+			"Bash(git cherry-pick:*)",
+			"Bash(git reset:*)",
+			"Bash(git restore:*)",
+			"Bash(git clean:*)",
+
+			"Bash(gh api:*)",
+			"Bash(gh pr:*)",
+			"Bash(gh issue:*)",
+			"Bash(gh repo view:*)",
+			"Bash(gh run:*)",
+			"Bash(gh workflow:*)"
+		]
+	}
 }

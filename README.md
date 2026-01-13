@@ -37,25 +37,37 @@ Never commit to main. Kickstart enforces creating worktrees for all changes:
 git worktree add -b feat/my-feature ../repo-feat-my-feature main
 ```
 
-### Project Scaffolding
-```
-/init    # Set up a new project (includes option to install companion plugins)
-/update  # Check for and apply config updates (with approval)
-```
+### Skills
+
+<!-- kickstart:skills:start -->
+| Skill | Description |
+|-------|-------------|
+| `/init` | Initialize project configuration with kickstart defaults (includes option to install companion plugins) |
+| `/update` | Check for and apply config updates with user approval |
+| `/docs` | Auto-generate documentation from plugin components |
+<!-- kickstart:skills:end -->
 
 ### Agents
+
+<!-- kickstart:agents:start -->
 | Agent | Description |
 |-------|-------------|
-| `debugger` | Investigates errors and stack traces |
+| `debugger` | Investigates errors, analyzes stack traces, traces issues through codebase |
+| `e2e-runner` | E2E testing specialist using Playwright |
 | `security-auditor` | OWASP Top 10 vulnerability scanning |
 | `test-generator` | Generates comprehensive unit tests |
-| `e2e-runner` | Playwright E2E test specialist |
+<!-- kickstart:agents:end -->
 
 ### Hooks
-| Hook | Description |
-|------|-------------|
-| `format-on-save` | Auto-formats files after write/edit |
-| `check-worktree` | Blocks writes on main branch |
+
+<!-- kickstart:hooks:start -->
+| Hook | Event | Description |
+|------|-------|-------------|
+| `session-start-warning` | SessionStart | Warns when on main/master branch and checks if behind remote |
+| `block-main-commits` | PreToolUse | Blocks git commit and push commands on main/master |
+| `check-worktree` | PreToolUse | Blocks file writes on main/master branch |
+| `format-on-save` | PostToolUse | Auto-formats files after write/edit |
+<!-- kickstart:hooks:end -->
 
 ### Rules
 - **TypeScript** - Naming conventions, type safety, imports
@@ -66,9 +78,17 @@ git worktree add -b feat/my-feature ../repo-feat-my-feature main
 - **SvelteKit** - Bun, Svelte 5, Tailwind, Biome
 - **Base** - Generic web project setup
 
-## Security & Permissions
+## Permissions
 
-**⚠️ This plugin grants Claude Code broad permissions to run commands without confirmation prompts.**
+<!-- kickstart:permissions:start -->
+| Category | Commands |
+|----------|----------|
+| **Git** | `status`, `branch`, `log`, `diff`, `show`, `fetch`, `pull`, `add`, `commit`, `push`, `checkout`, `switch`, `rebase`, `merge`, `stash`, `worktree`, `remote`, `tag`, `cherry-pick`, `reset`, `restore`, `clean` |
+| **GitHub CLI** | `api`, `pr`, `issue`, `repo view`, `run`, `workflow` |
+| **Bun** | `add`, `install`, `run dev`, `run build`, `run check`, `run lint`, `run test` |
+| **Playwright** | `bunx playwright` |
+| **Biome** | `bunx biome` |
+<!-- kickstart:permissions:end -->
 
 By installing this plugin, you're allowing Claude to execute the following without asking:
 
@@ -85,6 +105,8 @@ By installing this plugin, you're allowing Claude to execute the following witho
 | **System** | `pkill`, `chmod`, `brew install` | 🟠 Medium - Process control, file permissions, package installation |
 | **Plugin Management** | `claude plugin`, `claude mcp` | 🟡 Low - Can install/remove plugins and MCP servers |
 | **Plugin Commands** | `Skill(*)` | 🟡 Low - All Claude plugin commands run without confirmation |
+
+> **Note:** Git operations on main branch are blocked by kickstart hooks even though the commands are permitted. This provides safety while maintaining a frictionless workflow on feature branches.
 
 ### Who Should Use This
 
@@ -116,6 +138,10 @@ If you want tighter security, fork this plugin and edit `.claude/settings.json` 
 
 Run `/update` periodically to get the latest config without losing your customizations.
 
+## Documentation Maintenance
+
+Run `/docs` after modifying kickstart components to regenerate this README's tables. The sections between `<!-- kickstart:*:start -->` and `<!-- kickstart:*:end -->` markers are auto-generated.
+
 ## Credits
 
 Kickstart recommends these excellent official plugins:
@@ -129,7 +155,8 @@ Kickstart recommends these excellent official plugins:
 1. Fork the repo
 2. Create a feature branch
 3. Make your changes
-4. Submit a PR
+4. Run `/docs` to update documentation
+5. Submit a PR
 
 ## License
 
