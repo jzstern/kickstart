@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash({{PACKAGE_MANAGER}} add:*)",
+      "Bash({{PACKAGE_MANAGER}} install:*)",
+      "Bash({{PACKAGE_MANAGER}} run dev:*)",
+      "Bash({{PACKAGE_MANAGER}} run build:*)",
+      "Bash({{PACKAGE_MANAGER}} run check:*)",
+      "Bash({{PACKAGE_MANAGER}} run lint:*)",
+      "Bash({{PACKAGE_MANAGER}} run test:*)",
+      "Bash({{PACKAGE_MANAGER_X}} playwright:*)"
+    ]
+  }
+}
