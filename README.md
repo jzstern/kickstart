@@ -36,25 +36,37 @@ Never commit to main. Kickstart enforces creating worktrees for all changes:
 git worktree add -b feat/my-feature ../repo-feat-my-feature main
 ```
 
-### Project Scaffolding
-```
-/init    # Set up a new project with kickstart config
-/update  # Check for and apply config updates (with approval)
-```
+### Skills
+
+<!-- kickstart:skills:start -->
+| Skill | Description |
+|-------|-------------|
+| `/init` | Initialize project configuration with kickstart defaults |
+| `/update` | Check for and apply config updates with user approval |
+| `/docs` | Auto-generate documentation from plugin components |
+<!-- kickstart:skills:end -->
 
 ### Agents
+
+<!-- kickstart:agents:start -->
 | Agent | Description |
 |-------|-------------|
-| `debugger` | Investigates errors and stack traces |
+| `debugger` | Investigates errors, analyzes stack traces, traces issues through codebase |
+| `e2e-runner` | E2E testing specialist using Playwright |
 | `security-auditor` | OWASP Top 10 vulnerability scanning |
 | `test-generator` | Generates comprehensive unit tests |
-| `e2e-runner` | Playwright E2E test specialist |
+<!-- kickstart:agents:end -->
 
 ### Hooks
-| Hook | Description |
-|------|-------------|
-| `format-on-save` | Auto-formats files after write/edit |
-| `check-worktree` | Blocks writes on main branch |
+
+<!-- kickstart:hooks:start -->
+| Hook | Event | Description |
+|------|-------|-------------|
+| `session-start-warning` | SessionStart | Warns when on main/master branch and checks if behind remote |
+| `block-main-commits` | PreToolUse | Blocks git commit and push commands on main/master |
+| `check-worktree` | PreToolUse | Blocks file writes on main/master branch |
+| `format-on-save` | PostToolUse | Auto-formats files after write/edit |
+<!-- kickstart:hooks:end -->
 
 ### Rules
 - **TypeScript** - Naming conventions, type safety, imports
@@ -65,38 +77,19 @@ git worktree add -b feat/my-feature ../repo-feat-my-feature main
 - **SvelteKit** - Bun, Svelte 5, Tailwind, Biome
 - **Base** - Generic web project setup
 
-## Security & Permissions
+## Permissions
 
-**⚠️ This plugin grants Claude Code broad permissions to run commands without confirmation prompts.**
+<!-- kickstart:permissions:start -->
+| Category | Commands |
+|----------|----------|
+| **Git** | `status`, `branch`, `log`, `diff`, `show`, `fetch`, `pull`, `add`, `commit`, `push`, `checkout`, `switch`, `rebase`, `merge`, `stash`, `worktree`, `remote`, `tag`, `cherry-pick`, `reset`, `restore`, `clean` |
+| **GitHub CLI** | `api`, `pr`, `issue`, `repo view`, `run`, `workflow` |
+| **Bun** | `add`, `install`, `run dev`, `run build`, `run check`, `run lint`, `run test` |
+| **Playwright** | `bunx playwright` |
+| **Biome** | `bunx biome` |
+<!-- kickstart:permissions:end -->
 
-By installing this plugin, you're allowing Claude to execute the following without asking:
-
-| Category | Commands | Risk Level |
-|----------|----------|------------|
-| **Package Execution** | `npx`, `bunx` | 🔴 High - Can run arbitrary npm packages (supply chain risk) |
-| **Code Execution** | `python3` | 🔴 High - Arbitrary Python code execution |
-| **Network** | `curl`, `dig`, `ping` | 🟠 Medium - Can make network requests, potential data exfiltration |
-| **Git Operations** | `git push`, `git reset`, `git commit` | 🟠 Medium - Can push to remotes, discard uncommitted work |
-| **GitHub CLI** | `gh` (all commands) | 🟠 Medium - Includes `gh repo delete`, `gh release delete`, etc. |
-| **Deployment** | `vercel` | 🟠 Medium - Can deploy to production environments |
-| **System** | `pkill`, `chmod`, `brew install` | 🟠 Medium - Process control, file permissions, package installation |
-| **Plugin Commands** | `Skill(*)` | 🟡 Low - All Claude plugin commands run without confirmation |
-
-### Who Should Use This
-
-✅ **Recommended for:**
-- Personal development machines you fully control
-- Trusted development environments
-- Developers comfortable with Claude having broad access
-
-❌ **Not recommended for:**
-- Shared or multi-user systems
-- Production environments
-- Users who prefer explicit confirmation for each command
-
-### Reducing Permissions
-
-If you want tighter security, fork this plugin and edit `.claude/settings.json` to remove permissions you're not comfortable with. For example, remove `Bash(npx:*)` to require confirmation before running arbitrary npm packages.
+> **Note:** Git operations on main branch are blocked by kickstart hooks even though the commands are permitted. This provides safety while maintaining a frictionless workflow on feature branches.
 
 ## How It Works
 
@@ -112,6 +105,10 @@ If you want tighter security, fork this plugin and edit `.claude/settings.json` 
 
 Run `/update` periodically to get the latest config without losing your customizations.
 
+## Documentation Maintenance
+
+Run `/docs` after modifying kickstart components to regenerate this README's tables. The sections between `<!-- kickstart:*:start -->` and `<!-- kickstart:*:end -->` markers are auto-generated.
+
 ## Credits
 
 Kickstart recommends these excellent official plugins:
@@ -125,7 +122,8 @@ Kickstart recommends these excellent official plugins:
 1. Fork the repo
 2. Create a feature branch
 3. Make your changes
-4. Submit a PR
+4. Run `/docs` to update documentation
+5. Submit a PR
 
 ## License
 

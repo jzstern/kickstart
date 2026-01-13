@@ -1,21 +1,45 @@
 {
-  "permissions": {
-    "allow": [
-      "Bash(bun add:*)",
-      "Bash(bun install:*)",
-      "Bash(bun run dev:*)",
-      "Bash(bun run build:*)",
-      "Bash(bun run check:*)",
-      "Bash(bun run lint:*)",
-      "Bash(bun run test:*)",
-      "Bash(bunx playwright:*)",
-      "Bash(bunx biome:*)",
-      "Bash(gh api:*)",
-      "Bash(gh pr view:*)",
-      "Bash(gh pr list:*)",
-      "Bash(gh pr diff:*)",
-      "Bash(gh issue view:*)",
-      "Bash(gh issue list:*)"
-    ]
-  }
+	"permissions": {
+		"allow": [
+			"Bash(bun add:*)",
+			"Bash(bun install:*)",
+			"Bash(bun run dev:*)",
+			"Bash(bun run build:*)",
+			"Bash(bun run check:*)",
+			"Bash(bun run lint:*)",
+			"Bash(bun run test:*)",
+			"Bash(bunx playwright:*)",
+			"Bash(bunx biome:*)",
+
+			"Bash(git status:*)",
+			"Bash(git branch:*)",
+			"Bash(git log:*)",
+			"Bash(git diff:*)",
+			"Bash(git show:*)",
+			"Bash(git fetch:*)",
+			"Bash(git pull:*)",
+			"Bash(git add:*)",
+			"Bash(git commit:*)",
+			"Bash(git push:*)",
+			"Bash(git checkout:*)",
+			"Bash(git switch:*)",
+			"Bash(git rebase:*)",
+			"Bash(git merge:*)",
+			"Bash(git stash:*)",
+			"Bash(git worktree:*)",
+			"Bash(git remote:*)",
+			"Bash(git tag:*)",
+			"Bash(git cherry-pick:*)",
+			"Bash(git reset:*)",
+			"Bash(git restore:*)",
+			"Bash(git clean:*)",
+
+			"Bash(gh api:*)",
+			"Bash(gh pr:*)",
+			"Bash(gh issue:*)",
+			"Bash(gh repo view:*)",
+			"Bash(gh run:*)",
+			"Bash(gh workflow:*)"
+		]
+	}
 }
