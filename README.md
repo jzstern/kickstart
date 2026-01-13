@@ -67,7 +67,31 @@ git worktree add -b feat/my-feature ../repo-feat-my-feature main
 | `block-main-commits` | PreToolUse | Blocks git commit and push commands on main/master |
 | `check-worktree` | PreToolUse | Blocks file writes on main/master branch |
 | `format-on-save` | PostToolUse | Auto-formats files after write/edit |
+| `auto-pr-update` | PreToolUse | Updates PR description before push ([setup required](#github-mcp-setup)) |
 <!-- kickstart:hooks:end -->
+
+### GitHub MCP Setup
+
+The `auto-pr-update` hook requires the GitHub MCP integration to update PR descriptions. To enable it:
+
+1. **Create a GitHub Personal Access Token**
+   - Go to [GitHub Settings → Developer settings → Personal access tokens](https://github.com/settings/tokens)
+   - Create a token with `repo` scope (for PR read/write access)
+
+2. **Set the environment variable**
+   ```bash
+   # Add to your shell profile (~/.zshrc, ~/.bashrc, etc.)
+   export GITHUB_PERSONAL_ACCESS_TOKEN="ghp_your_token_here"
+   ```
+
+3. **Install the GitHub MCP plugin**
+   ```bash
+   /plugin install github@claude-plugins-official
+   ```
+
+4. **Restart Claude Code** to pick up the environment variable
+
+Once configured, the hook will automatically update your PR description with a summary, testing instructions, and files changed whenever you push to a branch with an open PR.
 
 ### Rules
 - **TypeScript** - Naming conventions, type safety, imports

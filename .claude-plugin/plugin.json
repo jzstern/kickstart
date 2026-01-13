@@ -15,6 +15,7 @@
 		"../hooks/session-start-warning.json",
 		"../hooks/block-main-commits.json",
 		"../hooks/check-worktree.json",
-		"../hooks/format-on-save.json"
+		"../hooks/format-on-save.json",
+		"../hooks/auto-pr-update.json"
 	]
 }
