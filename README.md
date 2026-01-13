@@ -53,8 +53,10 @@ git worktree add -b feat/my-feature ../repo-feat-my-feature main
 ### Hooks
 | Hook | Description |
 |------|-------------|
+| `session-start-warning` | Warns immediately when starting a session on main |
+| `block-main-commits` | Blocks `git commit` and `git push` on main |
+| `check-worktree` | Blocks file writes on main branch |
 | `format-on-save` | Auto-formats files after write/edit |
-| `check-worktree` | Blocks writes on main branch |
 
 ### Rules
 - **TypeScript** - Naming conventions, type safety, imports

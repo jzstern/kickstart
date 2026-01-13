@@ -1,0 +1,13 @@
+{
+	"name": "block-main-commits",
+	"description": "Block git commit and push commands when on main/master branch",
+	"hooks": [
+		{
+			"event": "PreToolUse",
+			"matcher": {
+				"tool": "Bash"
+			},
+			"command": "if echo \"$TOOL_INPUT_command\" | grep -qE '^git\\s+(commit|push)'; then branch=$(git branch --show-current 2>/dev/null); if [ \"$branch\" = \"main\" ] || [ \"$branch\" = \"master\" ]; then repo=$(basename \"$PWD\"); printf 'BLOCKED: Cannot commit/push directly to %s.\\n\\nCreate a worktree first:\\n\\n  git worktree add -b feat/your-feature ../%s-feat-your-feature %s\\n  cd ../%s-feat-your-feature\\n' \"$branch\" \"$repo\" \"$branch\" \"$repo\"; exit 1; fi; fi"
+		}
+	]
+}
