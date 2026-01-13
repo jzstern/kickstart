@@ -1,71 +1,77 @@
 ---
 name: init
-description: Initialize project configuration with kickstart defaults. Scaffolds .claude/CLAUDE.md, GitHub workflows, Playwright E2E testing, and deployment configs.
+description: Initialize project with kickstart config. Use --plugins to install companion plugins, --vercel for Vercel deployment config.
+args: "[--plugins] [--vercel]"
 ---
 
 # Initialize Kickstart Configuration
 
-You are setting up a new project with kickstart configuration.
+You are setting up a new project with kickstart configuration. This process is fully automated - detect everything automatically without asking questions.
+
+## Flags
+
+- `--plugins` - Install recommended companion plugins after setup
+- `--vercel` - Configure Vercel deployment
 
 ## Process
 
-### Step 1: Detect or Ask for Stack
+### Step 1: Auto-Detect Stack
 
-First, check if the project has identifiable technology markers:
+Detect the framework and package manager automatically. Do NOT ask the user - infer from files.
+
+**Detect package manager** (check in order):
+1. `bun.lockb` exists → bun
+2. `pnpm-lock.yaml` exists → pnpm
+3. `yarn.lock` exists → yarn
+4. `package-lock.json` exists → npm
+5. Default → npm
+
+**Detect framework** from package.json dependencies:
+- `@sveltejs/kit` → SvelteKit
+- `next` → Next.js
+- `@remix-run/react` → Remix
+- `astro` → Astro
+- Otherwise → Node/Generic
 
 ```bash
-# Check for package.json
+# Check lockfiles
+ls -la bun.lockb pnpm-lock.yaml yarn.lock package-lock.json 2>/dev/null
+
+# Check package.json
 cat package.json 2>/dev/null | head -50
 ```
 
-Look for:
-- **SvelteKit**: `@sveltejs/kit` in dependencies
-- **Next.js**: `next` in dependencies
-- **Remix**: `@remix-run/react` in dependencies
-- **Astro**: `astro` in dependencies
-- **Express/Node API**: `express` or no framework
-
-If unclear, use AskUserQuestion to ask:
-- Which framework? (SvelteKit, Next.js, Remix, Astro, Node API, Other)
-- Package manager? (bun, pnpm, npm, yarn)
-
 ### Step 2: Create Project Configuration
 
-Create `.claude/CLAUDE.md` with project-specific information.
+Create `.claude/CLAUDE.md` using the appropriate template.
 
-Use the appropriate template from `${CLAUDE_PLUGIN_ROOT}/templates/`:
-- `sveltekit/CLAUDE.md.template` for SvelteKit projects
-- `base/CLAUDE.md.template` for other projects
+**Project name**: Use the current directory name (do not ask).
+
+**Description**: Leave as placeholder text for user to fill in later.
+
+Use template from `${CLAUDE_PLUGIN_ROOT}/templates/`:
+- `sveltekit/CLAUDE.md.template` for SvelteKit
+- `base/CLAUDE.md.template` for others
 
 Replace template variables:
-- `{{PROJECT_NAME}}` - Directory name or ask user
-- `{{DESCRIPTION}}` - Ask user for brief description
-- `{{PACKAGE_MANAGER}}` - Detected or asked
-- `{{PACKAGE_MANAGER_X}}` - The exec command (bunx, npx, pnpx)
-- `{{DEV_COMMAND}}` - e.g., `bun run dev`
-- `{{BUILD_COMMAND}}` - e.g., `bun run build`
-- `{{TEST_COMMAND}}` - e.g., `bun run test`
-- `{{LINT_COMMAND}}` - e.g., `bun run lint`
+- `{{PROJECT_NAME}}` - Current directory name
+- `{{DESCRIPTION}}` - "Brief project description (edit this)"
+- `{{PACKAGE_MANAGER}}` - Detected package manager
+- `{{PACKAGE_MANAGER_X}}` - bunx, npx, pnpx, or yarn dlx
+- `{{DEV_COMMAND}}` - `<pm> run dev`
+- `{{BUILD_COMMAND}}` - `<pm> run build`
+- `{{TEST_COMMAND}}` - `<pm> run test`
+- `{{LINT_COMMAND}}` - `<pm> run lint`
 
 ### Step 3: Configure Permissions
 
-Create `.claude/settings.json` with pre-approved commands so Claude can run development tasks automatically.
+Create `.claude/settings.json` with pre-approved commands.
 
-Use the appropriate template:
-- For SvelteKit: Copy `${CLAUDE_PLUGIN_ROOT}/templates/sveltekit/settings.json`
-- For other stacks: Use `${CLAUDE_PLUGIN_ROOT}/templates/base/settings.json.template`
-  - Replace `{{PACKAGE_MANAGER}}` with the package manager (bun, npm, pnpm)
-  - Replace `{{PACKAGE_MANAGER_X}}` with the exec command (bunx, npx, pnpx)
-
-This allows Claude to automatically run:
-- Package installation (`bun add`, `npm install`, etc.)
-- Dev server, build, lint, and test commands
-- Playwright browser installation and test execution
-- GitHub CLI read commands (`gh pr view`, `gh api`, `gh issue view`, etc.)
+Use template from `${CLAUDE_PLUGIN_ROOT}/templates/`:
+- `sveltekit/settings.json` for SvelteKit
+- `base/settings.json.template` for others (replace `{{PACKAGE_MANAGER}}` and `{{PACKAGE_MANAGER_X}}`)
 
 ### Step 4: Copy GitHub Workflows
-
-Create `.github/workflows/` directory and copy workflow templates:
 
 ```bash
 mkdir -p .github/workflows
@@ -75,45 +81,29 @@ Copy from `${CLAUDE_PLUGIN_ROOT}/templates/<stack>/github/workflows/` if they ex
 
 ### Step 5: Set Up Playwright E2E Testing
 
-For web projects (SvelteKit, Next.js, Remix, Astro), set up Playwright:
+For web projects (SvelteKit, Next.js, Remix, Astro):
 
-1. **Install Playwright as a dev dependency**:
+1. Install Playwright:
 ```bash
-# For bun
-bun add -D @playwright/test
-
-# For npm
-npm install -D @playwright/test
-
-# For pnpm
-pnpm add -D @playwright/test
+<pm> add -D @playwright/test  # or npm install -D, pnpm add -D
 ```
 
-2. **Install browser binaries**:
+2. Install browsers:
 ```bash
-bunx playwright install chromium
-# or: npx playwright install chromium
+<pmx> playwright install chromium
 ```
 
-3. **Copy Playwright config**:
-   - For SvelteKit: Copy `${CLAUDE_PLUGIN_ROOT}/templates/sveltekit/playwright.config.ts`
-   - For other stacks: Use `${CLAUDE_PLUGIN_ROOT}/templates/base/playwright.config.ts.template`
-     - Replace `{{DEV_PORT}}` with the dev server port (e.g., 3000 for Next.js, 4321 for Astro)
-     - Replace `{{DEV_COMMAND}}` with the dev command (e.g., `npm run dev`)
+3. Copy Playwright config from templates.
 
-4. **Create tests directory and example test**:
+4. Create tests directory:
 ```bash
 mkdir -p tests
 ```
-Copy `${CLAUDE_PLUGIN_ROOT}/templates/shared/tests/example.spec.ts` as a starting point.
+Copy `${CLAUDE_PLUGIN_ROOT}/templates/shared/tests/example.spec.ts`.
 
-5. **Add test:e2e script to package.json** if not present:
+5. Add script to package.json if not present:
 ```json
-{
-  "scripts": {
-    "test:e2e": "playwright test"
-  }
-}
+{ "scripts": { "test:e2e": "playwright test" } }
 ```
 
 ### Step 6: Create Rules Directory
@@ -122,36 +112,12 @@ Copy `${CLAUDE_PLUGIN_ROOT}/templates/shared/tests/example.spec.ts` as a startin
 mkdir -p .claude/rules
 ```
 
-Note: Rules are provided by the kickstart plugin and don't need to be copied into the project.
+### Step 7: Install Companion Plugins (if --plugins flag)
 
-### Step 7: Install Recommended Plugins
+**Only if the user passed `--plugins`**, install recommended plugins:
 
-Use AskUserQuestion to ask if the user wants to install recommended companion plugins:
-
-**Question**: "Would you like to install recommended companion plugins?"
-
-**Options**:
-1. **Yes, install all** - Install all recommended plugins for the complete experience
-2. **Let me choose** - Show the list and let user select which to install
-3. **Skip** - Don't install any additional plugins
-
-**Recommended plugins**:
-| Plugin | Marketplace | Purpose |
-|--------|-------------|---------|
-| `github` | `claude-plugins-official` | GitHub MCP integration for PRs, issues, and repos |
-| `code-simplifier` | `claude-plugins-official` | Simplifies and refines code for clarity |
-| `code-review` | `claude-plugins-official` | Code review for pull requests |
-| `frontend-design` | `claude-plugins-official` | High-quality frontend interface generation |
-| `typescript-lsp` | `claude-plugins-official` | TypeScript language server integration |
-
-**If "Yes, install all"**:
-First, add the official marketplace if not already added:
 ```bash
 claude plugin marketplace add anthropics/claude-code-plugins
-```
-
-Then install each plugin:
-```bash
 claude plugin install github@claude-plugins-official
 claude plugin install code-simplifier@claude-plugins-official
 claude plugin install code-review@claude-plugins-official
@@ -159,73 +125,48 @@ claude plugin install frontend-design@claude-plugins-official
 claude plugin install typescript-lsp@claude-plugins-official
 ```
 
-**If "Let me choose"**:
-First, add the official marketplace if not already added:
+If `--plugins` was not passed, skip this step entirely.
+
+### Step 8: Configure Vercel (if --vercel flag)
+
+**Only if the user passed `--vercel`**, create `vercel.json`.
+
+Use `${CLAUDE_PLUGIN_ROOT}/templates/shared/deploy/vercel.json.template` with framework-specific values:
+
+| Framework | `{{FRAMEWORK}}` | `{{OUTPUT_DIR}}` |
+|-----------|-----------------|------------------|
+| SvelteKit | `sveltekit` | `.svelte-kit` |
+| Next.js | `nextjs` | `.next` |
+| Remix | `remix` | `build` |
+| Astro | `astro` | `dist` |
+
+For SvelteKit, also suggest:
 ```bash
-claude plugin marketplace add anthropics/claude-code-plugins
-```
-Then use AskUserQuestion with multiSelect to let the user pick which plugins to install, and run the installation commands for the selected ones.
-
-**If "Skip"**:
-Continue to the next step. Remind the user they can install these later with `/plugin install`.
-
-### Step 8: Configure Deployment (Optional)
-
-Use AskUserQuestion to ask about deployment platform:
-
-**Question**: "Would you like to configure Vercel deployment?"
-
-**Options**:
-1. **Yes** - Create vercel.json for zero-config deployments
-2. **Skip** - Configure deployment later
-
-**If "Yes"**, create `vercel.json` using template from `${CLAUDE_PLUGIN_ROOT}/templates/shared/deploy/vercel.json.template`.
-
-Replace template variables based on framework:
-
-| Framework | `{{FRAMEWORK}}` | `{{OUTPUT_DIR}}` | `{{INSTALL_COMMAND}}` |
-|-----------|-----------------|------------------|----------------------|
-| SvelteKit | `sveltekit` | `.svelte-kit` | `bun install` |
-| Next.js | `nextjs` | `.next` | `npm install` |
-| Remix | `remix` | `build` | `npm install` |
-| Astro | `astro` | `dist` | `npm install` |
-
-Adjust `{{INSTALL_COMMAND}}` based on the project's package manager:
-- bun: `bun install`
-- pnpm: `pnpm install`
-- npm: `npm install`
-- yarn: `yarn install`
-
-For SvelteKit, suggest installing the Vercel adapter for optimal performance:
-```bash
-bun add -D @sveltejs/adapter-vercel
+<pm> add -D @sveltejs/adapter-vercel
 ```
 
-**Framework-specific notes:**
-
-- **SvelteKit**: Default adapter is `adapter-auto` which works with Vercel. For explicit Vercel features (edge functions, ISR), use `@sveltejs/adapter-vercel`.
-- **Next.js**: Vercel works out of the box with zero configuration.
-- **Astro**: Install `@astrojs/vercel` integration for server-side rendering support.
+If `--vercel` was not passed, skip this step entirely.
 
 ### Step 9: Confirm Setup
 
-Summarize what was created:
-- `.claude/CLAUDE.md` - Project configuration
-- `.claude/settings.json` - Pre-approved commands for automatic execution
-- `.github/workflows/` - CI workflows (if copied)
-- `playwright.config.ts` - Playwright E2E test configuration
-- `tests/` - E2E test directory with example test
-- `vercel.json` - Vercel deployment config (if configured)
+Print a summary of what was created:
 
-Remind the user:
-- Run `bun run test:e2e` (or equivalent) to run E2E tests
-- Run `/update` periodically to get config updates
-- Edit `.claude/CLAUDE.md` to add project-specific notes
-- The kickstart plugin provides agents, hooks, and base rules automatically
-- For SvelteKit + Vercel, consider `@sveltejs/adapter-vercel` for advanced features
+```
+✓ Created .claude/CLAUDE.md
+✓ Created .claude/settings.json
+✓ Created .claude/rules/
+✓ Set up Playwright E2E testing
+✓ Installed companion plugins (if --plugins)
+✓ Configured Vercel deployment (if --vercel)
+
+Next steps:
+- Edit .claude/CLAUDE.md to add your project description
+- Run `<pm> run test:e2e` to verify Playwright works
+- Run `/update` periodically for config updates
+```
 
 ## Important
 
-- Do NOT copy the plugin's base CLAUDE.md into the project - it's loaded automatically
-- Project CLAUDE.md should only contain project-specific information
-- Keep the project config minimal - let the plugin handle common rules
+- Do NOT copy the plugin's base CLAUDE.md - it loads automatically
+- Project CLAUDE.md should only contain project-specific info
+- Never ask questions - detect everything automatically
