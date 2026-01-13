@@ -1,0 +1,13 @@
+{
+	"name": "format-on-save",
+	"description": "Automatically format files after they are written or edited",
+	"hooks": [
+		{
+			"event": "PostToolUse",
+			"matcher": {
+				"tool": ["Write", "Edit"]
+			},
+			"command": "biome check --write --unsafe \"$TOOL_INPUT_file_path\" 2>/dev/null || npx prettier --write \"$TOOL_INPUT_file_path\" 2>/dev/null || true"
+		}
+	]
+}

@@ -1,0 +1,13 @@
+{
+	"name": "check-worktree",
+	"description": "Warn if attempting to write code while on main branch",
+	"hooks": [
+		{
+			"event": "PreToolUse",
+			"matcher": {
+				"tool": ["Write", "Edit"]
+			},
+			"command": "branch=$(git branch --show-current 2>/dev/null); if [ \"$branch\" = \"main\" ] || [ \"$branch\" = \"master\" ]; then echo 'WARNING: You are on the main branch. Create a worktree first: git worktree add -b feat/feature-name ../repo-feat-feature-name main'; exit 1; fi"
+		}
+	]
+}

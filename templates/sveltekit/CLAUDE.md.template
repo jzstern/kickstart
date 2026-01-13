@@ -1,0 +1,76 @@
+# {{PROJECT_NAME}}
+
+{{DESCRIPTION}}
+
+## Tech Stack
+
+- **Runtime**: Bun
+- **Framework**: SvelteKit 5 with Svelte 5 runes (`$state`, `$props`, `$effect`)
+- **UI**: {{UI_LIBRARY}}
+- **Styling**: Tailwind CSS
+- **Code Quality**: Biome (linter + formatter)
+
+## Commands
+
+```bash
+bun run dev          # Dev server
+bun run build        # Production build
+bun run check        # TypeScript check
+bun run lint         # Biome lint
+bun run test         # Unit tests (Vitest)
+bun run test:e2e     # E2E tests (Playwright)
+```
+
+## Svelte 5 Patterns
+
+### State
+```svelte
+<script lang="ts">
+let count = $state(0);
+</script>
+```
+
+### Props
+```svelte
+<script lang="ts">
+interface Props {
+  title: string;
+  onClick?: () => void;
+}
+let { title, onClick }: Props = $props();
+</script>
+```
+
+### Effects
+```svelte
+<script lang="ts">
+$effect(() => {
+  console.log('count changed:', count);
+});
+</script>
+```
+
+## File Organization
+
+- `src/routes/` - Pages and API routes
+- `src/lib/components/` - Reusable components (PascalCase.svelte)
+- `src/lib/components/ui/` - UI library components
+- `src/lib/types.ts` - Shared TypeScript types
+- `src/lib/server/` - Server-only code
+
+## Biome
+
+Handles formatting and linting. Run `bun run lint` before committing.
+
+**Important**: Never run `--unsafe` without approval (can cause false positives on Svelte imports).
+
+## Before Committing
+
+1. Check for compilation errors in dev server
+2. Run `bun run check` for TypeScript
+3. Run `bun run lint` for Biome
+4. Test the feature manually
+
+## Project-Specific Notes
+
+<!-- Add notes specific to this project -->
