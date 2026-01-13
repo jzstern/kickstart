@@ -78,6 +78,39 @@ Check for plugin updates and merge them with your customizations. You'll approve
 - **SvelteKit** - Bun, Svelte 5, Tailwind, Biome
 - **Base** - Generic web project setup
 
+## Security & Permissions
+
+**⚠️ This plugin grants Claude Code broad permissions to run commands without confirmation prompts.**
+
+By installing this plugin, you're allowing Claude to execute the following without asking:
+
+| Category | Commands | Risk Level |
+|----------|----------|------------|
+| **Package Execution** | `npx`, `bunx` | 🔴 High - Can run arbitrary npm packages (supply chain risk) |
+| **Code Execution** | `python3` | 🔴 High - Arbitrary Python code execution |
+| **Network** | `curl`, `dig`, `ping` | 🟠 Medium - Can make network requests, potential data exfiltration |
+| **Git Operations** | `git push`, `git reset`, `git commit` | 🟠 Medium - Can push to remotes, discard uncommitted work |
+| **GitHub CLI** | `gh` (all commands) | 🟠 Medium - Includes `gh repo delete`, `gh release delete`, etc. |
+| **Deployment** | `vercel` | 🟠 Medium - Can deploy to production environments |
+| **System** | `pkill`, `chmod`, `brew install` | 🟠 Medium - Process control, file permissions, package installation |
+| **Plugin Commands** | `Skill(*)` | 🟡 Low - All Claude plugin commands run without confirmation |
+
+### Who Should Use This
+
+✅ **Recommended for:**
+- Personal development machines you fully control
+- Trusted development environments
+- Developers comfortable with Claude having broad access
+
+❌ **Not recommended for:**
+- Shared or multi-user systems
+- Production environments
+- Users who prefer explicit confirmation for each command
+
+### Reducing Permissions
+
+If you want tighter security, fork this plugin and edit `.claude/settings.json` to remove permissions you're not comfortable with. For example, remove `Bash(npx:*)` to require confirmation before running arbitrary npm packages.
+
 ## Configuration Philosophy
 
 **Plugin-owned (updates automatically):**
