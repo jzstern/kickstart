@@ -4,11 +4,10 @@ Opinionated Claude Code plugin for fast web project setup. Get productive immedi
 
 ## Installation
 
-```bash
-# Add the kickstart marketplace
-/plugin marketplace add jzstern/kickstart
+Run these commands inside a Claude Code session (not your regular terminal):
 
-# Install kickstart
+```
+/plugin marketplace add jzstern/kickstart
 /plugin install kickstart@kickstart
 ```
 
@@ -23,8 +22,8 @@ Kickstart works great alongside these official plugins. **During `/init`, you'll
 | `frontend-design` | High-quality frontend interface generation |
 | `typescript-lsp` | TypeScript language server integration |
 
-To install manually:
-```bash
+To install manually (in Claude Code):
+```
 /plugin marketplace add anthropics/claude-code-plugins
 /plugin install code-simplifier@claude-plugins-official
 ```
@@ -84,8 +83,8 @@ The `auto-pr-update` hook requires the GitHub MCP integration to update PR descr
    export GITHUB_PERSONAL_ACCESS_TOKEN="ghp_your_token_here"
    ```
 
-3. **Install the GitHub MCP plugin**
-   ```bash
+3. **Install the GitHub MCP plugin** (in Claude Code)
+   ```
    /plugin install github@claude-plugins-official
    ```
 
