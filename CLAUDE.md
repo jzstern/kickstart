@@ -22,9 +22,11 @@ Opinionated Claude Code configuration for web development. This file is loaded a
 ### After Completing Work
 
 When you finish implementing a feature or fix:
-1. Commit all changes with a conventional commit message
-2. Push the branch to origin
-3. Open a pull request using `gh pr create`
+1. Run type checker and linter (if configured)
+2. Run tests (if configured)
+3. Commit all changes with a conventional commit message
+4. Push the branch to origin
+5. Open a draft pull request using `gh pr create --draft`
 
 Do this automatically without asking for confirmation.
 

@@ -57,9 +57,19 @@ First, check if on main/master branch:
 git branch --show-current
 ```
 
-If on main/master, inform the user that copying rules requires being on a feature branch (the check-worktree hook blocks writes on main). Ask if they want to skip copying rules and proceed with uninstall, or cancel to switch branches first.
+**If on main/master**, use AskUserQuestion:
 
-If NOT on main/master (or user chose to skip copying), use AskUserQuestion:
+**Question**: "You're on the main branch. Copying rules requires a feature branch (the check-worktree hook blocks writes on main). What would you like to do?"
+
+**Options**:
+1. **Skip copying, continue uninstall** - Proceed without copying rules
+2. **Cancel** - Stop so I can switch branches first
+
+Handle each choice:
+- **Skip copying, continue uninstall**: Skip to Step 4
+- **Cancel**: Stop here and inform the user that no changes were made
+
+**If NOT on main/master**, use AskUserQuestion:
 
 **Question**: "Would you like to copy kickstart's rules to your project before uninstalling?"
 
@@ -77,7 +87,9 @@ Check for existing rule files that would be overwritten:
 ls .claude/rules/comments.md .claude/rules/testing.md .claude/rules/typescript.md 2>/dev/null
 ```
 
-If any files exist, use AskUserQuestion to warn:
+**If no existing files found**, proceed directly to copying (skip the overwrite dialog).
+
+**If any files exist**, use AskUserQuestion to warn:
 
 **Question**: "The following rule files already exist and will be overwritten: [list files]. Continue?"
 
@@ -87,11 +99,11 @@ If any files exist, use AskUserQuestion to warn:
 3. **Cancel** - Don't copy any rules
 
 Handle each choice:
-- **Overwrite**: Create directory and copy all rule files
-- **Skip existing**: Create directory and copy only rules that don't already exist
+- **Overwrite**: Proceed to copy all rule files
+- **Skip existing**: Proceed to copy only rules that don't already exist
 - **Cancel**: Skip to Step 4 without copying any rules
 
-If proceeding with copy (Overwrite or Skip existing):
+**When proceeding with copy** (no conflicts, Overwrite, or Skip existing):
 
 ```bash
 mkdir -p .claude/rules
