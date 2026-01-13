@@ -158,7 +158,11 @@ claude plugin install typescript-lsp@claude-plugins-official
 ```
 
 **If "Let me choose"**:
-Use AskUserQuestion with multiSelect to let the user pick which plugins to install, then run the installation commands for the selected ones.
+First, add the official marketplace if not already added:
+```bash
+claude plugin marketplace add anthropics/claude-code-plugins
+```
+Then use AskUserQuestion with multiSelect to let the user pick which plugins to install, and run the installation commands for the selected ones.
 
 **If "Skip"**:
 Continue to the next step. Remind the user they can install these later with `/plugin install`.

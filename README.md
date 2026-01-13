@@ -83,6 +83,7 @@ By installing this plugin, you're allowing Claude to execute the following witho
 | **GitHub MCP** | PR creation, branch creation, issue reading | 🟠 Medium - Can create PRs and branches automatically |
 | **Deployment** | `vercel` | 🟠 Medium - Can deploy to production environments |
 | **System** | `pkill`, `chmod`, `brew install` | 🟠 Medium - Process control, file permissions, package installation |
+| **Plugin Management** | `claude plugin`, `claude mcp` | 🟡 Low - Can install/remove plugins and MCP servers |
 | **Plugin Commands** | `Skill(*)` | 🟡 Low - All Claude plugin commands run without confirmation |
 
 ### Who Should Use This

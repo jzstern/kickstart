@@ -47,6 +47,7 @@
 			"Bash(python3:*)",
 			"Bash(brew install:*)",
 			"Bash(claude mcp:*)",
+			"Bash(claude plugin:*)",
 			"Bash(timeout:*)",
 			"mcp__github__list_pull_requests",
 			"mcp__github__create_pull_request",
