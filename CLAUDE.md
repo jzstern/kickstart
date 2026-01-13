@@ -26,7 +26,7 @@ When you finish implementing a feature or fix:
 2. Run tests (if configured)
 3. Commit all changes with a conventional commit message
 4. Push the branch to origin
-5. Open a draft pull request using `gh pr create --draft`
+5. Open a draft pull request using `gh pr create --draft` (skip if PR already exists)
 
 Do this automatically without asking for confirmation.
 
