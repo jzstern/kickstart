@@ -1,6 +1,6 @@
 # Deployment Templates
 
-These templates configure deployment for common hosting platforms.
+Vercel deployment configuration template.
 
 ## Template Variables
 
@@ -10,38 +10,34 @@ These templates configure deployment for common hosting platforms.
 | `{{FRAMEWORK}}` | Vercel framework preset | `sveltekit`, `nextjs` |
 | `{{BUILD_COMMAND}}` | Build command | `bun run build` |
 | `{{DEV_COMMAND}}` | Dev server command | `bun run dev` |
-| `{{DEV_PORT}}` | Dev server port | `5173` |
-| `{{OUTPUT_DIR}}` | Build output directory | `build`, `.next`, `dist` |
+| `{{OUTPUT_DIR}}` | Build output directory | `.svelte-kit`, `.next`, `dist` |
 | `{{INSTALL_COMMAND}}` | Package install command | `bun install` |
 
 ## Framework Presets
 
-### SvelteKit
-- **Vercel**: `framework: sveltekit`, `outputDirectory: .svelte-kit`
-- **Netlify**: Uses `@sveltejs/adapter-netlify`
-- **Cloudflare**: Uses `@sveltejs/adapter-cloudflare`
+| Framework | `{{FRAMEWORK}}` | `{{OUTPUT_DIR}}` |
+|-----------|-----------------|------------------|
+| SvelteKit | `sveltekit` | `.svelte-kit` |
+| Next.js | `nextjs` | `.next` |
+| Remix | `remix` | `build` |
+| Astro | `astro` | `dist` |
 
-### Next.js
-- **Vercel**: `framework: nextjs`, `outputDirectory: .next`
-- **Netlify**: Uses `@netlify/plugin-nextjs`
-- **Cloudflare**: Uses `@cloudflare/next-on-pages`
+## SvelteKit Adapter
 
-### Astro
-- **Vercel**: `framework: astro`, `outputDirectory: dist`
-- **Netlify**: `outputDirectory: dist`
-- **Cloudflare**: Uses `@astrojs/cloudflare`
-
-## Adapter Installation
-
-Some frameworks require platform-specific adapters:
+For advanced Vercel features (edge functions, ISR), install the Vercel adapter:
 
 ```bash
-# SvelteKit + Vercel
 bun add -D @sveltejs/adapter-vercel
+```
 
-# SvelteKit + Netlify
-bun add -D @sveltejs/adapter-netlify
+Then update `svelte.config.js`:
 
-# SvelteKit + Cloudflare
-bun add -D @sveltejs/adapter-cloudflare
+```js
+import adapter from '@sveltejs/adapter-vercel';
+
+export default {
+  kit: {
+    adapter: adapter()
+  }
+};
 ```

@@ -173,50 +173,39 @@ Continue to the next step. Remind the user they can install these later with `/p
 
 Use AskUserQuestion to ask about deployment platform:
 
-**Question**: "Which deployment platform will you use?"
+**Question**: "Would you like to configure Vercel deployment?"
 
 **Options**:
-1. **Vercel** - Zero-config deployments with edge functions
-2. **Netlify** - Full-featured platform with serverless functions
-3. **Cloudflare Pages** - Fast global CDN with Workers
-4. **Skip** - Configure deployment later
+1. **Yes** - Create vercel.json for zero-config deployments
+2. **Skip** - Configure deployment later
 
-**If a platform is selected**, create the appropriate config file:
+**If "Yes"**, create `vercel.json` using template from `${CLAUDE_PLUGIN_ROOT}/templates/shared/deploy/vercel.json.template`.
 
-**For Vercel** (`vercel.json`):
+Replace template variables based on framework:
 
-Use template from `${CLAUDE_PLUGIN_ROOT}/templates/shared/deploy/vercel.json.template`:
+| Framework | `{{FRAMEWORK}}` | `{{OUTPUT_DIR}}` | `{{INSTALL_COMMAND}}` |
+|-----------|-----------------|------------------|----------------------|
+| SvelteKit | `sveltekit` | `.svelte-kit` | `bun install` |
+| Next.js | `nextjs` | `.next` | `npm install` |
+| Remix | `remix` | `build` | `npm install` |
+| Astro | `astro` | `dist` | `npm install` |
 
-| Framework | `{{FRAMEWORK}}` | `{{OUTPUT_DIR}}` |
-|-----------|-----------------|------------------|
-| SvelteKit | `sveltekit` | `.svelte-kit` |
-| Next.js | `nextjs` | `.next` |
-| Remix | `remix` | `build` |
-| Astro | `astro` | `dist` |
+Adjust `{{INSTALL_COMMAND}}` based on the project's package manager:
+- bun: `bun install`
+- pnpm: `pnpm install`
+- npm: `npm install`
+- yarn: `yarn install`
 
-**For Netlify** (`netlify.toml`):
-
-Use template from `${CLAUDE_PLUGIN_ROOT}/templates/shared/deploy/netlify.toml.template`:
-
-For SvelteKit, also suggest installing the adapter:
+For SvelteKit, suggest installing the Vercel adapter for optimal performance:
 ```bash
-bun add -D @sveltejs/adapter-netlify
-```
-
-**For Cloudflare Pages** (`wrangler.toml`):
-
-Use template from `${CLAUDE_PLUGIN_ROOT}/templates/shared/deploy/wrangler.toml.template`:
-
-For SvelteKit, also suggest installing the adapter:
-```bash
-bun add -D @sveltejs/adapter-cloudflare
+bun add -D @sveltejs/adapter-vercel
 ```
 
 **Framework-specific notes:**
 
-- **SvelteKit**: Default adapter is `adapter-auto`. For specific platforms, update `svelte.config.js` to use the platform adapter.
-- **Next.js**: Vercel works out of the box. Other platforms may need `output: 'export'` in `next.config.js`.
-- **Astro**: Install platform-specific integration (e.g., `@astrojs/vercel`, `@astrojs/netlify`).
+- **SvelteKit**: Default adapter is `adapter-auto` which works with Vercel. For explicit Vercel features (edge functions, ISR), use `@sveltejs/adapter-vercel`.
+- **Next.js**: Vercel works out of the box with zero configuration.
+- **Astro**: Install `@astrojs/vercel` integration for server-side rendering support.
 
 ### Step 9: Confirm Setup
 
@@ -226,14 +215,14 @@ Summarize what was created:
 - `.github/workflows/` - CI workflows (if copied)
 - `playwright.config.ts` - Playwright E2E test configuration
 - `tests/` - E2E test directory with example test
-- `vercel.json` / `netlify.toml` / `wrangler.toml` - Deployment config (if platform selected)
+- `vercel.json` - Vercel deployment config (if configured)
 
 Remind the user:
 - Run `bun run test:e2e` (or equivalent) to run E2E tests
 - Run `/update` periodically to get config updates
 - Edit `.claude/CLAUDE.md` to add project-specific notes
 - The kickstart plugin provides agents, hooks, and base rules automatically
-- If using a platform adapter (Netlify, Cloudflare), update `svelte.config.js` to use it
+- For SvelteKit + Vercel, consider `@sveltejs/adapter-vercel` for advanced features
 
 ## Important
 
