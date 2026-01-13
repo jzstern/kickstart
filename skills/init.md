@@ -124,7 +124,50 @@ mkdir -p .claude/rules
 
 Note: Rules are provided by the kickstart plugin and don't need to be copied into the project.
 
-### Step 7: Confirm Setup
+### Step 7: Install Recommended Plugins
+
+Use AskUserQuestion to ask if the user wants to install recommended companion plugins:
+
+**Question**: "Would you like to install recommended companion plugins?"
+
+**Options**:
+1. **Yes, install all** - Install all recommended plugins for the complete experience
+2. **Let me choose** - Show the list and let user select which to install
+3. **Skip** - Don't install any additional plugins
+
+**Recommended plugins**:
+| Plugin | Marketplace | Purpose |
+|--------|-------------|---------|
+| `code-simplifier` | `claude-plugins-official` | Simplifies and refines code for clarity |
+| `code-review` | `claude-plugins-official` | Code review for pull requests |
+| `frontend-design` | `claude-plugins-official` | High-quality frontend interface generation |
+| `typescript-lsp` | `claude-plugins-official` | TypeScript language server integration |
+
+**If "Yes, install all"**:
+First, add the official marketplace if not already added:
+```bash
+claude plugin marketplace add anthropics/claude-code-plugins
+```
+
+Then install each plugin:
+```bash
+claude plugin install code-simplifier@claude-plugins-official
+claude plugin install code-review@claude-plugins-official
+claude plugin install frontend-design@claude-plugins-official
+claude plugin install typescript-lsp@claude-plugins-official
+```
+
+**If "Let me choose"**:
+First, add the official marketplace if not already added:
+```bash
+claude plugin marketplace add anthropics/claude-code-plugins
+```
+Then use AskUserQuestion with multiSelect to let the user pick which plugins to install, and run the installation commands for the selected ones.
+
+**If "Skip"**:
+Continue to the next step. Remind the user they can install these later with `/plugin install`.
+
+### Step 8: Confirm Setup
 
 Summarize what was created:
 - `.claude/CLAUDE.md` - Project configuration

@@ -12,20 +12,21 @@ Opinionated Claude Code plugin for fast web project setup. Get productive immedi
 /plugin install kickstart@kickstart
 ```
 
-### Recommended Plugins
+### Companion Plugins
 
-Kickstart works great alongside these official plugins. Install them for the complete experience:
+Kickstart works great alongside these official plugins. **During `/init`, you'll be offered the option to install them automatically.**
 
+| Plugin | Purpose |
+|--------|---------|
+| `code-simplifier` | Simplifies and refines code for clarity |
+| `code-review` | Code review for pull requests |
+| `frontend-design` | High-quality frontend interface generation |
+| `typescript-lsp` | TypeScript language server integration |
+
+To install manually:
 ```bash
-# Code quality
+/plugin marketplace add anthropics/claude-code-plugins
 /plugin install code-simplifier@claude-plugins-official
-/plugin install code-review@claude-plugins-official
-
-# Frontend development
-/plugin install frontend-design@claude-plugins-official
-
-# TypeScript support
-/plugin install typescript-lsp@claude-plugins-official
 ```
 
 ## Features
@@ -41,7 +42,7 @@ git worktree add -b feat/my-feature ../repo-feat-my-feature main
 <!-- kickstart:skills:start -->
 | Skill | Description |
 |-------|-------------|
-| `/init` | Initialize project configuration with kickstart defaults |
+| `/init` | Initialize project configuration with kickstart defaults (includes option to install companion plugins) |
 | `/update` | Check for and apply config updates with user approval |
 | `/docs` | Auto-generate documentation from plugin components |
 <!-- kickstart:skills:end -->
@@ -89,7 +90,39 @@ git worktree add -b feat/my-feature ../repo-feat-my-feature main
 | **Biome** | `bunx biome` |
 <!-- kickstart:permissions:end -->
 
+By installing this plugin, you're allowing Claude to execute the following without asking:
+
+| Category | Commands | Risk Level |
+|----------|----------|------------|
+| **File Operations** | `Edit`, `Write`, `mkdir`, `rm`, `mv`, `cp` | 🔴 High - Can modify/delete any file in project |
+| **Package Execution** | `npx`, `bunx` | 🔴 High - Can run arbitrary npm packages (supply chain risk) |
+| **Code Execution** | `python3` | 🔴 High - Arbitrary Python code execution |
+| **Network** | `curl`, `dig`, `ping` | 🟠 Medium - Can make network requests, potential data exfiltration |
+| **Git Operations** | `git push`, `git reset`, `git commit` | 🟠 Medium - Can push to remotes, discard uncommitted work |
+| **GitHub CLI** | `gh` (all commands) | 🟠 Medium - Includes `gh repo delete`, `gh release delete`, etc. |
+| **GitHub MCP** | PR creation, branch creation, issue reading | 🟠 Medium - Can create PRs and branches automatically |
+| **Deployment** | `vercel` | 🟠 Medium - Can deploy to production environments |
+| **System** | `pkill`, `chmod`, `brew install` | 🟠 Medium - Process control, file permissions, package installation |
+| **Plugin Management** | `claude plugin`, `claude mcp` | 🟡 Low - Can install/remove plugins and MCP servers |
+| **Plugin Commands** | `Skill(*)` | 🟡 Low - All Claude plugin commands run without confirmation |
+
 > **Note:** Git operations on main branch are blocked by kickstart hooks even though the commands are permitted. This provides safety while maintaining a frictionless workflow on feature branches.
+
+### Who Should Use This
+
+✅ **Recommended for:**
+- Personal development machines you fully control
+- Trusted development environments
+- Developers comfortable with Claude having broad access
+
+❌ **Not recommended for:**
+- Shared or multi-user systems
+- Production environments
+- Users who prefer explicit confirmation for each command
+
+### Reducing Permissions
+
+If you want tighter security, fork this plugin and edit `.claude/settings.json` to remove permissions you're not comfortable with. For example, remove `Bash(npx:*)` to require confirmation before running arbitrary npm packages.
 
 ## How It Works
 
