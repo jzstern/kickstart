@@ -61,6 +61,7 @@ This allows Claude to automatically run:
 - Package installation (`bun add`, `npm install`, etc.)
 - Dev server, build, lint, and test commands
 - Playwright browser installation and test execution
+- GitHub CLI read commands (`gh pr view`, `gh api`, `gh issue view`, etc.)
 
 ### Step 4: Copy GitHub Workflows
 
