@@ -63,12 +63,16 @@ Summarize what was cleaned up:
 ## Example Output
 
 ```
-Cleaned up 2 stale worktrees:
-  - ../myproject-feat-add-login (branch feat/add-login was merged)
-  - ../myproject-fix-typo (branch fix/typo was merged)
+🧹 Cleaning up 2 stale worktree(s)...
+  Removed: ../myproject-feat-add-login (branch feat/add-login deleted from remote)
+  Removed: ../myproject-fix-typo (branch fix/typo deleted from remote)
+```
 
-Skipped 1 worktree with uncommitted changes:
-  - ../myproject-feat-wip
+If a worktree cannot be removed:
+
+```
+🧹 Cleaning up 1 stale worktree(s)...
+  Skipped: ../myproject-feat-wip (fatal: cannot remove: has changes)
 ```
 
 ## Notes
