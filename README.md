@@ -44,6 +44,7 @@ git worktree add -b feat/my-feature ../repo-feat-my-feature main
 |-------|-------------|
 | `/init` | Initialize project configuration with kickstart defaults (includes option to install companion plugins) |
 | `/update` | Check for and apply config updates with user approval |
+| `/uninstall` | Uninstall plugin while preserving project configuration and customizations |
 | `/docs` | Auto-generate documentation from plugin components |
 <!-- kickstart:skills:end -->
 

@@ -1,0 +1,101 @@
+---
+name: uninstall
+description: Uninstall kickstart plugin while preserving all project-specific configuration and customizations.
+---
+
+# Uninstall Kickstart
+
+You are helping the user uninstall the kickstart plugin while preserving their project-specific configuration.
+
+## What Gets Removed vs Preserved
+
+**Removed (Plugin-Owned):**
+- Kickstart agents (debugger, security-auditor, test-generator, e2e-runner)
+- Kickstart hooks (worktree enforcement, format-on-save, etc.)
+- Kickstart rules (comments, testing, typescript)
+- Kickstart skills (/init, /update, /docs, /uninstall)
+- Base CLAUDE.md loaded by the plugin
+
+**Preserved (Project-Owned):**
+- `.claude/CLAUDE.md` - Your project configuration
+- `.claude/settings.json` - Your pre-approved commands
+- `.github/workflows/` - Your CI/CD workflows
+- `playwright.config.ts` - Your test configuration
+- `tests/` - Your test files
+- All other project files
+
+## Process
+
+### Step 1: Confirm Intent
+
+Use AskUserQuestion to confirm:
+
+**Question**: "Are you sure you want to uninstall kickstart?"
+
+**Options**:
+1. **Yes, uninstall** - Remove the plugin but keep all my project configuration
+2. **Cancel** - Don't uninstall
+
+If "Cancel", stop here and inform the user that no changes were made.
+
+### Step 2: Check Project Files
+
+Inventory what project files exist that will be preserved:
+
+```bash
+ls -la .claude/ 2>/dev/null
+ls -la .github/workflows/ 2>/dev/null
+ls playwright.config.ts 2>/dev/null
+ls -d tests/ 2>/dev/null
+```
+
+### Step 3: Offer to Export Rules
+
+Use AskUserQuestion:
+
+**Question**: "Would you like to copy kickstart's rules to your project before uninstalling?"
+
+**Options**:
+1. **Yes, copy rules** - Copy rules to `.claude/rules/` so they remain after uninstall
+2. **No, just uninstall** - Remove everything, I don't need the rules
+
+If "Yes, copy rules":
+
+```bash
+mkdir -p .claude/rules
+```
+
+Copy each rule file from the plugin:
+- `${CLAUDE_PLUGIN_ROOT}/rules/comments.md` → `.claude/rules/comments.md`
+- `${CLAUDE_PLUGIN_ROOT}/rules/testing.md` → `.claude/rules/testing.md`
+- `${CLAUDE_PLUGIN_ROOT}/rules/typescript.md` → `.claude/rules/typescript.md`
+
+### Step 4: Uninstall Plugin
+
+Run the uninstall command:
+
+```bash
+claude plugin uninstall kickstart
+```
+
+### Step 5: Summarize
+
+Tell the user what happened:
+
+**Removed:**
+- Kickstart plugin and all its agents, hooks, rules, and skills
+
+**Preserved:**
+- List each project file that was preserved (from Step 2)
+- If rules were copied, mention `.claude/rules/`
+
+**Note:** Remind the user:
+- They can reinstall anytime with `claude plugin install kickstart`
+- Their project configuration in `.claude/` will work with any plugins they install
+- If they copied rules, those will continue to work locally
+
+## Important
+
+- Never delete project files (`.claude/`, `tests/`, workflows, etc.)
+- The uninstall only removes the plugin registration, not project files
+- If user wants to completely remove all traces, they would need to manually delete project files

@@ -19,6 +19,15 @@ Opinionated Claude Code configuration for web development. This file is loaded a
 - `docs/` - Documentation
 - `test/` - Test changes
 
+### After Completing Work
+
+When you finish implementing a feature or fix:
+1. Commit all changes with a conventional commit message
+2. Push the branch to origin
+3. Open a pull request using `gh pr create`
+
+Do this automatically without asking for confirmation.
+
 ### After Merging
 Clean up: `git worktree remove ../<repo>-<branch>`
 
@@ -29,6 +38,7 @@ Clean up: `git worktree remove ../<repo>-<branch>`
 |-------|-------------|
 | `/init` | Initialize project with kickstart config |
 | `/update` | Check for and apply config updates |
+| `/uninstall` | Uninstall plugin, keeping customizations |
 | `/docs` | (Developer) Regenerate documentation |
 <!-- kickstart:skills:end -->
 
