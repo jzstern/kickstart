@@ -30,6 +30,7 @@ Clean up: `git worktree remove ../<repo>-<branch>`
 | `/init` | Initialize project with kickstart config |
 | `/update` | Check for and apply config updates |
 | `/docs` | (Developer) Regenerate documentation |
+| `/resolve-conflicts` | Detect and resolve merge conflicts with base branch |
 <!-- kickstart:skills:end -->
 
 ## Available Agents
@@ -37,6 +38,7 @@ Clean up: `git worktree remove ../<repo>-<branch>`
 <!-- kickstart:agents:start -->
 | Agent | Description |
 |-------|-------------|
+| `conflict-resolver` | Detects and resolves git merge conflicts |
 | `debugger` | Investigates errors and stack traces |
 | `e2e-runner` | Playwright E2E testing specialist |
 | `security-auditor` | OWASP Top 10 vulnerability scanning |
@@ -52,6 +54,7 @@ Clean up: `git worktree remove ../<repo>-<branch>`
 | `block-main-commits` | PreToolUse | Blocks git commit/push on main |
 | `check-worktree` | PreToolUse | Blocks file writes on main |
 | `format-on-save` | PostToolUse | Auto-formats after write/edit |
+| `detect-conflicts` | PreToolUse | Checks for merge conflicts before push |
 <!-- kickstart:hooks:end -->
 
 ## Commit Conventions

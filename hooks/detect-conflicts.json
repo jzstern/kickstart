@@ -1,0 +1,14 @@
+{
+	"name": "detect-conflicts",
+	"description": "Detects merge conflicts with base branch before pushing and offers to resolve them",
+	"hooks": [
+		{
+			"event": "PreToolUse",
+			"matcher": {
+				"tool": "Bash",
+				"command": "git push"
+			},
+			"prompt": "Before pushing, check if this branch has merge conflicts with its base branch.\n\n## Steps\n\n1. Get the current branch name:\n   ```bash\n   git branch --show-current\n   ```\n\n2. Determine the base branch (usually main or master):\n   ```bash\n   git remote show origin | grep 'HEAD branch' | cut -d' ' -f5\n   ```\n\n3. Fetch latest from remote:\n   ```bash\n   git fetch origin\n   ```\n\n4. Check if there would be conflicts by doing a dry-run merge:\n   ```bash\n   git merge-tree $(git merge-base HEAD origin/<base>) HEAD origin/<base>\n   ```\n   Or try:\n   ```bash\n   git merge --no-commit --no-ff origin/<base> 2>&1\n   ```\n   Then abort if it started:\n   ```bash\n   git merge --abort 2>/dev/null\n   ```\n\n5. If conflicts are detected:\n   - List the files that would conflict\n   - Use AskUserQuestion to ask the user:\n     - \"Resolve conflicts now (recommended)\" - Triggers conflict resolution\n     - \"Push anyway\" - Continue with push (conflicts will appear on PR)\n     - \"Cancel push\" - Stop and let user handle manually\n\n6. If user chooses to resolve:\n   - Fetch and merge the base branch: `git merge origin/<base>`\n   - Use the conflict-resolver agent to analyze and resolve conflicts\n   - After resolution, the push can proceed\n\n7. If no conflicts detected:\n   - Allow the push to proceed without interruption\n   - Do NOT output anything if there are no conflicts\n\n## Important\n\n- Only check for conflicts with the default branch (main/master)\n- Don't block pushes to the same branch (rebasing)\n- Be silent when no conflicts exist - don't slow down normal workflow"
+		}
+	]
+}
