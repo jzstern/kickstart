@@ -1,0 +1,46 @@
+{
+	"name": "kickstart",
+	"owner": {
+		"name": "jzstern",
+		"email": "jzstern@users.noreply.github.com",
+		"url": "https://github.com/jzstern"
+	},
+	"description": "Opinionated Claude Code starter config. Includes git worktree workflow, TypeScript rules, and project scaffolding.",
+	"plugins": [
+		{
+			"name": "kickstart",
+			"source": "../",
+			"description": "Git worktree workflow, TypeScript/testing rules, project scaffolding with /init and /update commands",
+			"version": "0.2.0",
+			"author": {
+				"name": "jzstern"
+			}
+		}
+	],
+	"recommendedPlugins": [
+		{
+			"name": "code-simplifier",
+			"marketplace": "claude-plugins-official",
+			"description": "Simplifies code for clarity and maintainability",
+			"author": "Anthropic"
+		},
+		{
+			"name": "code-review",
+			"marketplace": "claude-plugins-official",
+			"description": "Code review for pull requests",
+			"author": "Anthropic"
+		},
+		{
+			"name": "frontend-design",
+			"marketplace": "claude-plugins-official",
+			"description": "Create production-grade frontend interfaces",
+			"author": "Anthropic"
+		},
+		{
+			"name": "typescript-lsp",
+			"marketplace": "claude-plugins-official",
+			"description": "TypeScript language server integration",
+			"author": "Anthropic"
+		}
+	]
+}

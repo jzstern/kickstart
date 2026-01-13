@@ -1,0 +1,15 @@
+{
+	"name": "kickstart",
+	"version": "0.2.0",
+	"description": "Opinionated Claude Code starter config for web applications. Git worktrees, TypeScript best practices, testing patterns, and project scaffolding.",
+	"author": "jzstern",
+	"repository": "https://github.com/jzstern/kickstart",
+	"skills": ["../skills/init.md", "../skills/update.md"],
+	"agents": [
+		"../agents/debugger.md",
+		"../agents/security-auditor.md",
+		"../agents/test-generator.md",
+		"../agents/e2e-runner.md"
+	],
+	"hooks": ["../hooks/format-on-save.json", "../hooks/check-worktree.json"]
+}
