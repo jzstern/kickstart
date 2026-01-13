@@ -9,19 +9,32 @@ Automatically detect and resolve merge conflicts.
 
 ## Step 1: Assess Current State
 
-Check if there are existing conflicts in the working directory:
+Check if there are existing conflicts and determine their source:
 
 ```bash
 git status
+
+# Determine conflict source
+if [ -f .git/MERGE_HEAD ]; then
+    echo "Conflict source: merge"
+elif [ -d .git/rebase-merge ] || [ -d .git/rebase-apply ]; then
+    echo "Conflict source: rebase"
+elif [ -f .git/CHERRY_PICK_HEAD ]; then
+    echo "Conflict source: cherry-pick"
+else
+    echo "No active merge/rebase/cherry-pick"
+fi
 ```
 
 Look for:
 - "Unmerged paths" - Active conflicts that need resolution
 - Clean working directory - Check for potential conflicts with base branch
 
-## Step 2: Handle Existing Conflicts
+**Important**: This skill only handles merge conflicts. For rebase conflicts, use `git rebase --continue` after resolving. For cherry-pick conflicts, use `git cherry-pick --continue`.
 
-If there are unmerged paths (active conflicts):
+## Step 2: Handle Existing Merge Conflicts
+
+If there are unmerged paths from a **merge** (`.git/MERGE_HEAD` exists):
 
 1. List all conflicted files:
    ```bash
@@ -45,13 +58,28 @@ If there are unmerged paths (active conflicts):
    grep -rI "<<<<<<" . --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=dist --exclude-dir=build 2>/dev/null || echo "Clean"
    ```
 
-6. Run verification if available:
+6. Run verification if available (check exit codes for failures):
    ```bash
-   npm run check 2>/dev/null || bun run check 2>/dev/null || true
-   npm test 2>/dev/null || bun test 2>/dev/null || true
+   # Run type checker
+   if npm run check 2>/dev/null; then
+       echo "Type check passed"
+   elif bun run check 2>/dev/null; then
+       echo "Type check passed"
+   fi
+
+   # Run tests - capture result
+   if npm test 2>/dev/null; then
+       echo "Tests passed"
+   elif bun test 2>/dev/null; then
+       echo "Tests passed"
+   else
+       echo "Tests failed - aborting merge"
+       git merge --abort
+       exit 1
+   fi
    ```
 
-7. Complete the merge:
+7. If verification passes, complete the merge:
    ```bash
    git commit -m "merge: resolve conflicts with $(git remote show origin | grep 'HEAD branch' | cut -d' ' -f5)"
    ```
@@ -81,8 +109,9 @@ If working directory is clean, check if the branch would conflict with base:
    - Resolve them automatically using strategies below
    - Stage each resolved file with `git add <file>`
    - Verify no conflict markers remain
-   - Run tests if available
-   - Complete the merge:
+   - Run tests (check exit codes, not masked with `|| true`)
+   - If tests fail: `git merge --abort` and report failure
+   - If tests pass, complete the merge:
      ```bash
      git commit -m "merge: resolve conflicts with $BASE"
      ```
@@ -93,6 +122,15 @@ If working directory is clean, check if the branch would conflict with base:
    ```
 
 6. If already up to date, report "No conflicts - branch is up to date with $BASE"
+
+## Handling Non-Merge Conflicts
+
+If conflicts are from rebase or cherry-pick, inform the user:
+
+- **Rebase**: "Conflicts are from an active rebase. After resolving manually, run `git rebase --continue`"
+- **Cherry-pick**: "Conflicts are from a cherry-pick. After resolving manually, run `git cherry-pick --continue`"
+
+Do not attempt automatic resolution for these cases.
 
 ## Automatic Resolution Strategies
 
@@ -116,6 +154,16 @@ When both sides have meaningful changes:
 3. **Match patterns** - align with existing codebase conventions
 4. **Shared code** - prefer base branch for utilities others depend on
 5. **Feature code** - prefer current branch for feature-specific changes
+
+## Aborting on Failure
+
+If resolution fails or tests fail:
+
+```bash
+git merge --abort
+```
+
+This restores the repository to a clean state before the merge attempt.
 
 ## Output
 
