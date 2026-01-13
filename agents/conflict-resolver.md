@@ -49,9 +49,9 @@ All conflicts are resolved automatically using these strategies:
 | Whitespace/formatting | Take the better formatted version |
 | Import ordering | Merge both import sets, deduplicate, sort |
 | Non-overlapping additions | Keep both additions in logical order |
-| Deleted vs unchanged | Take the deletion (code cleanup) |
+| Deleted vs unchanged | Prefer deletion if it's clearly cleanup; otherwise keep both and verify with tests |
 | Identical intent | Take the more complete/cleaner version |
-| Logic conflicts | Analyze intent, take most complete version |
+| Logic conflicts | Analyze intent, take most complete version, then verify with tests |
 | API changes | Take version matching existing call sites |
 | Type changes | Take version with more complete types |
 
@@ -67,7 +67,7 @@ When both sides have meaningful changes:
 
 ## Conflict Pattern Recognition
 
-```
+```diff
 <<<<<<< HEAD
 const result = calculateTotal(items);
 =======
@@ -86,7 +86,7 @@ Analysis: Both compute a total. Check which function exists in codebase:
 1. **Categorize** each conflict by type
 2. **Resolve** using the strategies above
 3. **Apply resolution** by editing the file to remove markers
-4. **Stage resolved files** with `git add`
+4. **Stage each resolved file** with `git add <file>` (not `git add -A`)
 5. **Verify** no conflict markers remain
 
 ## Post-Resolution Verification
@@ -94,19 +94,34 @@ Analysis: Both compute a total. Check which function exists in codebase:
 After resolving all conflicts:
 
 ```bash
+# Check for leftover conflict markers in all text files
 git diff --check
-grep -r "<<<<<<" . --include="*.ts" --include="*.js" --include="*.tsx" --include="*.jsx" --include="*.json" --include="*.md" 2>/dev/null || echo "Clean"
+grep -rI "<<<<<<" . --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=dist --exclude-dir=build --exclude-dir=.next --exclude-dir=coverage 2>/dev/null || echo "Clean"
 ```
 
-Ensure no conflict markers remain before completing.
+Then run project verification if configured:
+
+```bash
+# Run type checker if available
+npm run check 2>/dev/null || bun run check 2>/dev/null || true
+
+# Run tests if available
+npm test 2>/dev/null || bun test 2>/dev/null || true
+```
+
+If tests fail after resolution, report the failure and do not complete the merge.
 
 ## Merge Completion
 
-Once all conflicts are resolved:
+Once all conflicts are resolved and verification passes:
 
 ```bash
-git add -A
-git commit -m "merge: resolve conflicts with $(git rev-parse --abbrev-ref MERGE_HEAD 2>/dev/null || echo 'base branch')"
+# Stage only the resolved conflict files (get list from earlier)
+git add <resolved-file-1> <resolved-file-2> ...
+
+# Get readable branch name for commit message
+MERGE_BRANCH=$(git name-rev --name-only MERGE_HEAD 2>/dev/null | sed 's|remotes/origin/||' || echo "base branch")
+git commit -m "merge: resolve conflicts with $MERGE_BRANCH"
 ```
 
 ## Output Format
@@ -115,19 +130,24 @@ After resolution, report:
 - Number of files resolved
 - Brief summary of what was merged
 - Confirmation that no conflict markers remain
+- Test/build status if verification was run
 
 Example:
-```
+```text
 Resolved 3 conflicts:
 - src/utils/api.ts: merged import statements
 - src/components/Button.tsx: kept both style additions
 - package.json: merged dependencies
 
-No conflict markers remaining. Ready to push.
+No conflict markers remaining.
+Tests passed.
+Ready to push.
 ```
 
 ## Important
 
 - Be fully automatic - do not ask the user for input
 - Report what was resolved after the fact
-- If resolution fails, abort and report the issue
+- Run tests after resolving logic conflicts or deletions to catch semantic errors
+- If tests fail or resolution fails, abort and report the issue
+- Only stage files that were actually conflicted (avoid staging untracked files)

@@ -35,17 +35,23 @@ If there are unmerged paths (active conflicts):
 
 3. Edit files to resolve conflicts - remove markers and keep resolved content
 
-4. Stage resolved files:
+4. Stage each resolved file individually:
    ```bash
    git add <file>
    ```
 
 5. Verify no markers remain:
    ```bash
-   grep -r "<<<<<<" . --include="*.ts" --include="*.js" --include="*.tsx" --include="*.jsx" --include="*.json" --include="*.md" 2>/dev/null || echo "Clean"
+   grep -rI "<<<<<<" . --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=dist --exclude-dir=build 2>/dev/null || echo "Clean"
    ```
 
-6. Complete the merge:
+6. Run verification if available:
+   ```bash
+   npm run check 2>/dev/null || bun run check 2>/dev/null || true
+   npm test 2>/dev/null || bun test 2>/dev/null || true
+   ```
+
+7. Complete the merge:
    ```bash
    git commit -m "merge: resolve conflicts with $(git remote show origin | grep 'HEAD branch' | cut -d' ' -f5)"
    ```
@@ -71,9 +77,17 @@ If working directory is clean, check if the branch would conflict with base:
    git merge --no-commit --no-ff origin/$BASE 2>&1
    ```
 
-4. If conflicts detected, resolve them automatically using strategies below
+4. If conflicts detected:
+   - Resolve them automatically using strategies below
+   - Stage each resolved file with `git add <file>`
+   - Verify no conflict markers remain
+   - Run tests if available
+   - Complete the merge:
+     ```bash
+     git commit -m "merge: resolve conflicts with $BASE"
+     ```
 
-5. If no conflicts, complete merge:
+5. If no conflicts but merge started, complete it:
    ```bash
    git commit -m "merge: sync with $BASE"
    ```
@@ -87,9 +101,9 @@ If working directory is clean, check if the branch would conflict with base:
 | Import ordering | Merge both import sets, deduplicate, sort alphabetically |
 | Whitespace only | Take cleaner/better formatted version |
 | Non-overlapping additions | Keep both in logical order |
-| Deleted vs unchanged | Take the deletion (code cleanup wins) |
+| Deleted vs unchanged | Prefer deletion if clearly cleanup; verify with tests |
 | Added vs unchanged | Take the addition |
-| Both modified same line | Analyze intent - take most complete version |
+| Both modified same line | Analyze intent - take most complete version, verify with tests |
 | Type/interface changes | Take version with more complete types |
 | Function signature changes | Take version that matches existing call sites |
 
@@ -109,13 +123,16 @@ After resolution, report:
 - Number of files resolved
 - Brief summary of what was merged
 - Confirmation that no conflict markers remain
+- Test results if verification was run
 
 Example:
-```
+```text
 Resolved 3 conflicts:
 - src/utils/api.ts: merged import statements
 - src/components/Button.tsx: kept both style additions
 - package.json: merged dependencies
 
-No conflict markers remaining. Ready to push.
+No conflict markers remaining.
+Tests passed.
+Ready to push.
 ```
