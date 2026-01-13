@@ -1,0 +1,14 @@
+{
+	"name": "auto-assign-pr",
+	"description": "Automatically assign newly created PRs to the creator",
+	"hooks": [
+		{
+			"event": "PostToolUse",
+			"matcher": {
+				"tool": "Bash",
+				"command": "gh pr create"
+			},
+			"command": "gh pr edit --add-assignee @me 2>/dev/null || true"
+		}
+	]
+}
