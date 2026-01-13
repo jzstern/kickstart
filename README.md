@@ -12,20 +12,21 @@ Opinionated Claude Code plugin for fast web project setup. Get productive immedi
 /plugin install kickstart@kickstart
 ```
 
-### Recommended Plugins
+### Companion Plugins
 
-Kickstart works great alongside these official plugins. Install them for the complete experience:
+Kickstart works great alongside these official plugins. **During `/init`, you'll be offered the option to install them automatically.**
 
+| Plugin | Purpose |
+|--------|---------|
+| `code-simplifier` | Simplifies and refines code for clarity |
+| `code-review` | Code review for pull requests |
+| `frontend-design` | High-quality frontend interface generation |
+| `typescript-lsp` | TypeScript language server integration |
+
+To install manually:
 ```bash
-# Code quality
+/plugin marketplace add anthropics/claude-code-plugins
 /plugin install code-simplifier@claude-plugins-official
-/plugin install code-review@claude-plugins-official
-
-# Frontend development
-/plugin install frontend-design@claude-plugins-official
-
-# TypeScript support
-/plugin install typescript-lsp@claude-plugins-official
 ```
 
 ## Features
@@ -38,7 +39,7 @@ git worktree add -b feat/my-feature ../repo-feat-my-feature main
 
 ### Project Scaffolding
 ```
-/init    # Set up a new project with kickstart config
+/init    # Set up a new project (includes option to install companion plugins)
 /update  # Check for and apply config updates (with approval)
 ```
 
@@ -73,11 +74,13 @@ By installing this plugin, you're allowing Claude to execute the following witho
 
 | Category | Commands | Risk Level |
 |----------|----------|------------|
+| **File Operations** | `Edit`, `Write`, `mkdir`, `rm`, `mv`, `cp` | 🔴 High - Can modify/delete any file in project |
 | **Package Execution** | `npx`, `bunx` | 🔴 High - Can run arbitrary npm packages (supply chain risk) |
 | **Code Execution** | `python3` | 🔴 High - Arbitrary Python code execution |
 | **Network** | `curl`, `dig`, `ping` | 🟠 Medium - Can make network requests, potential data exfiltration |
 | **Git Operations** | `git push`, `git reset`, `git commit` | 🟠 Medium - Can push to remotes, discard uncommitted work |
 | **GitHub CLI** | `gh` (all commands) | 🟠 Medium - Includes `gh repo delete`, `gh release delete`, etc. |
+| **GitHub MCP** | PR creation, branch creation, issue reading | 🟠 Medium - Can create PRs and branches automatically |
 | **Deployment** | `vercel` | 🟠 Medium - Can deploy to production environments |
 | **System** | `pkill`, `chmod`, `brew install` | 🟠 Medium - Process control, file permissions, package installation |
 | **Plugin Commands** | `Skill(*)` | 🟡 Low - All Claude plugin commands run without confirmation |
