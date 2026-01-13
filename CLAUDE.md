@@ -20,7 +20,7 @@ Opinionated Claude Code configuration for web development. This file is loaded a
 - `test/` - Test changes
 
 ### After Merging
-Clean up: `git worktree remove ../<repo>-<branch>`
+Worktrees are automatically cleaned up at session start when their branches are deleted from remote. You can also run `/cleanup` manually.
 
 ## Available Skills
 
@@ -29,6 +29,7 @@ Clean up: `git worktree remove ../<repo>-<branch>`
 |-------|-------------|
 | `/init` | Initialize project with kickstart config |
 | `/update` | Check for and apply config updates |
+| `/cleanup` | Remove stale worktrees (runs automatically at session start) |
 | `/docs` | (Developer) Regenerate documentation |
 <!-- kickstart:skills:end -->
 
@@ -48,7 +49,7 @@ Clean up: `git worktree remove ../<repo>-<branch>`
 <!-- kickstart:hooks:start -->
 | Hook | Event | Description |
 |------|-------|-------------|
-| `session-start-warning` | SessionStart | Warns on main, checks if behind origin |
+| `session-start-warning` | SessionStart | Auto-cleans stale worktrees, warns on main |
 | `block-main-commits` | PreToolUse | Blocks git commit/push on main |
 | `check-worktree` | PreToolUse | Blocks file writes on main |
 | `format-on-save` | PostToolUse | Auto-formats after write/edit |
