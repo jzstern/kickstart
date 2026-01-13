@@ -2,8 +2,8 @@
 	"name": "kickstart",
 	"version": "0.1.0",
 	"description": "Opinionated Claude Code starter config for web applications. Git worktrees, TypeScript best practices, testing patterns, and more.",
-	"author": "jzs",
-	"repository": "https://github.com/jzs/kickstart",
+	"author": "jzstern",
+	"repository": "https://github.com/jzstern/kickstart",
 	"skills": ["skills/init.md", "skills/update.md"],
 	"agents": [
 		"agents/code-reviewer.md",

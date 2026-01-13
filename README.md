@@ -17,13 +17,13 @@ Add to your project's `.claude/plugins/`:
 ```bash
 mkdir -p .claude/plugins
 cd .claude/plugins
-git clone https://github.com/jzs/kickstart.git
+git clone https://github.com/jzstern/kickstart.git
 ```
 
 Or add as a git submodule:
 
 ```bash
-git submodule add https://github.com/jzs/kickstart.git .claude/plugins/kickstart
+git submodule add https://github.com/jzstern/kickstart.git .claude/plugins/kickstart
 ```
 
 ## Usage

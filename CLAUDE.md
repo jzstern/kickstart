@@ -1,6 +1,6 @@
 # Kickstart Base Configuration
 
-This configuration is provided by the [kickstart](https://github.com/jzs/kickstart) plugin.
+This configuration is provided by the [kickstart](https://github.com/jzstern/kickstart) plugin.
 Run `/update` to check for updates. Run `/init` to scaffold a new project.
 
 ## Git Worktree Workflow
