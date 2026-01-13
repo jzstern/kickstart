@@ -88,7 +88,7 @@ git worktree add -b feat/my-feature ../repo-feat-my-feature main
 | `auto-pr-update` | PreToolUse | Updates PR description before push ([setup required](#github-mcp-setup)) |
 | `auto-assign-pr` | PostToolUse | Assigns created PRs to creator |
 | `auto-docs` | PostToolUse | Regenerates docs when components change |
-| `detect-conflicts` | PreToolUse | Checks for merge conflicts before push |
+| `detect-conflicts` | PreToolUse | Checks for merge conflicts before push and auto-resolves them |
 <!-- kickstart:hooks:end -->
 
 ### GitHub MCP Setup
