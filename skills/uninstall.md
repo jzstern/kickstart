@@ -51,7 +51,15 @@ ls -d tests/ 2>/dev/null
 
 ### Step 3: Offer to Export Rules
 
-Use AskUserQuestion:
+First, check if on main/master branch:
+
+```bash
+git branch --show-current
+```
+
+If on main/master, inform the user that copying rules requires being on a feature branch (the check-worktree hook blocks writes on main). Ask if they want to skip copying rules and proceed with uninstall, or cancel to switch branches first.
+
+If NOT on main/master (or user chose to skip copying), use AskUserQuestion:
 
 **Question**: "Would you like to copy kickstart's rules to your project before uninstalling?"
 
@@ -59,9 +67,11 @@ Use AskUserQuestion:
 1. **Yes, copy rules** - Copy rules to `.claude/rules/` so they remain after uninstall
 2. **No, just uninstall** - Remove everything, I don't need the rules
 
+If "No, just uninstall", skip to Step 4.
+
 If "Yes, copy rules":
 
-First, check for existing rule files that would be overwritten:
+Check for existing rule files that would be overwritten:
 
 ```bash
 ls .claude/rules/comments.md .claude/rules/testing.md .claude/rules/typescript.md 2>/dev/null
@@ -76,13 +86,18 @@ If any files exist, use AskUserQuestion to warn:
 2. **Skip existing** - Only copy rules that don't already exist
 3. **Cancel** - Don't copy any rules
 
-Then proceed based on choice:
+Handle each choice:
+- **Overwrite**: Create directory and copy all rule files
+- **Skip existing**: Create directory and copy only rules that don't already exist
+- **Cancel**: Skip to Step 4 without copying any rules
+
+If proceeding with copy (Overwrite or Skip existing):
 
 ```bash
 mkdir -p .claude/rules
 ```
 
-Copy rule files (respecting the user's choice about existing files):
+Copy rule files based on the user's choice:
 - `${CLAUDE_PLUGIN_ROOT}/rules/comments.md` → `.claude/rules/comments.md`
 - `${CLAUDE_PLUGIN_ROOT}/rules/testing.md` → `.claude/rules/testing.md`
 - `${CLAUDE_PLUGIN_ROOT}/rules/typescript.md` → `.claude/rules/typescript.md`
