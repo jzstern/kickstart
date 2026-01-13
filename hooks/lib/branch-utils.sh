@@ -34,11 +34,14 @@ get_stale_worktrees() {
         local remote
         remote=$(git config --get "branch.$wt_branch.remote" 2>/dev/null)
         if [ "$remote" = "origin" ]; then
-          if ! git ls-remote --heads origin "$wt_branch" 2>/dev/null | grep -q "$wt_branch"; then
-            if [ -n "$stale" ]; then
-              stale="$stale"$'\n'"$wt_path|$wt_branch"
-            else
-              stale="$wt_path|$wt_branch"
+          local ls_output
+          if ls_output=$(git ls-remote --heads origin "$wt_branch" 2>/dev/null); then
+            if ! echo "$ls_output" | grep -Fq "$wt_branch"; then
+              if [ -n "$stale" ]; then
+                stale="$stale"$'\n'"$wt_path|$wt_branch"
+              else
+                stale="$wt_path|$wt_branch"
+              fi
             fi
           fi
         fi
@@ -65,10 +68,11 @@ cleanup_stale_worktrees() {
 
   while IFS='|' read -r wt_path wt_branch; do
     if [ -n "$wt_path" ]; then
-      if git worktree remove "$wt_path" 2>/dev/null; then
+      local err
+      if err=$(git worktree remove "$wt_path" 2>&1); then
         printf '  Removed: %s (branch %s was merged)\n' "$wt_path" "$wt_branch"
       else
-        printf '  Skipped: %s (has uncommitted changes)\n' "$wt_path"
+        printf '  Skipped: %s (%s)\n' "$wt_path" "$err"
       fi
     fi
   done <<< "$stale"
