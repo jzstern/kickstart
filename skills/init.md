@@ -138,6 +138,7 @@ Use AskUserQuestion to ask if the user wants to install recommended companion pl
 **Recommended plugins**:
 | Plugin | Marketplace | Purpose |
 |--------|-------------|---------|
+| `github` | `claude-plugins-official` | GitHub MCP integration for PRs, issues, and repos |
 | `code-simplifier` | `claude-plugins-official` | Simplifies and refines code for clarity |
 | `code-review` | `claude-plugins-official` | Code review for pull requests |
 | `frontend-design` | `claude-plugins-official` | High-quality frontend interface generation |
@@ -151,6 +152,7 @@ claude plugin marketplace add anthropics/claude-code-plugins
 
 Then install each plugin:
 ```bash
+claude plugin install github@claude-plugins-official
 claude plugin install code-simplifier@claude-plugins-official
 claude plugin install code-review@claude-plugins-official
 claude plugin install frontend-design@claude-plugins-official
