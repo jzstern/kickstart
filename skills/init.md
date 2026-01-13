@@ -105,7 +105,7 @@ bunx playwright install chromium
 ```bash
 mkdir -p tests
 ```
-Copy `${CLAUDE_PLUGIN_ROOT}/templates/sveltekit/tests/example.spec.ts` as a starting point.
+Copy `${CLAUDE_PLUGIN_ROOT}/templates/shared/tests/example.spec.ts` as a starting point.
 
 5. **Add test:e2e script to package.json** if not present:
 ```json
