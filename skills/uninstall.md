@@ -61,11 +61,28 @@ Use AskUserQuestion:
 
 If "Yes, copy rules":
 
+First, check for existing rule files that would be overwritten:
+
+```bash
+ls .claude/rules/comments.md .claude/rules/testing.md .claude/rules/typescript.md 2>/dev/null
+```
+
+If any files exist, use AskUserQuestion to warn:
+
+**Question**: "The following rule files already exist and will be overwritten: [list files]. Continue?"
+
+**Options**:
+1. **Overwrite** - Replace existing files with kickstart defaults
+2. **Skip existing** - Only copy rules that don't already exist
+3. **Cancel** - Don't copy any rules
+
+Then proceed based on choice:
+
 ```bash
 mkdir -p .claude/rules
 ```
 
-Copy each rule file from the plugin:
+Copy rule files (respecting the user's choice about existing files):
 - `${CLAUDE_PLUGIN_ROOT}/rules/comments.md` → `.claude/rules/comments.md`
 - `${CLAUDE_PLUGIN_ROOT}/rules/testing.md` → `.claude/rules/testing.md`
 - `${CLAUDE_PLUGIN_ROOT}/rules/typescript.md` → `.claude/rules/typescript.md`
