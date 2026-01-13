@@ -43,6 +43,7 @@ Worktrees are automatically cleaned up at session start when their branches are 
 | `/cleanup` | Remove stale worktrees (runs automatically at session start) |
 | `/uninstall` | Uninstall plugin, keeping project config |
 | `/docs` | Regenerate documentation tables (runs automatically) |
+| `/resolve-conflicts` | Detect and resolve merge conflicts with base branch |
 | `/review` | Code review of staged/changed files |
 | `/security` | Security audit with OWASP Top 10 checks |
 | `/test` | Generate comprehensive unit tests |
@@ -55,6 +56,7 @@ Worktrees are automatically cleaned up at session start when their branches are 
 <!-- kickstart:agents:start -->
 | Agent | Description |
 |-------|-------------|
+| `conflict-resolver` | Detects and resolves git merge conflicts |
 | `debugger` | Investigates errors and stack traces |
 | `e2e-runner` | Playwright E2E testing specialist |
 | `security-auditor` | OWASP Top 10 vulnerability scanning |
@@ -78,6 +80,7 @@ Worktrees are automatically cleaned up at session start when their branches are 
 | `auto-pr-update` | PreToolUse | Updates PR description before push |
 | `auto-assign-pr` | PostToolUse | Assigns created PRs to creator |
 | `auto-docs` | PostToolUse | Regenerates docs when components change |
+| `detect-conflicts` | PreToolUse | Checks for merge conflicts before push |
 <!-- kickstart:hooks:end -->
 
 ## Commit Conventions

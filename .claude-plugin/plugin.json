@@ -10,6 +10,7 @@
 		"../skills/cleanup.md",
 		"../skills/uninstall.md",
 		"../skills/docs.md",
+		"../skills/resolve-conflicts.md",
 		"../skills/review.md",
 		"../skills/security.md",
 		"../skills/test.md",
@@ -22,6 +23,7 @@
 		"../agents/security-auditor.md",
 		"../agents/test-generator.md",
 		"../agents/e2e-runner.md",
+		"../agents/conflict-resolver.md",
 		"../agents/code-reviewer.md",
 		"../agents/codebase-search.md",
 		"../agents/media-interpreter.md",
@@ -35,6 +37,7 @@
 		"../hooks/auto-pr-update.json",
 		"../hooks/auto-assign-pr.json",
 		"../hooks/auto-init.json",
-		"../hooks/auto-docs.json"
+		"../hooks/auto-docs.json",
+		"../hooks/detect-conflicts.json"
 	]
 }
