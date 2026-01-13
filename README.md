@@ -4,7 +4,7 @@ Opinionated Claude Code plugin for fast web project setup. Get productive immedi
 
 ## Installation
 
-Run these commands inside a Claude Code session (not your regular terminal):
+Run these commands inside a Claude Code session:
 
 ```
 /plugin marketplace add jzstern/kickstart
