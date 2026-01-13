@@ -1,6 +1,6 @@
 ---
 name: init
-description: Initialize project configuration with kickstart defaults. Scaffolds .claude/CLAUDE.md, GitHub workflows, and Playwright E2E testing.
+description: Initialize project configuration with kickstart defaults. Scaffolds .claude/CLAUDE.md, GitHub workflows, Playwright E2E testing, and deployment configs.
 ---
 
 # Initialize Kickstart Configuration
@@ -169,7 +169,45 @@ Then use AskUserQuestion with multiSelect to let the user pick which plugins to 
 **If "Skip"**:
 Continue to the next step. Remind the user they can install these later with `/plugin install`.
 
-### Step 8: Confirm Setup
+### Step 8: Configure Deployment (Optional)
+
+Use AskUserQuestion to ask about deployment platform:
+
+**Question**: "Would you like to configure Vercel deployment?"
+
+**Options**:
+1. **Yes** - Create vercel.json for zero-config deployments
+2. **Skip** - Configure deployment later
+
+**If "Yes"**, create `vercel.json` using template from `${CLAUDE_PLUGIN_ROOT}/templates/shared/deploy/vercel.json.template`.
+
+Replace template variables based on framework:
+
+| Framework | `{{FRAMEWORK}}` | `{{OUTPUT_DIR}}` | `{{INSTALL_COMMAND}}` |
+|-----------|-----------------|------------------|----------------------|
+| SvelteKit | `sveltekit` | `.svelte-kit` | `bun install` |
+| Next.js | `nextjs` | `.next` | `npm install` |
+| Remix | `remix` | `build` | `npm install` |
+| Astro | `astro` | `dist` | `npm install` |
+
+Adjust `{{INSTALL_COMMAND}}` based on the project's package manager:
+- bun: `bun install`
+- pnpm: `pnpm install`
+- npm: `npm install`
+- yarn: `yarn install`
+
+For SvelteKit, suggest installing the Vercel adapter for optimal performance:
+```bash
+bun add -D @sveltejs/adapter-vercel
+```
+
+**Framework-specific notes:**
+
+- **SvelteKit**: Default adapter is `adapter-auto` which works with Vercel. For explicit Vercel features (edge functions, ISR), use `@sveltejs/adapter-vercel`.
+- **Next.js**: Vercel works out of the box with zero configuration.
+- **Astro**: Install `@astrojs/vercel` integration for server-side rendering support.
+
+### Step 9: Confirm Setup
 
 Summarize what was created:
 - `.claude/CLAUDE.md` - Project configuration
@@ -177,12 +215,14 @@ Summarize what was created:
 - `.github/workflows/` - CI workflows (if copied)
 - `playwright.config.ts` - Playwright E2E test configuration
 - `tests/` - E2E test directory with example test
+- `vercel.json` - Vercel deployment config (if configured)
 
 Remind the user:
 - Run `bun run test:e2e` (or equivalent) to run E2E tests
 - Run `/update` periodically to get config updates
 - Edit `.claude/CLAUDE.md` to add project-specific notes
 - The kickstart plugin provides agents, hooks, and base rules automatically
+- For SvelteKit + Vercel, consider `@sveltejs/adapter-vercel` for advanced features
 
 ## Important
 
