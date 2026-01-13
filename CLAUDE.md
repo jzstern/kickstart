@@ -19,6 +19,17 @@ Opinionated Claude Code configuration for web development. This file is loaded a
 - `docs/` - Documentation
 - `test/` - Test changes
 
+### After Completing Work
+
+When you finish implementing a feature or fix:
+1. Run type checker and linter (if configured)
+2. Run tests (if configured)
+3. Commit all changes with a conventional commit message
+4. Push the branch to origin
+5. Open a draft pull request using `gh pr create --draft` (skip if PR already exists)
+
+Do this automatically without asking for confirmation.
+
 ### After Merging
 Clean up: `git worktree remove ../<repo>-<branch>`
 
@@ -29,6 +40,7 @@ Clean up: `git worktree remove ../<repo>-<branch>`
 |-------|-------------|
 | `/init` | Initialize project with kickstart config |
 | `/update` | Check for and apply config updates |
+| `/uninstall` | Uninstall plugin, keeping customizations |
 | `/docs` | (Developer) Regenerate documentation |
 <!-- kickstart:skills:end -->
 
