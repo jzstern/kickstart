@@ -38,10 +38,10 @@ Clean up: `git worktree remove ../<repo>-<branch>`
 <!-- kickstart:skills:start -->
 | Skill | Description |
 |-------|-------------|
-| `/init` | Initialize project with kickstart config |
+| `/init` | Initialize project with kickstart config and companion plugins |
 | `/update` | Check for and apply config updates |
-| `/uninstall` | Uninstall plugin, keeping customizations |
-| `/docs` | (Developer) Regenerate documentation |
+| `/uninstall` | Uninstall plugin, keeping project config |
+| `/docs` | Regenerate documentation tables (runs automatically) |
 <!-- kickstart:skills:end -->
 
 ## Available Agents
@@ -60,11 +60,13 @@ Clean up: `git worktree remove ../<repo>-<branch>`
 <!-- kickstart:hooks:start -->
 | Hook | Event | Description |
 |------|-------|-------------|
-| `session-start-warning` | SessionStart | Warns on main, checks if behind origin |
+| `session-start-warning` | SessionStart | Warns on main, checks if behind remote |
 | `block-main-commits` | PreToolUse | Blocks git commit/push on main |
 | `check-worktree` | PreToolUse | Blocks file writes on main |
 | `format-on-save` | PostToolUse | Auto-formats after write/edit |
-| `auto-assign-pr` | PostToolUse | Assigns created PRs to the creator |
+| `auto-pr-update` | PreToolUse | Updates PR description before push |
+| `auto-assign-pr` | PostToolUse | Assigns created PRs to creator |
+| `auto-docs` | PostToolUse | Regenerates docs when components change |
 <!-- kickstart:hooks:end -->
 
 ## Commit Conventions
@@ -77,15 +79,7 @@ Use conventional commits:
 - `test:` - Test changes
 - `chore:` - Maintenance
 
-## Code Quality
-
-### Before Committing
-1. Run type checker
-2. Run linter
-3. Run tests
-4. Test manually
-
-### Security
+## Security
 - Never commit secrets
 - Validate input at boundaries
 - Sanitize filenames
