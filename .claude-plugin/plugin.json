@@ -4,7 +4,7 @@
 	"description": "Opinionated Claude Code starter config for web applications. Git worktrees, TypeScript best practices, testing patterns, and project scaffolding.",
 	"author": "jzstern",
 	"repository": "https://github.com/jzstern/kickstart",
-	"skills": ["../skills/init.md", "../skills/update.md"],
+	"skills": ["../skills/init.md", "../skills/update.md", "../skills/docs.md"],
 	"agents": [
 		"../agents/debugger.md",
 		"../agents/security-auditor.md",
