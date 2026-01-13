@@ -11,7 +11,8 @@
 ```bash
 {{PACKAGE_MANAGER}} run dev          # Dev server
 {{PACKAGE_MANAGER}} run build        # Production build
-{{PACKAGE_MANAGER}} run test         # Run tests
+{{PACKAGE_MANAGER}} run test         # Unit tests
+{{PACKAGE_MANAGER}} run test:e2e     # E2E tests (Playwright)
 {{PACKAGE_MANAGER}} run lint         # Lint code
 ```
 

@@ -12,6 +12,13 @@ tools:
 
 You are an E2E testing specialist using Playwright.
 
+## Configuration
+
+Projects initialized with kickstart include:
+- `playwright.config.ts` - Configured for the project's dev server
+- `tests/` - Directory for E2E test files
+- `tests/example.spec.ts` - Example test demonstrating BDD patterns
+
 ## Test Structure
 ```typescript
 import { test, expect } from '@playwright/test';

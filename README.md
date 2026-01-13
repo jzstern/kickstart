@@ -2,79 +2,66 @@
 
 Opinionated Claude Code plugin for fast web project setup. Get productive immediately with sensible defaults for git workflows, TypeScript, testing, and more.
 
-## Features
-
-- **Git Worktree Workflow** - Enforced branching with worktrees (never commit to main)
-- **TypeScript Best Practices** - Naming conventions, type safety rules
-- **Testing Standards** - BDD structure, mocking guidelines
-- **Code Quality Agents** - Code review, security audit, test generation
-- **CI/CD Templates** - GitHub Actions workflows ready to go
-
 ## Installation
 
-Add to your project's `.claude/plugins/`:
+```bash
+# Add the kickstart marketplace
+/plugin marketplace add jzstern/kickstart
+
+# Install kickstart
+/plugin install kickstart@kickstart
+```
+
+### Recommended Plugins
+
+Kickstart works great alongside these official plugins. Install them for the complete experience:
 
 ```bash
-mkdir -p .claude/plugins
-cd .claude/plugins
-git clone https://github.com/jzstern/kickstart.git
+# Code quality
+/plugin install code-simplifier@claude-plugins-official
+/plugin install code-review@claude-plugins-official
+
+# Frontend development
+/plugin install frontend-design@claude-plugins-official
+
+# TypeScript support
+/plugin install typescript-lsp@claude-plugins-official
 ```
 
-Or add as a git submodule:
+## Features
 
+### Git Worktree Workflow
+Never commit to main. Kickstart enforces creating worktrees for all changes:
 ```bash
-git submodule add https://github.com/jzstern/kickstart.git .claude/plugins/kickstart
+git worktree add -b feat/my-feature ../repo-feat-my-feature main
 ```
 
-## Usage
-
-### Initialize a New Project
-
+### Project Scaffolding
 ```
-/init
+/init    # Set up a new project with kickstart config
+/update  # Check for and apply config updates (with approval)
 ```
-
-This will:
-1. Detect your tech stack (or ask)
-2. Create `.claude/CLAUDE.md` with project config
-3. Set up GitHub workflows
-
-### Update Configuration
-
-```
-/update
-```
-
-Check for plugin updates and merge them with your customizations. You'll approve all changes before they're applied.
-
-## What's Included
 
 ### Agents
-
 | Agent | Description |
 |-------|-------------|
-| `code-reviewer` | Reviews changes for quality and style |
+| `debugger` | Investigates errors and stack traces |
 | `security-auditor` | OWASP Top 10 vulnerability scanning |
 | `test-generator` | Generates comprehensive unit tests |
-| `debugger` | Investigates errors and stack traces |
 | `e2e-runner` | Playwright E2E test specialist |
-| `code-simplifier` | Simplifies code without changing behavior |
 
 ### Hooks
-
 | Hook | Description |
 |------|-------------|
 | `format-on-save` | Auto-formats files after write/edit |
-| `check-worktree` | Warns if writing code on main branch |
+| `check-worktree` | Blocks writes on main branch |
 
 ### Rules
-
-- **TypeScript** - Naming, type safety, imports, async handling
-- **Testing** - BDD structure, mocking, coverage requirements
+- **TypeScript** - Naming conventions, type safety, imports
+- **Testing** - BDD structure, mocking, coverage
 - **Comments** - Self-documenting code principles
 
 ### Templates
-
 - **SvelteKit** - Bun, Svelte 5, Tailwind, Biome
 - **Base** - Generic web project setup
 
@@ -111,7 +98,7 @@ By installing this plugin, you're allowing Claude to execute the following witho
 
 If you want tighter security, fork this plugin and edit `.claude/settings.json` to remove permissions you're not comfortable with. For example, remove `Bash(npx:*)` to require confirmation before running arbitrary npm packages.
 
-## Configuration Philosophy
+## How It Works
 
 **Plugin-owned (updates automatically):**
 - Agents, hooks, rules
@@ -123,7 +110,15 @@ If you want tighter security, fork this plugin and edit `.claude/settings.json` 
 - Custom commands
 - Project-specific notes
 
-This split means you get updates without losing customizations.
+Run `/update` periodically to get the latest config without losing your customizations.
+
+## Credits
+
+Kickstart recommends these excellent official plugins:
+- [code-simplifier](https://github.com/anthropics/claude-code-plugins) by Anthropic
+- [code-review](https://github.com/anthropics/claude-code-plugins) by Anthropic
+- [frontend-design](https://github.com/anthropics/claude-code-plugins) by Anthropic
+- [typescript-lsp](https://github.com/anthropics/claude-code-plugins) by Anthropic
 
 ## Contributing
 
