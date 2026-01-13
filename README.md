@@ -70,7 +70,7 @@ git worktree add -b feat/my-feature ../repo-feat-my-feature main
 | `check-worktree` | PreToolUse | Blocks file writes on main/master branch |
 | `format-on-save` | PostToolUse | Auto-formats files after write/edit |
 | `auto-pr-update` | PreToolUse | Updates PR description before push ([setup required](#github-mcp-setup)) |
-| `detect-conflicts` | PreToolUse | Checks for merge conflicts before push and offers resolution |
+| `detect-conflicts` | PreToolUse | Checks for merge conflicts before push and auto-resolves them |
 <!-- kickstart:hooks:end -->
 
 ### GitHub MCP Setup
