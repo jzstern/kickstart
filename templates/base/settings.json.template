@@ -9,6 +9,7 @@
 			"Bash({{PACKAGE_MANAGER}} run lint:*)",
 			"Bash({{PACKAGE_MANAGER}} run test:*)",
 			"Bash({{PACKAGE_MANAGER_X}} playwright:*)",
+			"Bash({{PACKAGE_MANAGER_X}} biome:*)",
 
 			"Bash(git status:*)",
 			"Bash(git branch:*)",
