@@ -1,6 +1,6 @@
 ---
 name: init
-description: Initialize project configuration with kickstart defaults. Scaffolds .claude/CLAUDE.md, GitHub workflows, and Playwright E2E testing.
+description: Initialize project configuration with kickstart defaults. Scaffolds .claude/CLAUDE.md, GitHub workflows, Playwright E2E testing, and deployment configs.
 ---
 
 # Initialize Kickstart Configuration
@@ -169,7 +169,56 @@ Then use AskUserQuestion with multiSelect to let the user pick which plugins to 
 **If "Skip"**:
 Continue to the next step. Remind the user they can install these later with `/plugin install`.
 
-### Step 8: Confirm Setup
+### Step 8: Configure Deployment (Optional)
+
+Use AskUserQuestion to ask about deployment platform:
+
+**Question**: "Which deployment platform will you use?"
+
+**Options**:
+1. **Vercel** - Zero-config deployments with edge functions
+2. **Netlify** - Full-featured platform with serverless functions
+3. **Cloudflare Pages** - Fast global CDN with Workers
+4. **Skip** - Configure deployment later
+
+**If a platform is selected**, create the appropriate config file:
+
+**For Vercel** (`vercel.json`):
+
+Use template from `${CLAUDE_PLUGIN_ROOT}/templates/shared/deploy/vercel.json.template`:
+
+| Framework | `{{FRAMEWORK}}` | `{{OUTPUT_DIR}}` |
+|-----------|-----------------|------------------|
+| SvelteKit | `sveltekit` | `.svelte-kit` |
+| Next.js | `nextjs` | `.next` |
+| Remix | `remix` | `build` |
+| Astro | `astro` | `dist` |
+
+**For Netlify** (`netlify.toml`):
+
+Use template from `${CLAUDE_PLUGIN_ROOT}/templates/shared/deploy/netlify.toml.template`:
+
+For SvelteKit, also suggest installing the adapter:
+```bash
+bun add -D @sveltejs/adapter-netlify
+```
+
+**For Cloudflare Pages** (`wrangler.toml`):
+
+Use template from `${CLAUDE_PLUGIN_ROOT}/templates/shared/deploy/wrangler.toml.template`:
+
+For SvelteKit, also suggest installing the adapter:
+```bash
+bun add -D @sveltejs/adapter-cloudflare
+```
+
+**Framework-specific notes:**
+
+- **SvelteKit**: Default adapter is `adapter-auto`. For specific platforms, update `svelte.config.js` to use the platform adapter.
+- **Next.js**: Vercel works out of the box. Other platforms may need `output: 'export'` in `next.config.js`.
+- **Astro**: Install platform-specific integration (e.g., `@astrojs/vercel`, `@astrojs/netlify`).
+
+### Step 9: Confirm Setup
 
 Summarize what was created:
 - `.claude/CLAUDE.md` - Project configuration
@@ -177,12 +226,14 @@ Summarize what was created:
 - `.github/workflows/` - CI workflows (if copied)
 - `playwright.config.ts` - Playwright E2E test configuration
 - `tests/` - E2E test directory with example test
+- `vercel.json` / `netlify.toml` / `wrangler.toml` - Deployment config (if platform selected)
 
 Remind the user:
 - Run `bun run test:e2e` (or equivalent) to run E2E tests
 - Run `/update` periodically to get config updates
 - Edit `.claude/CLAUDE.md` to add project-specific notes
 - The kickstart plugin provides agents, hooks, and base rules automatically
+- If using a platform adapter (Netlify, Cloudflare), update `svelte.config.js` to use it
 
 ## Important
 
