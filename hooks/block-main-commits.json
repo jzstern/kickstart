@@ -7,7 +7,7 @@
 			"matcher": {
 				"tool": "Bash"
 			},
-			"command": "if echo \"$TOOL_INPUT_command\" | grep -qE 'git[[:space:]]+(commit|push)'; then branch=$(git branch --show-current 2>/dev/null); if [ \"$branch\" = \"main\" ] || [ \"$branch\" = \"master\" ]; then repo=$(basename \"$PWD\"); printf 'BLOCKED: Cannot commit/push directly to %s.\\n\\nCreate a worktree first:\\n\\n  git worktree add -b feat/your-feature ../%s-feat-your-feature %s\\n  cd ../%s-feat-your-feature\\n' \"$branch\" \"$repo\" \"$branch\" \"$repo\"; exit 1; fi; fi"
+			"command": "if echo \"$TOOL_INPUT_command\" | grep -qE 'git[[:space:]]+(commit|push)'; then source \"${CLAUDE_PLUGIN_ROOT}/hooks/lib/branch-utils.sh\"; branch=$(get_branch); if is_main_branch \"$branch\"; then repo=$(get_repo); printf 'BLOCKED: Cannot commit/push directly to %s.\\n\\n%s\\n' \"$branch\" \"$(worktree_message \"$branch\" \"$repo\")\"; exit 1; fi; fi"
 		}
 	]
 }

@@ -4,11 +4,10 @@ Opinionated Claude Code plugin for fast web project setup. Get productive immedi
 
 ## Installation
 
-```bash
-# Add the kickstart marketplace
-/plugin marketplace add jzstern/kickstart
+Run these commands inside a Claude Code session:
 
-# Install kickstart
+```
+/plugin marketplace add jzstern/kickstart
 /plugin install kickstart@kickstart
 ```
 
@@ -23,8 +22,8 @@ Kickstart works great alongside these official plugins. **During `/init`, you'll
 | `frontend-design` | High-quality frontend interface generation |
 | `typescript-lsp` | TypeScript language server integration |
 
-To install manually:
-```bash
+To install manually (in Claude Code):
+```
 /plugin marketplace add anthropics/claude-code-plugins
 /plugin install code-simplifier@claude-plugins-official
 ```
@@ -44,6 +43,7 @@ git worktree add -b feat/my-feature ../repo-feat-my-feature main
 |-------|-------------|
 | `/init` | Initialize project configuration with kickstart defaults (includes option to install companion plugins) |
 | `/update` | Check for and apply config updates with user approval |
+| `/uninstall` | Uninstall plugin while preserving project configuration and customizations |
 | `/docs` | Auto-generate documentation from plugin components |
 | `/resolve-conflicts` | Detect and resolve merge conflicts with base branch |
 <!-- kickstart:skills:end -->
@@ -87,8 +87,8 @@ The `auto-pr-update` hook requires the GitHub MCP integration to update PR descr
    export GITHUB_PERSONAL_ACCESS_TOKEN="ghp_your_token_here"
    ```
 
-3. **Install the GitHub MCP plugin**
-   ```bash
+3. **Install the GitHub MCP plugin** (in Claude Code)
+   ```
    /plugin install github@claude-plugins-official
    ```
 
@@ -107,49 +107,18 @@ Once configured, the hook will automatically update your PR description with a s
 
 ## Permissions
 
-<!-- kickstart:permissions:start -->
-| Category | Commands |
-|----------|----------|
-| **Git** | `status`, `branch`, `log`, `diff`, `show`, `fetch`, `pull`, `add`, `commit`, `push`, `checkout`, `switch`, `rebase`, `merge`, `stash`, `worktree`, `remote`, `tag`, `cherry-pick`, `reset`, `restore`, `clean` |
-| **GitHub CLI** | `api`, `pr`, `issue`, `repo view`, `run`, `workflow` |
-| **Bun** | `add`, `install`, `run dev`, `run build`, `run check`, `run lint`, `run test` |
-| **Playwright** | `bunx playwright` |
-| **Biome** | `bunx biome` |
-<!-- kickstart:permissions:end -->
+⚠️ **Warning: This plugin grants Claude extensive permissions.** It can edit files, run code, push to git, deploy to Vercel, and more—all without asking first. This is by design: fewer interruptions, faster coding.
 
-By installing this plugin, you're allowing Claude to execute the following without asking:
+**[See the full list →](.claude/settings.json)**
 
-| Category | Commands | Risk Level |
-|----------|----------|------------|
-| **File Operations** | `Edit`, `Write`, `mkdir`, `rm`, `mv`, `cp` | 🔴 High - Can modify/delete any file in project |
-| **Package Execution** | `npx`, `bunx` | 🔴 High - Can run arbitrary npm packages (supply chain risk) |
-| **Code Execution** | `python3` | 🔴 High - Arbitrary Python code execution |
-| **Network** | `curl`, `dig`, `ping` | 🟠 Medium - Can make network requests, potential data exfiltration |
-| **Git Operations** | `git push`, `git reset`, `git commit` | 🟠 Medium - Can push to remotes, discard uncommitted work |
-| **GitHub CLI** | `gh` (all commands) | 🟠 Medium - Includes `gh repo delete`, `gh release delete`, etc. |
-| **GitHub MCP** | PR creation, branch creation, issue reading | 🟠 Medium - Can create PRs and branches automatically |
-| **Deployment** | `vercel` | 🟠 Medium - Can deploy to production environments |
-| **System** | `pkill`, `chmod`, `brew install` | 🟠 Medium - Process control, file permissions, package installation |
-| **Plugin Management** | `claude plugin`, `claude mcp` | 🟡 Low - Can install/remove plugins and MCP servers |
-| **Plugin Commands** | `Skill(*)` | 🟡 Low - All Claude plugin commands run without confirmation |
+Think of it like giving your coworker sudo access. Great if you trust them. Terrifying if you don't.
 
-> **Note:** Git operations on main branch are blocked by kickstart hooks even though the commands are permitted. This provides safety while maintaining a frictionless workflow on feature branches.
+✅ Use on personal dev machines you control
+❌ Don't use on shared systems or prod environments
 
-### Who Should Use This
+> **Safety net:** Hooks block commits to main even though the permissions allow it. We're reckless, not stupid.
 
-✅ **Recommended for:**
-- Personal development machines you fully control
-- Trusted development environments
-- Developers comfortable with Claude having broad access
-
-❌ **Not recommended for:**
-- Shared or multi-user systems
-- Production environments
-- Users who prefer explicit confirmation for each command
-
-### Reducing Permissions
-
-If you want tighter security, fork this plugin and edit `.claude/settings.json` to remove permissions you're not comfortable with. For example, remove `Bash(npx:*)` to require confirmation before running arbitrary npm packages.
+**Want fewer permissions?** Fork and edit `.claude/settings.json`. Remove whatever scares you.
 
 ## How It Works
 

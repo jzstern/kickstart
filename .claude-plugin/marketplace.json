@@ -19,6 +19,12 @@
 	],
 	"recommendedPlugins": [
 		{
+			"name": "github",
+			"marketplace": "claude-plugins-official",
+			"description": "GitHub MCP integration for PRs, issues, and repository management",
+			"author": "Anthropic"
+		},
+		{
 			"name": "code-simplifier",
 			"marketplace": "claude-plugins-official",
 			"description": "Simplifies code for clarity and maintainability",

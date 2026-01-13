@@ -7,6 +7,7 @@
 	"skills": [
 		"../skills/init.md",
 		"../skills/update.md",
+		"../skills/uninstall.md",
 		"../skills/docs.md",
 		"../skills/resolve-conflicts.md"
 	],
@@ -23,6 +24,7 @@
 		"../hooks/check-worktree.json",
 		"../hooks/format-on-save.json",
 		"../hooks/auto-pr-update.json",
+		"../hooks/auto-assign-pr.json",
 		"../hooks/detect-conflicts.json"
 	]
 }
