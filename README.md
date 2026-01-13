@@ -12,20 +12,21 @@ Opinionated Claude Code plugin for fast web project setup. Get productive immedi
 /plugin install kickstart@kickstart
 ```
 
-### Recommended Plugins
+### Companion Plugins
 
-Kickstart works great alongside these official plugins. Install them for the complete experience:
+Kickstart works great alongside these official plugins. **During `/init`, you'll be offered the option to install them automatically.**
 
+| Plugin | Purpose |
+|--------|---------|
+| `code-simplifier` | Simplifies and refines code for clarity |
+| `code-review` | Code review for pull requests |
+| `frontend-design` | High-quality frontend interface generation |
+| `typescript-lsp` | TypeScript language server integration |
+
+To install manually:
 ```bash
-# Code quality
+/plugin marketplace add anthropics/claude-code-plugins
 /plugin install code-simplifier@claude-plugins-official
-/plugin install code-review@claude-plugins-official
-
-# Frontend development
-/plugin install frontend-design@claude-plugins-official
-
-# TypeScript support
-/plugin install typescript-lsp@claude-plugins-official
 ```
 
 ## Features
@@ -36,25 +37,61 @@ Never commit to main. Kickstart enforces creating worktrees for all changes:
 git worktree add -b feat/my-feature ../repo-feat-my-feature main
 ```
 
-### Project Scaffolding
-```
-/init    # Set up a new project with kickstart config
-/update  # Check for and apply config updates (with approval)
-```
+### Skills
+
+<!-- kickstart:skills:start -->
+| Skill | Description |
+|-------|-------------|
+| `/init` | Initialize project configuration with kickstart defaults (includes option to install companion plugins) |
+| `/update` | Check for and apply config updates with user approval |
+| `/docs` | Auto-generate documentation from plugin components |
+<!-- kickstart:skills:end -->
 
 ### Agents
+
+<!-- kickstart:agents:start -->
 | Agent | Description |
 |-------|-------------|
-| `debugger` | Investigates errors and stack traces |
+| `debugger` | Investigates errors, analyzes stack traces, traces issues through codebase |
+| `e2e-runner` | E2E testing specialist using Playwright |
 | `security-auditor` | OWASP Top 10 vulnerability scanning |
 | `test-generator` | Generates comprehensive unit tests |
-| `e2e-runner` | Playwright E2E test specialist |
+<!-- kickstart:agents:end -->
 
 ### Hooks
-| Hook | Description |
-|------|-------------|
-| `format-on-save` | Auto-formats files after write/edit |
-| `check-worktree` | Blocks writes on main branch |
+
+<!-- kickstart:hooks:start -->
+| Hook | Event | Description |
+|------|-------|-------------|
+| `session-start-warning` | SessionStart | Warns when on main/master branch and checks if behind remote |
+| `block-main-commits` | PreToolUse | Blocks git commit and push commands on main/master |
+| `check-worktree` | PreToolUse | Blocks file writes on main/master branch |
+| `format-on-save` | PostToolUse | Auto-formats files after write/edit |
+| `auto-pr-update` | PreToolUse | Updates PR description before push ([setup required](#github-mcp-setup)) |
+<!-- kickstart:hooks:end -->
+
+### GitHub MCP Setup
+
+The `auto-pr-update` hook requires the GitHub MCP integration to update PR descriptions. To enable it:
+
+1. **Create a GitHub Personal Access Token**
+   - Go to [GitHub Settings → Developer settings → Personal access tokens](https://github.com/settings/tokens)
+   - Create a token with `repo` scope (for PR read/write access)
+
+2. **Set the environment variable**
+   ```bash
+   # Add to your shell profile (~/.zshrc, ~/.bashrc, etc.)
+   export GITHUB_PERSONAL_ACCESS_TOKEN="ghp_your_token_here"
+   ```
+
+3. **Install the GitHub MCP plugin**
+   ```bash
+   /plugin install github@claude-plugins-official
+   ```
+
+4. **Restart Claude Code** to pick up the environment variable
+
+Once configured, the hook will automatically update your PR description with a summary, testing instructions, and files changed whenever you push to a branch with an open PR.
 
 ### Rules
 - **TypeScript** - Naming conventions, type safety, imports
@@ -65,38 +102,20 @@ git worktree add -b feat/my-feature ../repo-feat-my-feature main
 - **SvelteKit** - Bun, Svelte 5, Tailwind, Biome
 - **Base** - Generic web project setup
 
-## Security & Permissions
+## Permissions
 
-**⚠️ This plugin grants Claude Code broad permissions to run commands without confirmation prompts.**
+⚠️ **Warning: This plugin grants Claude extensive permissions.** It can edit files, run code, push to git, deploy to Vercel, and more—all without asking first. This is by design: fewer interruptions, faster coding.
 
-By installing this plugin, you're allowing Claude to execute the following without asking:
+**[See the full list →](.claude/settings.json)**
 
-| Category | Commands | Risk Level |
-|----------|----------|------------|
-| **Package Execution** | `npx`, `bunx` | 🔴 High - Can run arbitrary npm packages (supply chain risk) |
-| **Code Execution** | `python3` | 🔴 High - Arbitrary Python code execution |
-| **Network** | `curl`, `dig`, `ping` | 🟠 Medium - Can make network requests, potential data exfiltration |
-| **Git Operations** | `git push`, `git reset`, `git commit` | 🟠 Medium - Can push to remotes, discard uncommitted work |
-| **GitHub CLI** | `gh` (all commands) | 🟠 Medium - Includes `gh repo delete`, `gh release delete`, etc. |
-| **Deployment** | `vercel` | 🟠 Medium - Can deploy to production environments |
-| **System** | `pkill`, `chmod`, `brew install` | 🟠 Medium - Process control, file permissions, package installation |
-| **Plugin Commands** | `Skill(*)` | 🟡 Low - All Claude plugin commands run without confirmation |
+Think of it like giving your coworker sudo access. Great if you trust them. Terrifying if you don't.
 
-### Who Should Use This
+✅ Use on personal dev machines you control
+❌ Don't use on shared systems or prod environments
 
-✅ **Recommended for:**
-- Personal development machines you fully control
-- Trusted development environments
-- Developers comfortable with Claude having broad access
+> **Safety net:** Hooks block commits to main even though the permissions allow it. We're reckless, not stupid.
 
-❌ **Not recommended for:**
-- Shared or multi-user systems
-- Production environments
-- Users who prefer explicit confirmation for each command
-
-### Reducing Permissions
-
-If you want tighter security, fork this plugin and edit `.claude/settings.json` to remove permissions you're not comfortable with. For example, remove `Bash(npx:*)` to require confirmation before running arbitrary npm packages.
+**Want fewer permissions?** Fork and edit `.claude/settings.json`. Remove whatever scares you.
 
 ## How It Works
 
@@ -112,6 +131,10 @@ If you want tighter security, fork this plugin and edit `.claude/settings.json` 
 
 Run `/update` periodically to get the latest config without losing your customizations.
 
+## Documentation Maintenance
+
+Run `/docs` after modifying kickstart components to regenerate this README's tables. The sections between `<!-- kickstart:*:start -->` and `<!-- kickstart:*:end -->` markers are auto-generated.
+
 ## Credits
 
 Kickstart recommends these excellent official plugins:
@@ -125,7 +148,8 @@ Kickstart recommends these excellent official plugins:
 1. Fork the repo
 2. Create a feature branch
 3. Make your changes
-4. Submit a PR
+4. Run `/docs` to update documentation
+5. Submit a PR
 
 ## License
 

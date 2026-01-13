@@ -11,13 +11,19 @@
 			"name": "kickstart",
 			"source": "../",
 			"description": "Git worktree workflow, TypeScript/testing rules, project scaffolding with /init and /update commands",
-			"version": "0.2.0",
+			"version": "0.3.0",
 			"author": {
 				"name": "jzstern"
 			}
 		}
 	],
 	"recommendedPlugins": [
+		{
+			"name": "github",
+			"marketplace": "claude-plugins-official",
+			"description": "GitHub MCP integration for PRs, issues, and repository management",
+			"author": "Anthropic"
+		},
 		{
 			"name": "code-simplifier",
 			"marketplace": "claude-plugins-official",

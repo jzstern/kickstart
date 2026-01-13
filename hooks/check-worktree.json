@@ -1,13 +1,13 @@
 {
 	"name": "check-worktree",
-	"description": "Warn if attempting to write code while on main branch",
+	"description": "Block file writes when on main/master branch",
 	"hooks": [
 		{
 			"event": "PreToolUse",
 			"matcher": {
-				"tool": ["Write", "Edit"]
+				"tool": ["Write", "Edit", "MultiEdit"]
 			},
-			"command": "branch=$(git branch --show-current 2>/dev/null); if [ \"$branch\" = \"main\" ] || [ \"$branch\" = \"master\" ]; then echo 'WARNING: You are on the main branch. Create a worktree first: git worktree add -b feat/feature-name ../repo-feat-feature-name main'; exit 1; fi"
+			"command": "source \"${CLAUDE_PLUGIN_ROOT}/hooks/lib/branch-utils.sh\"; branch=$(get_branch); if is_main_branch \"$branch\"; then repo=$(get_repo); printf 'BLOCKED: Cannot write files on %s branch.\\n\\n%s\\n' \"$branch\" \"$(worktree_message \"$branch\" \"$repo\")\"; exit 1; fi"
 		}
 	]
 }

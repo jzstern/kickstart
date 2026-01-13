@@ -21,6 +21,14 @@ bun run test         # Unit tests (Vitest)
 bun run test:e2e     # E2E tests (Playwright)
 ```
 
+## File Organization
+
+- `src/routes/` - Pages and API routes
+- `src/lib/components/` - Reusable components (PascalCase.svelte)
+- `src/lib/components/ui/` - UI library components
+- `src/lib/types.ts` - Shared TypeScript types
+- `src/lib/server/` - Server-only code
+
 ## Svelte 5 Patterns
 
 ### State
@@ -50,27 +58,12 @@ $effect(() => {
 </script>
 ```
 
-## File Organization
-
-- `src/routes/` - Pages and API routes
-- `src/lib/components/` - Reusable components (PascalCase.svelte)
-- `src/lib/components/ui/` - UI library components
-- `src/lib/types.ts` - Shared TypeScript types
-- `src/lib/server/` - Server-only code
-
 ## Biome
 
 Handles formatting and linting. Run `bun run lint` before committing.
 
 **Important**: Never run `--unsafe` without approval (can cause false positives on Svelte imports).
 
-## Before Committing
+## Project Notes
 
-1. Check for compilation errors in dev server
-2. Run `bun run check` for TypeScript
-3. Run `bun run lint` for Biome
-4. Test the feature manually
-
-## Project-Specific Notes
-
-<!-- Add notes specific to this project -->
+<!-- Add project-specific patterns, context, or gotchas here -->
