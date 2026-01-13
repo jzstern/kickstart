@@ -16,17 +16,6 @@
 {{PACKAGE_MANAGER}} run lint         # Lint code
 ```
 
-## Project Structure
+## Project Notes
 
-<!-- Describe your project's file organization -->
-
-## Development Notes
-
-<!-- Add project-specific patterns, gotchas, or important context -->
-
-## Before Committing
-
-1. Run type checker: `{{PACKAGE_MANAGER}} run check`
-2. Run linter: `{{PACKAGE_MANAGER}} run lint`
-3. Run tests: `{{PACKAGE_MANAGER}} run test`
-4. Test manually in browser/client
+<!-- Add project-specific patterns, context, or gotchas here -->
