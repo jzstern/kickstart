@@ -41,9 +41,7 @@ Never commit to main. Kickstart enforces creating worktrees for all changes:
 git worktree add -b feat/my-feature ../repo-feat-my-feature main
 ```
 
-Stale worktrees are automatically cleaned up at session start when their branches are deleted from remote. For this to work, enable auto-delete in your GitHub repo settings:
-
-**Settings → General → Pull Requests → Automatically delete head branches**
+Stale worktrees are automatically cleaned up at session start when their branches are deleted from `origin` (e.g., after a PR is merged). For this to work, enable auto-delete in your GitHub repo under **Settings → General → Pull Requests → Automatically delete head branches**.
 
 ### Skills
 
