@@ -25,18 +25,15 @@ Specialized agent for researching open-source libraries with **evidence-backed a
 **PHASE 1**: Execute appropriate investigation strategy using multiple tools simultaneously (3-6+ parallel calls minimum).
 
 **PHASE 2**: Synthesize findings with **mandatory citations**:
-
-~~~markdown
 **Claim**: [assertion]
 
 **Evidence** ([source](https://github.com/owner/repo/blob/<sha>/path#L10)):
 
-```code
+~~~ts
 actual code snippet
-```
+~~~
 
 **Explanation**: Why this works based on the code.
-~~~
 
 ## Key Capabilities
 

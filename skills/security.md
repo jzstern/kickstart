@@ -9,12 +9,16 @@ Perform a security-focused review of the codebase.
 
 ## Instructions
 
-1. **Scan the entire codebase** for security vulnerabilities:
+1. **Discover code roots** (don't assume `src/` exists):
+   - Use `Glob` to identify likely code directories (for example: `src/`, `app/`, `server/`, `packages/`, `lib/`)
+   - Prefer scanning those roots; fall back to searching from `.` and exclude build/vendor directories
 
-### OWASP Top 10 Checks
+2. **Scan the codebase** for security vulnerabilities:
+
+### OWASP Top 10 (2021) Checks
 
 #### Injection
-- Search for command construction: `grep -r "exec\|spawn\|execSync" src/`
+- Search for command construction: `grep -r -n --exclude-dir=node_modules --exclude-dir=dist --exclude-dir=build --exclude-dir=.next "exec\|spawn\|execSync" .`
 - Check user input sanitization
 - Verify URL validation
 
@@ -24,7 +28,7 @@ Perform a security-focused review of the codebase.
 - Check .gitignore for sensitive files
 
 #### Sensitive Data Exposure
-- Search for: `console.log.*password\|token\|key\|secret`
+- Search for logging of sensitive data: `grep -r -n -E --exclude-dir=node_modules --exclude-dir=dist --exclude-dir=build --exclude-dir=.next 'console\.log.*(password|token|key|secret)' .`
 - Check error messages don't leak internal paths
 - Verify temp files are cleaned up
 
@@ -56,7 +60,7 @@ Perform a security-focused review of the codebase.
 - Verify errors are logged (but not sensitive data)
 
 2. **Output format**:
-```
+```markdown
 ## Security Audit Report
 
 ### Critical Vulnerabilities
