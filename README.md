@@ -13,7 +13,7 @@ Run these commands inside a Claude Code session:
 
 ### Companion Plugins
 
-Kickstart works great alongside these official plugins. **During `/init`, you'll be offered the option to install them automatically.**
+Kickstart automatically installs these official plugins during `/init`:
 
 | Plugin | Purpose |
 |--------|---------|
@@ -22,11 +22,16 @@ Kickstart works great alongside these official plugins. **During `/init`, you'll
 | `frontend-design` | High-quality frontend interface generation |
 | `typescript-lsp` | TypeScript language server integration |
 
-To install manually (in Claude Code):
-```
-/plugin marketplace add anthropics/claude-code-plugins
-/plugin install code-simplifier@claude-plugins-official
-```
+## Getting Started
+
+When you open a project that hasn't been initialized with Kickstart, you'll see a welcome message and be prompted to run `/init`. This sets up:
+
+- Project-specific `CLAUDE.md` with your project name and description
+- Git worktree workflow enforcement
+- TypeScript, testing, and comment rules
+- Companion plugins for code quality
+
+The prompt only appears once per project. After initialization, Kickstart works silently in the background.
 
 ## Features
 
@@ -41,10 +46,17 @@ git worktree add -b feat/my-feature ../repo-feat-my-feature main
 <!-- kickstart:skills:start -->
 | Skill | Description |
 |-------|-------------|
-| `/init` | Initialize project configuration with kickstart defaults (includes option to install companion plugins) |
-| `/update` | Check for and apply config updates with user approval |
-| `/uninstall` | Uninstall plugin while preserving project configuration and customizations |
-| `/docs` | Auto-generate documentation from plugin components |
+| `/init` | Initialize project with kickstart config and companion plugins |
+| `/update` | Check for and apply config updates |
+| `/cleanup` | Remove stale worktrees (runs automatically at session start) |
+| `/uninstall` | Uninstall plugin, keeping project config |
+| `/docs` | Regenerate documentation tables (runs automatically) |
+| `/resolve-conflicts` | Detect and resolve merge conflicts with base branch |
+| `/review` | Code review of staged/changed files |
+| `/security` | Security audit with OWASP Top 10 checks |
+| `/test` | Generate comprehensive unit tests |
+| `/e2e` | E2E testing with Playwright |
+| `/compound` | Capture session learnings to improve future work |
 <!-- kickstart:skills:end -->
 
 ### Agents
@@ -52,10 +64,15 @@ git worktree add -b feat/my-feature ../repo-feat-my-feature main
 <!-- kickstart:agents:start -->
 | Agent | Description |
 |-------|-------------|
-| `debugger` | Investigates errors, analyzes stack traces, traces issues through codebase |
-| `e2e-runner` | E2E testing specialist using Playwright |
+| `conflict-resolver` | Detects and resolves git merge conflicts |
+| `debugger` | Investigates errors and stack traces |
+| `e2e-runner` | Playwright E2E testing specialist |
 | `security-auditor` | OWASP Top 10 vulnerability scanning |
 | `test-generator` | Generates comprehensive unit tests |
+| `code-reviewer` | Reviews code for quality, security, and standards |
+| `codebase-search` | Locates code and implementations with parallel search |
+| `media-interpreter` | Extracts data from PDFs, images, diagrams |
+| `open-source-librarian` | Researches libraries with GitHub permalinks |
 <!-- kickstart:agents:end -->
 
 ### Hooks
@@ -63,11 +80,15 @@ git worktree add -b feat/my-feature ../repo-feat-my-feature main
 <!-- kickstart:hooks:start -->
 | Hook | Event | Description |
 |------|-------|-------------|
-| `session-start-warning` | SessionStart | Warns when on main/master branch and checks if behind remote |
-| `block-main-commits` | PreToolUse | Blocks git commit and push commands on main/master |
-| `check-worktree` | PreToolUse | Blocks file writes on main/master branch |
-| `format-on-save` | PostToolUse | Auto-formats files after write/edit |
+| `session-start-warning` | SessionStart | Auto-cleans stale worktrees, warns on main |
+| `auto-init` | UserPromptSubmit | Prompts /init for uninitialized projects |
+| `block-main-commits` | PreToolUse | Blocks git commit/push on main |
+| `check-worktree` | PreToolUse | Blocks file writes on main |
+| `format-on-save` | PostToolUse | Auto-formats after write/edit |
 | `auto-pr-update` | PreToolUse | Updates PR description before push ([setup required](#github-mcp-setup)) |
+| `auto-assign-pr` | PostToolUse | Assigns created PRs to creator |
+| `auto-docs` | PostToolUse | Regenerates docs when components change |
+| `detect-conflicts` | PreToolUse | Checks for merge conflicts before push and auto-resolves them |
 <!-- kickstart:hooks:end -->
 
 ### GitHub MCP Setup
@@ -108,14 +129,7 @@ Once configured, the hook will automatically update your PR description with a s
 
 **[See the full list →](.claude/settings.json)**
 
-Think of it like giving your coworker sudo access. Great if you trust them. Terrifying if you don't.
-
-✅ Use on personal dev machines you control
-❌ Don't use on shared systems or prod environments
-
-> **Safety net:** Hooks block commits to main even though the permissions allow it. We're reckless, not stupid.
-
-**Want fewer permissions?** Fork and edit `.claude/settings.json`. Remove whatever scares you.
+**Want fewer permissions?** Edit `.claude/settings.json`, remove whatever scares you.
 
 ## How It Works
 
@@ -130,26 +144,6 @@ Think of it like giving your coworker sudo access. Great if you trust them. Terr
 - Project-specific notes
 
 Run `/update` periodically to get the latest config without losing your customizations.
-
-## Documentation Maintenance
-
-Run `/docs` after modifying kickstart components to regenerate this README's tables. The sections between `<!-- kickstart:*:start -->` and `<!-- kickstart:*:end -->` markers are auto-generated.
-
-## Credits
-
-Kickstart recommends these excellent official plugins:
-- [code-simplifier](https://github.com/anthropics/claude-code-plugins) by Anthropic
-- [code-review](https://github.com/anthropics/claude-code-plugins) by Anthropic
-- [frontend-design](https://github.com/anthropics/claude-code-plugins) by Anthropic
-- [typescript-lsp](https://github.com/anthropics/claude-code-plugins) by Anthropic
-
-## Contributing
-
-1. Fork the repo
-2. Create a feature branch
-3. Make your changes
-4. Run `/docs` to update documentation
-5. Submit a PR
 
 ## License
 
