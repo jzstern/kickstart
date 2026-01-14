@@ -8,6 +8,10 @@ get_repo() {
   basename "$PWD"
 }
 
+get_repo_root() {
+  git rev-parse --show-toplevel 2>/dev/null
+}
+
 is_main_branch() {
   local branch="$1"
   [ "$branch" = "main" ] || [ "$branch" = "master" ]
@@ -20,5 +24,7 @@ worktree_message() {
 }
 
 is_kickstart_initialized() {
-  [ -f ".claude/CLAUDE.md" ]
+  local root
+  root=$(get_repo_root) || return 1
+  [ -f "$root/.claude/CLAUDE.md" ]
 }

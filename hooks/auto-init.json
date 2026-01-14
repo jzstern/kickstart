@@ -4,7 +4,7 @@
 	"hooks": [
 		{
 			"event": "UserPromptSubmit",
-			"command": "source \"${CLAUDE_PLUGIN_ROOT}/hooks/lib/branch-utils.sh\"; if ! is_kickstart_initialized; then printf '<kickstart-action>This project needs initialization. Run /init now before doing anything else.</kickstart-action>'; fi"
+			"command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/lib/auto-init.sh\""
 		}
 	]
 }
