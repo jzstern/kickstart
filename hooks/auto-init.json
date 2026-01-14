@@ -1,0 +1,10 @@
+{
+	"name": "auto-init",
+	"description": "Automatically prompts /init for uninitialized projects",
+	"hooks": [
+		{
+			"event": "UserPromptSubmit",
+			"command": "source \"${CLAUDE_PLUGIN_ROOT}/hooks/lib/branch-utils.sh\"; if ! is_kickstart_initialized; then printf '<kickstart-action>This project needs initialization. Run /init now before doing anything else.</kickstart-action>'; fi"
+		}
+	]
+}

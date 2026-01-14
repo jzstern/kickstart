@@ -17,6 +17,7 @@
 		"../hooks/check-worktree.json",
 		"../hooks/format-on-save.json",
 		"../hooks/auto-pr-update.json",
-		"../hooks/auto-assign-pr.json"
+		"../hooks/auto-assign-pr.json",
+		"../hooks/auto-init.json"
 	]
 }

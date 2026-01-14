@@ -18,3 +18,7 @@ worktree_message() {
   local repo="$2"
   printf 'Create a worktree first:\n\n  git worktree add -b feat/your-feature ../%s-feat-your-feature %s\n  cd ../%s-feat-your-feature\n' "$repo" "$branch" "$repo"
 }
+
+is_kickstart_initialized() {
+  [ -f ".claude/CLAUDE.md" ]
+}
