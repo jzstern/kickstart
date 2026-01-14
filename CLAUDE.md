@@ -48,7 +48,6 @@ Worktrees are automatically cleaned up at session start when their branches are 
 | `/test` | Generate comprehensive unit tests |
 | `/e2e` | E2E testing with Playwright |
 | `/compound` | Capture session learnings to improve future work |
-| `/interview` | Interview to flesh out a plan/spec |
 <!-- kickstart:skills:end -->
 
 ## Available Agents
