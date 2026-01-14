@@ -26,12 +26,21 @@ Detect the framework and package manager automatically. Do NOT ask the user - in
 4. `package-lock.json` exists → npm
 5. Default → npm
 
+**Package manager command mapping**:
+| PM | Install cmd | Exec cmd | Add dev dep |
+|----|-------------|----------|-------------|
+| bun | `bun install` | `bunx` | `bun add -D` |
+| pnpm | `pnpm install` | `pnpm dlx` | `pnpm add -D` |
+| yarn | `yarn install` | `yarn dlx` | `yarn add -D` |
+| npm | `npm install` | `npx` | `npm install -D` |
+
 **Detect framework** from package.json dependencies:
-- `@sveltejs/kit` → SvelteKit
-- `next` → Next.js
-- `@remix-run/react` → Remix
-- `astro` → Astro
-- Otherwise → Node/Generic
+- `@sveltejs/kit` → SvelteKit (port 5173)
+- `next` → Next.js (port 3000)
+- `@remix-run/react` → Remix (port 3000)
+- `astro` → Astro (port 4321)
+- `express`, `fastify`, `hono` → Node API (skip Playwright)
+- No package.json or no framework deps → Node/Generic (skip Playwright)
 
 ```bash
 # Check lockfiles
@@ -57,7 +66,7 @@ Replace template variables:
 - `{{PROJECT_NAME}}` - Current directory name
 - `{{DESCRIPTION}}` - "Brief project description (edit this)"
 - `{{PACKAGE_MANAGER}}` - Detected package manager
-- `{{PACKAGE_MANAGER_X}}` - bunx, npx, pnpx, or yarn dlx
+- `{{PACKAGE_MANAGER_X}}` - Exec command from mapping above
 - `{{DEV_COMMAND}}` - `<pm> run dev`
 - `{{BUILD_COMMAND}}` - `<pm> run build`
 - `{{TEST_COMMAND}}` - `<pm> run test`
@@ -81,19 +90,27 @@ Copy from `${CLAUDE_PLUGIN_ROOT}/templates/<stack>/github/workflows/` if they ex
 
 ### Step 5: Set Up Playwright E2E Testing
 
+**Skip this step for Node API or Node/Generic projects** (no web UI to test).
+
 For web projects (SvelteKit, Next.js, Remix, Astro):
 
-1. Install Playwright:
-```bash
-<pm> add -D @playwright/test  # or npm install -D, pnpm add -D
-```
+1. Install Playwright using the correct command for the detected package manager:
+   - bun: `bun add -D @playwright/test`
+   - pnpm: `pnpm add -D @playwright/test`
+   - yarn: `yarn add -D @playwright/test`
+   - npm: `npm install -D @playwright/test`
 
 2. Install browsers:
-```bash
-<pmx> playwright install chromium
-```
+   - bun: `bunx playwright install chromium`
+   - pnpm: `pnpm dlx playwright install chromium`
+   - yarn: `yarn dlx playwright install chromium`
+   - npm: `npx playwright install chromium`
 
-3. Copy Playwright config from templates.
+3. Copy Playwright config:
+   - For SvelteKit: Copy `${CLAUDE_PLUGIN_ROOT}/templates/sveltekit/playwright.config.ts`
+   - For other stacks: Use `${CLAUDE_PLUGIN_ROOT}/templates/base/playwright.config.ts.template`
+     - Replace `{{DEV_PORT}}` with framework default port (see Step 1)
+     - Replace `{{DEV_COMMAND}}` with `<pm> run dev`
 
 4. Create tests directory:
 ```bash
@@ -114,7 +131,9 @@ mkdir -p .claude/rules
 
 ### Step 7: Install Companion Plugins (if --plugins flag)
 
-**Only if the user passed `--plugins`**, install recommended plugins:
+**Only if the user passed `--plugins`**, install recommended plugins.
+
+The marketplace add command is idempotent (safe to run if already added):
 
 ```bash
 claude plugin marketplace add anthropics/claude-code-plugins
@@ -131,14 +150,19 @@ If `--plugins` was not passed, skip this step entirely.
 
 **Only if the user passed `--vercel`**, create `vercel.json`.
 
-Use `${CLAUDE_PLUGIN_ROOT}/templates/shared/deploy/vercel.json.template` with framework-specific values:
+Use `${CLAUDE_PLUGIN_ROOT}/templates/shared/deploy/vercel.json.template` and replace all variables:
 
-| Framework | `{{FRAMEWORK}}` | `{{OUTPUT_DIR}}` |
-|-----------|-----------------|------------------|
-| SvelteKit | `sveltekit` | `.svelte-kit` |
-| Next.js | `nextjs` | `.next` |
-| Remix | `remix` | `build` |
-| Astro | `astro` | `dist` |
+| Framework | `{{FRAMEWORK}}` | `{{OUTPUT_DIR}}` | `{{DEV_PORT}}` |
+|-----------|-----------------|------------------|----------------|
+| SvelteKit | `sveltekit` | `.svelte-kit` | `5173` |
+| Next.js | `nextjs` | `.next` | `3000` |
+| Remix | `remix` | `build` | `3000` |
+| Astro | `astro` | `dist` | `4321` |
+
+Additional variables (derive from detected package manager):
+- `{{INSTALL_COMMAND}}` - Install command from PM mapping (e.g., `bun install`)
+- `{{BUILD_COMMAND}}` - `<pm> run build`
+- `{{DEV_COMMAND}}` - `<pm> run dev`
 
 For SvelteKit, also suggest:
 ```bash
@@ -151,18 +175,23 @@ If `--vercel` was not passed, skip this step entirely.
 
 Print a summary of what was created:
 
-```
-✓ Created .claude/CLAUDE.md
-✓ Created .claude/settings.json
-✓ Created .claude/rules/
-✓ Set up Playwright E2E testing
-✓ Installed companion plugins (if --plugins)
-✓ Configured Vercel deployment (if --vercel)
+```text
+Setup complete for <PROJECT_NAME> (<FRAMEWORK>)
+
+Created:
+  .claude/CLAUDE.md - Project configuration
+  .claude/settings.json - Pre-approved commands
+  .claude/rules/ - Rules directory
+
+Configured:
+  Playwright E2E testing (if web project)
+  Companion plugins (if --plugins)
+  Vercel deployment (if --vercel)
 
 Next steps:
-- Edit .claude/CLAUDE.md to add your project description
-- Run `<pm> run test:e2e` to verify Playwright works
-- Run `/update` periodically for config updates
+  1. Edit .claude/CLAUDE.md to add your project description
+  2. Run `<pm> run test:e2e` to verify Playwright works
+  3. Run `/update` periodically for config updates
 ```
 
 ## Important
