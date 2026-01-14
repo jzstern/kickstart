@@ -1,7 +1,7 @@
 ---
 name: init
-description: Initialize project with kickstart config. Use --plugins to install companion plugins, --vercel for Vercel deployment config.
-args: "[--plugins] [--vercel]"
+description: Initialize project with kickstart config. Use --vercel for Vercel deployment config.
+args: "[--vercel]"
 ---
 
 # Initialize Kickstart Configuration
@@ -10,8 +10,9 @@ You are setting up a new project with kickstart configuration. This process is f
 
 ## Flags
 
-- `--plugins` - Install recommended companion plugins after setup
 - `--vercel` - Configure Vercel deployment
+
+Note: Companion plugins are automatically installed via the `auto-install-plugins` hook on every session start.
 
 ## Process
 
@@ -157,27 +158,7 @@ Copy `${CLAUDE_PLUGIN_ROOT}/templates/shared/tests/example.spec.ts`.
 mkdir -p .claude/rules
 ```
 
-### Step 7: Install Companion Plugins (if --plugins flag)
-
-**Only if the user passed `--plugins`**, install recommended plugins.
-
-The marketplace add command is idempotent (safe to run if already added):
-
-```bash
-claude plugin marketplace add anthropics/claude-code-plugins
-claude plugin install github@claude-plugins-official
-claude plugin install code-simplifier@claude-plugins-official
-claude plugin install code-review@claude-plugins-official
-claude plugin install frontend-design@claude-plugins-official
-claude plugin install typescript-lsp@claude-plugins-official
-claude plugin install pr-review-toolkit@claude-plugins-official
-claude plugin install playwright@claude-plugins-official
-claude plugin install security-guidance@claude-plugins-official
-```
-
-If `--plugins` was not passed, skip this step entirely.
-
-### Step 8: Configure Vercel (if --vercel flag)
+### Step 7: Configure Vercel (if --vercel flag)
 
 **Skip this step for Node API or Node/Generic projects** (no Vercel framework preset available).
 
@@ -205,7 +186,7 @@ For SvelteKit, also suggest installing the Vercel adapter (use "Add dev dep" com
 
 If `--vercel` was not passed, skip this step entirely.
 
-### Step 9: Confirm Setup
+### Step 8: Confirm Setup
 
 Print a summary based on what happened:
 
@@ -250,7 +231,6 @@ Next steps:
 ```text
 Configured:
   Playwright E2E testing (if web project)
-  Companion plugins (if --plugins)
   Vercel deployment (if --vercel)
 
 Next steps:

@@ -38,7 +38,7 @@ Worktrees are automatically cleaned up at session start when their branches are 
 <!-- kickstart:skills:start -->
 | Skill | Description |
 |-------|-------------|
-| `/init` | Initialize project with kickstart config and companion plugins |
+| `/init` | Initialize project with kickstart config |
 | `/update` | Check for and apply config updates |
 | `/cleanup` | Remove stale worktrees (runs automatically at session start) |
 | `/uninstall` | Uninstall plugin, keeping customizations |
@@ -73,6 +73,7 @@ Worktrees are automatically cleaned up at session start when their branches are 
 | Hook | Event | Description |
 |------|-------|-------------|
 | `session-start-warning` | SessionStart | Auto-cleans stale worktrees, warns on main |
+| `auto-install-plugins` | SessionStart | Installs companion plugins automatically |
 | `auto-init` | UserPromptSubmit | Prompts /init for uninitialized projects |
 | `block-main-commits` | PreToolUse | Blocks git commit/push on main |
 | `check-worktree` | PreToolUse | Blocks file writes on main |

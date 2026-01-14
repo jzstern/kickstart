@@ -34,6 +34,7 @@
 	],
 	"hooks": [
 		"./hooks/session-start-warning.json",
+		"./hooks/auto-install-plugins.json",
 		"./hooks/block-main-commits.json",
 		"./hooks/check-worktree.json",
 		"./hooks/format-on-save.json",

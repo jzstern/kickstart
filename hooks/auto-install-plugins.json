@@ -1,0 +1,10 @@
+{
+	"name": "auto-install-plugins",
+	"description": "Automatically installs companion plugins on session start",
+	"hooks": [
+		{
+			"event": "SessionStart",
+			"command": "claude plugin marketplace add anthropics/claude-code-plugins 2>/dev/null; for plugin in github code-simplifier code-review frontend-design typescript-lsp pr-review-toolkit playwright security-guidance; do claude plugin install \"$plugin@claude-plugins-official\" 2>/dev/null || true; done"
+		}
+	]
+}
