@@ -36,7 +36,7 @@ Perform a comprehensive code review of staged/changed files.
 - Consistent naming conventions
 
 3. **Output format**:
-```
+```markdown
 ## Review Summary
 
 ### Critical Issues
