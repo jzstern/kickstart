@@ -22,11 +22,11 @@ Opinionated Claude Code configuration for web development. This file is loaded a
 ### After Completing Work
 
 When you finish implementing a feature or fix:
-1. Run type checker and linter (if configured)
-2. Run tests (if configured)
+1. Run type checker and linter
+2. Run tests
 3. Commit all changes with a conventional commit message
 4. Push the branch to origin
-5. Open a draft pull request using `gh pr create --draft` (skip if PR already exists)
+5. Open a pull request using `gh pr create` (skip if PR already exists)
 
 Do this automatically without asking for confirmation.
 
