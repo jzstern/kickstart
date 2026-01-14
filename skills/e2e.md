@@ -13,6 +13,16 @@ Run end-to-end tests for the full user journey.
 
 Before installing anything, verify you're in a Node project (a `package.json` exists in the current directory) and `npx` is available. If either is missing, do not install dependencies; report the issue and stop.
 ```bash
+if [ ! -f package.json ]; then
+  echo "No package.json found in the current directory. Run this skill from your Node project root." >&2
+  exit 1
+fi
+
+if ! command -v npx >/dev/null 2>&1; then
+  echo "npx is not available on PATH; install Node.js/npm before running Playwright." >&2
+  exit 1
+fi
+
 if ! npx playwright --version >/dev/null 2>&1; then
   npm install -D @playwright/test && npx playwright install
 fi

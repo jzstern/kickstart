@@ -34,6 +34,8 @@ When choosing `CODE_ROOTS` from `Glob` results:
 
 #### Injection
 - Search for command construction: `grep -r -n -E --exclude-dir=node_modules --exclude-dir=dist --exclude-dir=build --exclude-dir=.next '(execSync|exec|spawn)[[:space:]]*\(' CODE_ROOTS`
+
+Example: if you discover `src/` and `server/`, run `grep -r -n -E --exclude-dir=node_modules --exclude-dir=dist --exclude-dir=build --exclude-dir=.next '(execSync|exec|spawn)[[:space:]]*\(' src server`.
 - Check user input sanitization
 - Verify URL validation
 
