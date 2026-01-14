@@ -19,12 +19,26 @@ jobs:
       pull-requests: write
 
     steps:
+      - name: Check for API key
+        id: check-key
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo "::notice title=Setup Required::ANTHROPIC_API_KEY not configured. Add it at ${{ github.server_url }}/${{ github.repository }}/settings/secrets/actions"
+            echo "has_key=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_key=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - uses: actions/checkout@v4
+        if: steps.check-key.outputs.has_key == 'true'
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           fetch-depth: 0
 
       - uses: anthropics/claude-code-action@v1
+        if: steps.check-key.outputs.has_key == 'true'
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           prompt: |
