@@ -77,11 +77,20 @@ Copy from `${CLAUDE_PLUGIN_ROOT}/templates/<stack>/github/workflows/` if they ex
 
 For web projects (SvelteKit, Next.js, Remix, Astro):
 
-1. Install Playwright: `{{PACKAGE_MANAGER}} add -D @playwright/test`
-2. Install browsers: `{{PACKAGE_MANAGER_X}} playwright install chromium`
-3. Copy config from `${CLAUDE_PLUGIN_ROOT}/templates/sveltekit/playwright.config.ts` or `base/playwright.config.ts.template`
-4. Create `tests/` directory with example from `${CLAUDE_PLUGIN_ROOT}/templates/shared/tests/example.spec.ts`
-5. Add `"test:e2e": "playwright test"` script to package.json if not present
+1. **Install Playwright** using the package manager detected in Step 1:
+   - bun: `bun add -D @playwright/test`
+   - npm: `npm install -D @playwright/test`
+   - pnpm: `pnpm add -D @playwright/test`
+
+2. **Install browsers**: `bunx playwright install chromium` (or `npx`/`pnpm exec`)
+
+3. **Copy config**:
+   - SvelteKit: Copy `${CLAUDE_PLUGIN_ROOT}/templates/sveltekit/playwright.config.ts`
+   - Other stacks: Copy `${CLAUDE_PLUGIN_ROOT}/templates/base/playwright.config.ts.template` and replace `{{DEV_PORT}}` (3000 for Next.js, 4321 for Astro, etc.)
+
+4. **Create tests directory** with example from `${CLAUDE_PLUGIN_ROOT}/templates/shared/tests/example.spec.ts`
+
+5. **Add script** to package.json if not present: `"test:e2e": "playwright test"`
 
 ### Step 6: Create Rules Directory
 
