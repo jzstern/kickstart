@@ -91,6 +91,27 @@ git worktree add -b feat/my-feature ../repo-feat-my-feature main
 | `detect-conflicts` | PreToolUse | Checks for merge conflicts before push and auto-resolves them |
 <!-- kickstart:hooks:end -->
 
+### GitHub Workflows
+
+Workflows copied to `.github/workflows/` during `/init`:
+
+<!-- kickstart:workflows:start -->
+| Workflow | Description |
+|----------|-------------|
+| `address-pr-comments.yml` | Auto-addresses PR review comments using Claude ([setup required](#anthropic-api-key-setup)) |
+<!-- kickstart:workflows:end -->
+
+#### Anthropic API Key Setup
+
+The `address-pr-comments` workflow requires an Anthropic API key to call Claude:
+
+1. **Get an API key** from [console.anthropic.com](https://console.anthropic.com/)
+2. **Add it as a repository secret:**
+   - Go to your repo → Settings → Secrets and variables → Actions
+   - Click "New repository secret"
+   - Name: `ANTHROPIC_API_KEY`
+   - Value: your API key
+
 ### GitHub MCP Setup
 
 The `auto-pr-update` hook requires the GitHub MCP integration to update PR descriptions. To enable it:

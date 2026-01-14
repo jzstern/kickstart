@@ -85,6 +85,12 @@ Worktrees are automatically cleaned up at session start when their branches are 
 
 ## GitHub Workflows
 
+<!-- kickstart:workflows:start -->
+| Workflow | Description |
+|----------|-------------|
+| `address-pr-comments.yml` | Auto-addresses PR review comments using Claude |
+<!-- kickstart:workflows:end -->
+
 ### Auto-Address PR Comments
 
 The `address-pr-comments.yml` workflow automatically responds to PR review comments:
