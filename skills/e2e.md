@@ -14,14 +14,14 @@ Run end-to-end tests for the full user journey.
 npx playwright --version || npm install -D @playwright/test && npx playwright install
 ```
 
-2. **Start dev server** (if not running):
-```bash
-npm run dev &
-```
-
-3. **Run E2E tests**:
+2. **Run E2E tests** (Playwright will start the server if `webServer` is configured):
 ```bash
 npx playwright test
+```
+
+3. **If `webServer` is not configured**, start the dev server in a separate terminal and stop it when you're done:
+```bash
+npm run dev
 ```
 
 4. **If no tests exist**, create them in `tests/e2e/`:
