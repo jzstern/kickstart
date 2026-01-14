@@ -41,7 +41,7 @@ Worktrees are automatically cleaned up at session start when their branches are 
 | `/init` | Initialize project with kickstart config and companion plugins |
 | `/update` | Check for and apply config updates |
 | `/cleanup` | Remove stale worktrees (runs automatically at session start) |
-| `/uninstall` | Uninstall plugin, keeping project config |
+| `/uninstall` | Uninstall plugin, keeping customizations |
 | `/docs` | Regenerate documentation tables (runs automatically) |
 | `/resolve-conflicts` | Detect and resolve merge conflicts with base branch |
 | `/review` | Code review of staged/changed files |

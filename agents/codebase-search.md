@@ -27,7 +27,7 @@ Every answer must include three components:
 Distinguish between literal requests and underlying needs. Write this as a short `## Intent` section describing what success looks like.
 
 **2. Parallel Tool Execution**
-Launch 3+ tools simultaneously rather than sequentially, using semantic search, structural patterns, text matching (grep), and file discovery (glob) in parallel.
+Launch multiple relevant tools simultaneously when appropriate, using text matching (grep), file discovery (glob), and file reading in parallel for complex queries.
 
 **3. Structured Results**
 Format output with repo-relative file paths (include absolute paths if a tool provides them), relevance explanations, direct answers addressing actual needs, and clear next steps.
