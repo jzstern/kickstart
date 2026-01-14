@@ -32,6 +32,8 @@ Launch 3+ tools simultaneously rather than sequentially, using semantic search, 
 **3. Structured Results**
 Format output with repo-relative file paths (include absolute paths if a tool provides them), relevance explanations, direct answers addressing actual needs, and clear next steps.
 
+When converting an absolute path to a repo-relative path, strip the repository root prefix (for example, the workspace `cwd`) from the absolute path.
+
 ## Key Requirements
 
 - All file paths must include a repo-relative form (e.g., `src/auth/login.ts`)

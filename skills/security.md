@@ -13,6 +13,8 @@ Perform a security-focused review of the codebase.
    - Use `Glob` to identify likely code directories (for example: `src/`, `app/`, `server/`, `packages/`, `lib/`)
    - Prefer scanning those roots; fall back to searching from `.` and exclude build/vendor directories
 
+When running `grep`, replace `.` with your discovered code roots when possible (for example: `src app server packages lib`).
+
 2. **Scan the codebase** for security vulnerabilities:
 
 ### OWASP Top 10 (2021) Checks

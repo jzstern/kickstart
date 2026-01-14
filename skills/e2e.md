@@ -17,7 +17,7 @@ fi
 ```
 
 2. **Ensure the app is running**:
-   - If `playwright.config.(ts|js)` uses `webServer` (see below), you can skip this step.
+   - Prefer configuring `webServer` in `playwright.config.(ts|js)` (see below). If it is configured, do not start the dev server manually.
    - Otherwise, start the dev server in a separate terminal and stop it when you're done:
 ```bash
 npm run dev
