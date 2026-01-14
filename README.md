@@ -50,6 +50,7 @@ git worktree add -b feat/my-feature ../repo-feat-my-feature main
 | `/update` | Check for and apply config updates |
 | `/uninstall` | Uninstall plugin, keeping project config |
 | `/docs` | Regenerate documentation tables (runs automatically) |
+| `/resolve-conflicts` | Detect and resolve merge conflicts with base branch |
 <!-- kickstart:skills:end -->
 
 ### Agents
@@ -57,6 +58,7 @@ git worktree add -b feat/my-feature ../repo-feat-my-feature main
 <!-- kickstart:agents:start -->
 | Agent | Description |
 |-------|-------------|
+| `conflict-resolver` | Detects and resolves git merge conflicts |
 | `debugger` | Investigates errors and stack traces |
 | `e2e-runner` | Playwright E2E testing specialist |
 | `security-auditor` | OWASP Top 10 vulnerability scanning |
@@ -76,6 +78,7 @@ git worktree add -b feat/my-feature ../repo-feat-my-feature main
 | `auto-pr-update` | PreToolUse | Updates PR description before push ([setup required](#github-mcp-setup)) |
 | `auto-assign-pr` | PostToolUse | Assigns created PRs to creator |
 | `auto-docs` | PostToolUse | Regenerates docs when components change |
+| `detect-conflicts` | PreToolUse | Checks for merge conflicts before push and auto-resolves them |
 <!-- kickstart:hooks:end -->
 
 ### GitHub MCP Setup
