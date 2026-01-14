@@ -13,7 +13,7 @@ Run these commands inside a Claude Code session:
 
 ### Companion Plugins
 
-Kickstart works great alongside these official plugins. **During `/init`, you'll be offered the option to install them automatically.**
+Kickstart automatically installs these official plugins during `/init`:
 
 | Plugin | Purpose |
 |--------|---------|
@@ -41,10 +41,10 @@ git worktree add -b feat/my-feature ../repo-feat-my-feature main
 <!-- kickstart:skills:start -->
 | Skill | Description |
 |-------|-------------|
-| `/init` | Initialize project configuration with kickstart defaults (includes option to install companion plugins) |
-| `/update` | Check for and apply config updates with user approval |
-| `/uninstall` | Uninstall plugin while preserving project configuration and customizations |
-| `/docs` | Auto-generate documentation from plugin components |
+| `/init` | Initialize project with kickstart config and companion plugins |
+| `/update` | Check for and apply config updates |
+| `/uninstall` | Uninstall plugin, keeping project config |
+| `/docs` | Regenerate documentation tables (runs automatically) |
 | `/resolve-conflicts` | Detect and resolve merge conflicts with base branch |
 <!-- kickstart:skills:end -->
 
@@ -53,9 +53,9 @@ git worktree add -b feat/my-feature ../repo-feat-my-feature main
 <!-- kickstart:agents:start -->
 | Agent | Description |
 |-------|-------------|
-| `conflict-resolver` | Detects, analyzes, and resolves git merge conflicts intelligently |
-| `debugger` | Investigates errors, analyzes stack traces, traces issues through codebase |
-| `e2e-runner` | E2E testing specialist using Playwright |
+| `conflict-resolver` | Detects and resolves git merge conflicts |
+| `debugger` | Investigates errors and stack traces |
+| `e2e-runner` | Playwright E2E testing specialist |
 | `security-auditor` | OWASP Top 10 vulnerability scanning |
 | `test-generator` | Generates comprehensive unit tests |
 <!-- kickstart:agents:end -->
@@ -65,11 +65,13 @@ git worktree add -b feat/my-feature ../repo-feat-my-feature main
 <!-- kickstart:hooks:start -->
 | Hook | Event | Description |
 |------|-------|-------------|
-| `session-start-warning` | SessionStart | Warns when on main/master branch and checks if behind remote |
-| `block-main-commits` | PreToolUse | Blocks git commit and push commands on main/master |
-| `check-worktree` | PreToolUse | Blocks file writes on main/master branch |
-| `format-on-save` | PostToolUse | Auto-formats files after write/edit |
+| `session-start-warning` | SessionStart | Warns on main, checks if behind remote |
+| `block-main-commits` | PreToolUse | Blocks git commit/push on main |
+| `check-worktree` | PreToolUse | Blocks file writes on main |
+| `format-on-save` | PostToolUse | Auto-formats after write/edit |
 | `auto-pr-update` | PreToolUse | Updates PR description before push ([setup required](#github-mcp-setup)) |
+| `auto-assign-pr` | PostToolUse | Assigns created PRs to creator |
+| `auto-docs` | PostToolUse | Regenerates docs when components change |
 | `detect-conflicts` | PreToolUse | Checks for merge conflicts before push and auto-resolves them |
 <!-- kickstart:hooks:end -->
 
@@ -134,25 +136,12 @@ Think of it like giving your coworker sudo access. Great if you trust them. Terr
 
 Run `/update` periodically to get the latest config without losing your customizations.
 
-## Documentation Maintenance
-
-Run `/docs` after modifying kickstart components to regenerate this README's tables. The sections between `<!-- kickstart:*:start -->` and `<!-- kickstart:*:end -->` markers are auto-generated.
-
-## Credits
-
-Kickstart recommends these excellent official plugins:
-- [code-simplifier](https://github.com/anthropics/claude-code-plugins) by Anthropic
-- [code-review](https://github.com/anthropics/claude-code-plugins) by Anthropic
-- [frontend-design](https://github.com/anthropics/claude-code-plugins) by Anthropic
-- [typescript-lsp](https://github.com/anthropics/claude-code-plugins) by Anthropic
-
 ## Contributing
 
 1. Fork the repo
 2. Create a feature branch
 3. Make your changes
-4. Run `/docs` to update documentation
-5. Submit a PR
+4. Submit a PR
 
 ## License
 

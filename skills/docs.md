@@ -1,19 +1,13 @@
 ---
 name: docs
-description: "[Kickstart Developer] Auto-generate documentation from plugin components. Updates README.md and CLAUDE.md tables."
+description: "Regenerate documentation tables (runs automatically via hook)"
 ---
 
 # Generate Documentation
 
-**This skill is for kickstart plugin developers only.** Users of kickstart do not need to run this - they receive updated documentation automatically when they update the plugin.
+This skill regenerates the documentation tables in README.md and CLAUDE.md. It runs automatically via the `auto-docs` hook when plugin components are modified.
 
-## When to Run
-
-Run `/docs` in the kickstart repository after:
-- Adding, removing, or modifying agents
-- Adding, removing, or modifying hooks
-- Adding, removing, or modifying skills
-- Changing permissions in settings.json templates
+You can also run `/docs` manually if needed.
 
 ## Process
 
