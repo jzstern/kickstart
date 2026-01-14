@@ -111,30 +111,56 @@ git diff --check
 grep -rI "<<<<<<" . --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=dist --exclude-dir=build --exclude-dir=.next --exclude-dir=coverage 2>/dev/null || echo "Clean"
 ```
 
-Then run project verification if configured. **Detect package manager first, then run tests only with that one** (don't fallback on test failure):
+Then run project verification if configured. **Detect package manager by lock file** (most specific first), and **only run tests if a test script exists** in package.json:
 
 ```bash
-# Detect package manager and run verification with it only
+# Detect package manager by lock file and check for test script before running
 if [ -f bun.lockb ] || [ -f bun.lock ]; then
-    # Bun project - run bun commands only
+    # Bun project
     bun run check 2>/dev/null && echo "Type check passed"
-    if ! bun test 2>/dev/null; then
-        echo "Tests failed - aborting merge"
-        git merge --abort
-        exit 1
+    if grep -q '"test"' package.json 2>/dev/null; then
+        if ! bun test; then
+            echo "Tests failed - aborting merge"
+            git merge --abort
+            exit 1
+        fi
+        echo "Tests passed"
     fi
-    echo "Tests passed"
-elif [ -f package-lock.json ] || [ -f package.json ]; then
-    # npm project - run npm commands only
+elif [ -f pnpm-lock.yaml ]; then
+    # pnpm project
+    pnpm run check 2>/dev/null && echo "Type check passed"
+    if grep -q '"test"' package.json 2>/dev/null; then
+        if ! pnpm test; then
+            echo "Tests failed - aborting merge"
+            git merge --abort
+            exit 1
+        fi
+        echo "Tests passed"
+    fi
+elif [ -f yarn.lock ]; then
+    # Yarn project
+    yarn run check 2>/dev/null && echo "Type check passed"
+    if grep -q '"test"' package.json 2>/dev/null; then
+        if ! yarn test; then
+            echo "Tests failed - aborting merge"
+            git merge --abort
+            exit 1
+        fi
+        echo "Tests passed"
+    fi
+elif [ -f package-lock.json ]; then
+    # npm project (must have lock file, not just package.json)
     npm run check 2>/dev/null && echo "Type check passed"
-    if ! npm test 2>/dev/null; then
-        echo "Tests failed - aborting merge"
-        git merge --abort
-        exit 1
+    if grep -q '"test"' package.json 2>/dev/null; then
+        if ! npm test; then
+            echo "Tests failed - aborting merge"
+            git merge --abort
+            exit 1
+        fi
+        echo "Tests passed"
     fi
-    echo "Tests passed"
 fi
-# If no package manager detected, skip tests
+# If no lock file or no test script, skip tests
 ```
 
 If tests fail after resolution:
