@@ -75,46 +75,22 @@ Copy from `${CLAUDE_PLUGIN_ROOT}/templates/<stack>/github/workflows/` if they ex
 
 ### Step 5: Set Up Playwright E2E Testing
 
-For web projects (SvelteKit, Next.js, Remix, Astro), set up Playwright:
+For web projects (SvelteKit, Next.js, Remix, Astro):
 
-1. **Install Playwright as a dev dependency**:
-```bash
-# For bun
-bun add -D @playwright/test
+1. **Install Playwright** using the package manager detected in Step 1:
+   - bun: `bun add -D @playwright/test`
+   - npm: `npm install -D @playwright/test`
+   - pnpm: `pnpm add -D @playwright/test`
 
-# For npm
-npm install -D @playwright/test
+2. **Install browsers**: `bunx playwright install chromium` (or `npx`/`pnpm exec`)
 
-# For pnpm
-pnpm add -D @playwright/test
-```
+3. **Copy config**:
+   - SvelteKit: Copy `${CLAUDE_PLUGIN_ROOT}/templates/sveltekit/playwright.config.ts`
+   - Other stacks: Copy `${CLAUDE_PLUGIN_ROOT}/templates/base/playwright.config.ts.template` and replace `{{DEV_PORT}}` (3000 for Next.js, 4321 for Astro, etc.)
 
-2. **Install browser binaries**:
-```bash
-bunx playwright install chromium
-# or: npx playwright install chromium
-```
+4. **Create tests directory** with example from `${CLAUDE_PLUGIN_ROOT}/templates/shared/tests/example.spec.ts`
 
-3. **Copy Playwright config**:
-   - For SvelteKit: Copy `${CLAUDE_PLUGIN_ROOT}/templates/sveltekit/playwright.config.ts`
-   - For other stacks: Use `${CLAUDE_PLUGIN_ROOT}/templates/base/playwright.config.ts.template`
-     - Replace `{{DEV_PORT}}` with the dev server port (e.g., 3000 for Next.js, 4321 for Astro)
-     - Replace `{{DEV_COMMAND}}` with the dev command (e.g., `npm run dev`)
-
-4. **Create tests directory and example test**:
-```bash
-mkdir -p tests
-```
-Copy `${CLAUDE_PLUGIN_ROOT}/templates/shared/tests/example.spec.ts` as a starting point.
-
-5. **Add test:e2e script to package.json** if not present:
-```json
-{
-  "scripts": {
-    "test:e2e": "playwright test"
-  }
-}
-```
+5. **Add script** to package.json if not present: `"test:e2e": "playwright test"`
 
 ### Step 6: Create Rules Directory
 
@@ -124,50 +100,18 @@ mkdir -p .claude/rules
 
 Note: Rules are provided by the kickstart plugin and don't need to be copied into the project.
 
-### Step 7: Install Recommended Plugins
+### Step 7: Install Companion Plugins
 
-Use AskUserQuestion to ask if the user wants to install recommended companion plugins:
+Add the official marketplace and install all companion plugins:
 
-**Question**: "Would you like to install recommended companion plugins?"
-
-**Options**:
-1. **Yes, install all** - Install all recommended plugins for the complete experience
-2. **Let me choose** - Show the list and let user select which to install
-3. **Skip** - Don't install any additional plugins
-
-**Recommended plugins**:
-| Plugin | Marketplace | Purpose |
-|--------|-------------|---------|
-| `github` | `claude-plugins-official` | GitHub MCP integration for PRs, issues, and repos |
-| `code-simplifier` | `claude-plugins-official` | Simplifies and refines code for clarity |
-| `code-review` | `claude-plugins-official` | Code review for pull requests |
-| `frontend-design` | `claude-plugins-official` | High-quality frontend interface generation |
-| `typescript-lsp` | `claude-plugins-official` | TypeScript language server integration |
-
-**If "Yes, install all"**:
-First, add the official marketplace if not already added:
 ```bash
 claude plugin marketplace add anthropics/claude-code-plugins
-```
-
-Then install each plugin:
-```bash
 claude plugin install github@claude-plugins-official
 claude plugin install code-simplifier@claude-plugins-official
 claude plugin install code-review@claude-plugins-official
 claude plugin install frontend-design@claude-plugins-official
 claude plugin install typescript-lsp@claude-plugins-official
 ```
-
-**If "Let me choose"**:
-First, add the official marketplace if not already added:
-```bash
-claude plugin marketplace add anthropics/claude-code-plugins
-```
-Then use AskUserQuestion with multiSelect to let the user pick which plugins to install, and run the installation commands for the selected ones.
-
-**If "Skip"**:
-Continue to the next step. Remind the user they can install these later with `/plugin install`.
 
 ### Step 8: Configure Deployment (Optional)
 
@@ -181,31 +125,7 @@ Use AskUserQuestion to ask about deployment platform:
 
 **If "Yes"**, create `vercel.json` using template from `${CLAUDE_PLUGIN_ROOT}/templates/shared/deploy/vercel.json.template`.
 
-Replace template variables based on framework:
-
-| Framework | `{{FRAMEWORK}}` | `{{OUTPUT_DIR}}` | `{{INSTALL_COMMAND}}` |
-|-----------|-----------------|------------------|----------------------|
-| SvelteKit | `sveltekit` | `.svelte-kit` | `bun install` |
-| Next.js | `nextjs` | `.next` | `npm install` |
-| Remix | `remix` | `build` | `npm install` |
-| Astro | `astro` | `dist` | `npm install` |
-
-Adjust `{{INSTALL_COMMAND}}` based on the project's package manager:
-- bun: `bun install`
-- pnpm: `pnpm install`
-- npm: `npm install`
-- yarn: `yarn install`
-
-For SvelteKit, suggest installing the Vercel adapter for optimal performance:
-```bash
-bun add -D @sveltejs/adapter-vercel
-```
-
-**Framework-specific notes:**
-
-- **SvelteKit**: Default adapter is `adapter-auto` which works with Vercel. For explicit Vercel features (edge functions, ISR), use `@sveltejs/adapter-vercel`.
-- **Next.js**: Vercel works out of the box with zero configuration.
-- **Astro**: Install `@astrojs/vercel` integration for server-side rendering support.
+See `${CLAUDE_PLUGIN_ROOT}/templates/shared/deploy/README.md` for framework presets and template variables.
 
 ### Step 9: Confirm Setup
 
