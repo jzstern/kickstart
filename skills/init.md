@@ -253,7 +253,9 @@ Configured:
   Companion plugins (if --plugins)
   Vercel deployment (if --vercel)
 
-Run `/update` periodically for config updates
+Next steps:
+  Run `<pm> run test:e2e` to verify Playwright works (if web project)
+  Run `/update` periodically for config updates
 ```
 
 ## Important
