@@ -1,0 +1,8 @@
+{
+	"$schema": "https://openapi.vercel.sh/vercel.json",
+	"framework": "{{FRAMEWORK}}",
+	"buildCommand": "{{BUILD_COMMAND}}",
+	"outputDirectory": "{{OUTPUT_DIR}}",
+	"installCommand": "{{INSTALL_COMMAND}}",
+	"devCommand": "{{DEV_COMMAND}}"
+}
