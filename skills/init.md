@@ -54,16 +54,29 @@ cat package.json 2>/dev/null | head -50
 
 ### Step 2: Create Project Configuration
 
-**First, check for existing CLAUDE.md files:**
+**First, check for existing CLAUDE.md files (case-insensitive):**
 
 ```bash
-# Check for existing CLAUDE.md (case-insensitive)
-ls -la CLAUDE.md claude.md .claude/CLAUDE.md .claude/claude.md 2>/dev/null
+# Check .claude/ directory first (case-insensitive)
+find .claude -maxdepth 1 -type f -iname 'claude.md' 2>/dev/null
+
+# Check root directory (case-insensitive)
+find . -maxdepth 1 -type f -iname 'claude.md' 2>/dev/null
 ```
 
-**If a CLAUDE.md already exists** (in root or `.claude/`):
+**If `.claude/CLAUDE.md` (any case) already exists:**
 - **Do NOT overwrite it** - the user has customized content
-- If it exists at the root but not in `.claude/`, move it: `mkdir -p .claude && mv CLAUDE.md .claude/CLAUDE.md`
+- Skip to Step 3
+
+**If root has a CLAUDE.md (any case) but `.claude/` does not:**
+- Move it into `.claude/` without overwriting:
+```bash
+mkdir -p .claude
+ROOT_CLAUDE=$(find . -maxdepth 1 -type f -iname 'claude.md' -print -quit)
+if [ -n "$ROOT_CLAUDE" ]; then
+  mv "$ROOT_CLAUDE" .claude/CLAUDE.md
+fi
+```
 - Skip to Step 3
 
 **If no CLAUDE.md exists**, create `.claude/CLAUDE.md` using the appropriate template.
@@ -194,8 +207,33 @@ If `--vercel` was not passed, skip this step entirely.
 
 ### Step 9: Confirm Setup
 
-Print a summary of what was created:
+Print a summary based on what happened:
 
+**If CLAUDE.md was preserved (already existed in `.claude/`):**
+```text
+Setup complete for <PROJECT_NAME> (<FRAMEWORK>)
+
+Preserved:
+  .claude/CLAUDE.md - Existing configuration kept
+
+Created:
+  .claude/settings.json - Pre-approved commands
+  .claude/rules/ - Rules directory
+```
+
+**If CLAUDE.md was moved from root:**
+```text
+Setup complete for <PROJECT_NAME> (<FRAMEWORK>)
+
+Moved:
+  CLAUDE.md → .claude/CLAUDE.md
+
+Created:
+  .claude/settings.json - Pre-approved commands
+  .claude/rules/ - Rules directory
+```
+
+**If CLAUDE.md was created from template:**
 ```text
 Setup complete for <PROJECT_NAME> (<FRAMEWORK>)
 
@@ -204,15 +242,18 @@ Created:
   .claude/settings.json - Pre-approved commands
   .claude/rules/ - Rules directory
 
+Next steps:
+  1. Edit .claude/CLAUDE.md to add your project description
+```
+
+**Always include (when applicable):**
+```text
 Configured:
   Playwright E2E testing (if web project)
   Companion plugins (if --plugins)
   Vercel deployment (if --vercel)
 
-Next steps:
-  1. Edit .claude/CLAUDE.md to add your project description
-  2. Run `<pm> run test:e2e` to verify Playwright works
-  3. Run `/update` periodically for config updates
+Run `/update` periodically for config updates
 ```
 
 ## Important
