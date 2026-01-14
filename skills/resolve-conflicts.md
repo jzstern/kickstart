@@ -58,21 +58,39 @@ If there are unmerged paths from a **merge** (`.git/MERGE_HEAD` exists):
    grep -rI "<<<<<<" . --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=dist --exclude-dir=build 2>/dev/null || echo "Clean"
    ```
 
-6. Run verification if available (detect package manager first, don't fallback on failure):
+6. Run verification if available (detect package manager by lock file, only run tests if test script exists):
    ```bash
-   # Detect package manager and run verification with it only
+   # Detect package manager by lock file and check for test script
    if [ -f bun.lockb ] || [ -f bun.lock ]; then
        # Bun project
        bun run check 2>/dev/null && echo "Type check passed"
-       bun test || { echo "Tests failed - aborting merge"; git merge --abort; exit 1; }
-       echo "Tests passed"
-   elif [ -f package-lock.json ] || [ -f package.json ]; then
-       # npm project
+       if grep -q '"test"' package.json 2>/dev/null; then
+           bun test || { echo "Tests failed - aborting merge"; git merge --abort; exit 1; }
+           echo "Tests passed"
+       fi
+   elif [ -f pnpm-lock.yaml ]; then
+       # pnpm project
+       pnpm run check 2>/dev/null && echo "Type check passed"
+       if grep -q '"test"' package.json 2>/dev/null; then
+           pnpm test || { echo "Tests failed - aborting merge"; git merge --abort; exit 1; }
+           echo "Tests passed"
+       fi
+   elif [ -f yarn.lock ]; then
+       # Yarn project
+       yarn run check 2>/dev/null && echo "Type check passed"
+       if grep -q '"test"' package.json 2>/dev/null; then
+           yarn test || { echo "Tests failed - aborting merge"; git merge --abort; exit 1; }
+           echo "Tests passed"
+       fi
+   elif [ -f package-lock.json ]; then
+       # npm project (must have lock file, not just package.json)
        npm run check 2>/dev/null && echo "Type check passed"
-       npm test || { echo "Tests failed - aborting merge"; git merge --abort; exit 1; }
-       echo "Tests passed"
+       if grep -q '"test"' package.json 2>/dev/null; then
+           npm test || { echo "Tests failed - aborting merge"; git merge --abort; exit 1; }
+           echo "Tests passed"
+       fi
    fi
-   # If no package manager detected, skip tests
+   # If no lock file or no test script, skip tests
    ```
 
 7. If verification passes, complete the merge:
