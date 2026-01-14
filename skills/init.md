@@ -31,8 +31,10 @@ Detect the framework and package manager automatically. Do NOT ask the user - in
 |----|-------------|----------|-------------|
 | bun | `bun install` | `bunx` | `bun add -D` |
 | pnpm | `pnpm install` | `pnpm dlx` | `pnpm add -D` |
-| yarn | `yarn install` | `yarn dlx` | `yarn add -D` |
+| yarn | `yarn install` | `npx` | `yarn add -D` |
 | npm | `npm install` | `npx` | `npm install -D` |
+
+Note: `npx` is used for yarn because `yarn dlx` only exists in Yarn 2+ (Berry), not Yarn 1 (Classic).
 
 **Detect framework** from package.json dependencies:
 - `@sveltejs/kit` → SvelteKit (port 5173)
@@ -100,10 +102,10 @@ For web projects (SvelteKit, Next.js, Remix, Astro):
    - yarn: `yarn add -D @playwright/test`
    - npm: `npm install -D @playwright/test`
 
-2. Install browsers:
+2. Install browsers (use exec command from mapping above):
    - bun: `bunx playwright install chromium`
    - pnpm: `pnpm dlx playwright install chromium`
-   - yarn: `yarn dlx playwright install chromium`
+   - yarn: `npx playwright install chromium`
    - npm: `npx playwright install chromium`
 
 3. Copy Playwright config:
