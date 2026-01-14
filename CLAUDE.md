@@ -42,6 +42,12 @@ Clean up: `git worktree remove ../<repo>-<branch>`
 | `/update` | Check for and apply config updates |
 | `/uninstall` | Uninstall plugin, keeping customizations |
 | `/docs` | (Developer) Regenerate documentation |
+| `/review` | Code review of staged/changed files |
+| `/security` | Security audit with OWASP Top 10 checks |
+| `/test` | Generate comprehensive unit tests |
+| `/e2e` | E2E testing with Playwright |
+| `/compound` | Capture session learnings to improve future work |
+| `/interview` | Interview to flesh out a plan/spec |
 <!-- kickstart:skills:end -->
 
 ## Available Agents
@@ -53,6 +59,10 @@ Clean up: `git worktree remove ../<repo>-<branch>`
 | `e2e-runner` | Playwright E2E testing specialist |
 | `security-auditor` | OWASP Top 10 vulnerability scanning |
 | `test-generator` | Generates comprehensive unit tests |
+| `code-reviewer` | Reviews code for quality, security, and standards |
+| `codebase-search` | Locates code and implementations with parallel search |
+| `media-interpreter` | Extracts data from PDFs, images, diagrams |
+| `open-source-librarian` | Researches libraries with GitHub permalinks |
 <!-- kickstart:agents:end -->
 
 ## Active Hooks
