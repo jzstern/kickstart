@@ -1,3 +1,8 @@
+---
+description: Systematic complex task management using persistent markdown files
+allowed-tools: Read, Write, Edit, Glob, Grep
+---
+
 # Planning with Files
 
 This skill teaches a systematic approach to managing complex tasks using persistent markdown files as "working memory on disk."
