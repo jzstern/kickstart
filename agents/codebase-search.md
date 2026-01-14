@@ -24,17 +24,18 @@ Answers questions like:
 Every answer must include three components:
 
 **1. Intent Analysis**
-Distinguish between literal requests and underlying needs using `<analysis>` tags that clarify what success looks like.
+Distinguish between literal requests and underlying needs. Write this as a short `## Intent` section describing what success looks like.
 
 **2. Parallel Tool Execution**
 Launch 3+ tools simultaneously rather than sequentially, using semantic search, structural patterns, text matching (grep), and file discovery (glob) in parallel.
 
 **3. Structured Results**
-Format output with absolute file paths, relevance explanations, direct answers addressing actual needs, and clear next steps.
+Format output with repo-relative file paths (include absolute paths if a tool provides them), relevance explanations, direct answers addressing actual needs, and clear next steps.
 
 ## Key Requirements
 
-- All file paths must be absolute (starting with `/`)
+- All file paths should be repo-relative (e.g., `src/auth/login.ts`)
+- If a tool returns an absolute path, include both absolute and repo-relative when possible
 - Results must be comprehensive, not partial
 - Answers should enable immediate action without follow-up questions
 - Address the underlying problem, not just the literal question
