@@ -98,7 +98,7 @@ Workflows copied to `.github/workflows/` during `/init`:
 <!-- kickstart:workflows:start -->
 | Workflow | Description |
 |----------|-------------|
-| `address-pr-comments.yml` | Auto-addresses PR review comments using Claude ([setup required](#anthropic-api-key-setup)) |
+| `address-pr-comments.yml` | Auto-addresses PR review comments using Claude ([Anthropic secret setup](#anthropic-api-key-setup)) |
 <!-- kickstart:workflows:end -->
 
 <a id="anthropic-api-key-setup"></a>
