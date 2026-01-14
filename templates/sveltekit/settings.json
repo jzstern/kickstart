@@ -42,7 +42,9 @@
 			"Bash(gh issue:*)",
 			"Bash(gh repo view:*)",
 			"Bash(gh run:*)",
-			"Bash(gh workflow:*)"
+			"Bash(gh workflow:*)",
+
+			"Bash(mkdir:*)"
 		]
 	}
 }
