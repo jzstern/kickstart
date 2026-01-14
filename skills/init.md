@@ -148,7 +148,9 @@ If `--plugins` was not passed, skip this step entirely.
 
 ### Step 8: Configure Vercel (if --vercel flag)
 
-**Only if the user passed `--vercel`**, create `vercel.json`.
+**Skip this step for Node API or Node/Generic projects** (no Vercel framework preset available).
+
+**Only if the user passed `--vercel`** and the project is a web framework (SvelteKit, Next.js, Remix, Astro), create `vercel.json`.
 
 Use `${CLAUDE_PLUGIN_ROOT}/templates/shared/deploy/vercel.json.template` and replace all variables:
 
