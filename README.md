@@ -22,11 +22,16 @@ Kickstart automatically installs these official plugins during `/init`:
 | `frontend-design` | High-quality frontend interface generation |
 | `typescript-lsp` | TypeScript language server integration |
 
-To install manually (in Claude Code):
-```
-/plugin marketplace add anthropics/claude-code-plugins
-/plugin install code-simplifier@claude-plugins-official
-```
+## Getting Started
+
+When you open a project that hasn't been initialized with Kickstart, you'll see a welcome message and be prompted to run `/init`. This sets up:
+
+- Project-specific `CLAUDE.md` with your project name and description
+- Git worktree workflow enforcement
+- TypeScript, testing, and comment rules
+- Companion plugins for code quality
+
+The prompt only appears once per project. After initialization, Kickstart works silently in the background.
 
 ## Features
 
@@ -66,6 +71,7 @@ git worktree add -b feat/my-feature ../repo-feat-my-feature main
 | Hook | Event | Description |
 |------|-------|-------------|
 | `session-start-warning` | SessionStart | Warns on main, checks if behind remote |
+| `auto-init` | UserPromptSubmit | Prompts /init for uninitialized projects |
 | `block-main-commits` | PreToolUse | Blocks git commit/push on main |
 | `check-worktree` | PreToolUse | Blocks file writes on main |
 | `format-on-save` | PostToolUse | Auto-formats after write/edit |
@@ -113,14 +119,7 @@ Once configured, the hook will automatically update your PR description with a s
 
 **[See the full list →](.claude/settings.json)**
 
-Think of it like giving your coworker sudo access. Great if you trust them. Terrifying if you don't.
-
-✅ Use on personal dev machines you control
-❌ Don't use on shared systems or prod environments
-
-> **Safety net:** Hooks block commits to main even though the permissions allow it. We're reckless, not stupid.
-
-**Want fewer permissions?** Fork and edit `.claude/settings.json`. Remove whatever scares you.
+**Want fewer permissions?** Edit `.claude/settings.json`, remove whatever scares you.
 
 ## How It Works
 
@@ -135,13 +134,6 @@ Think of it like giving your coworker sudo access. Great if you trust them. Terr
 - Project-specific notes
 
 Run `/update` periodically to get the latest config without losing your customizations.
-
-## Contributing
-
-1. Fork the repo
-2. Create a feature branch
-3. Make your changes
-4. Submit a PR
 
 ## License
 
