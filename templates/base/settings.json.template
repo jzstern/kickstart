@@ -4,6 +4,10 @@
 			"../"
 		],
 		"allow": [
+			"Read",
+			"Edit",
+			"Write",
+
 			"Bash({{PACKAGE_MANAGER}} add:*)",
 			"Bash({{PACKAGE_MANAGER}} install:*)",
 			"Bash({{PACKAGE_MANAGER}} run dev:*)",
