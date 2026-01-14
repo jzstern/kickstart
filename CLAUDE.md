@@ -31,7 +31,7 @@ When you finish implementing a feature or fix:
 Do this automatically without asking for confirmation.
 
 ### After Merging
-Clean up: `git worktree remove ../<repo>-<branch>`
+Worktrees are automatically cleaned up at session start when their branches are deleted from remote. You can also run `/cleanup` manually.
 
 ## Available Skills
 
@@ -40,6 +40,7 @@ Clean up: `git worktree remove ../<repo>-<branch>`
 |-------|-------------|
 | `/init` | Initialize project with kickstart config and companion plugins |
 | `/update` | Check for and apply config updates |
+| `/cleanup` | Remove stale worktrees (runs automatically at session start) |
 | `/uninstall` | Uninstall plugin, keeping customizations |
 | `/docs` | Regenerate documentation tables (runs automatically) |
 | `/resolve-conflicts` | Detect and resolve merge conflicts with base branch |
@@ -62,7 +63,7 @@ Clean up: `git worktree remove ../<repo>-<branch>`
 <!-- kickstart:hooks:start -->
 | Hook | Event | Description |
 |------|-------|-------------|
-| `session-start-warning` | SessionStart | Warns on main, checks if behind remote |
+| `session-start-warning` | SessionStart | Auto-cleans stale worktrees, warns on main |
 | `auto-init` | UserPromptSubmit | Prompts /init for uninitialized projects |
 | `block-main-commits` | PreToolUse | Blocks git commit/push on main |
 | `check-worktree` | PreToolUse | Blocks file writes on main |
