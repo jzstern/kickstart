@@ -19,31 +19,31 @@ Generate comprehensive tests for the codebase.
 ### Test Structure
 ```typescript
 describe('ModuleName.functionName()', () => {
-	// #given
-	const mockData = { /* test data */ };
+  // #given
+  const mockData = { /* test data */ };
 
-	beforeEach(() => {
-		// Reset mocks
-	});
+  beforeEach(() => {
+    // Reset mocks
+  });
 
-	it('should handle valid input', async () => {
-		// #given
-		const input = 'valid';
+  it('should handle valid input', async () => {
+    // #given
+    const input = 'valid';
 
-		// #when
-		const result = await functionName(input);
+    // #when
+    const result = await functionName(input);
 
-		// #then
-		expect(result).toBeDefined();
-	});
+    // #then
+    expect(result).toBeDefined();
+  });
 
-	it('should reject invalid input', async () => {
-		// #given
-		const input = '';
+  it('should reject invalid input', async () => {
+    // #given
+    const input = '';
 
-		// #when & #then
-		await expect(functionName(input)).rejects.toThrow();
-	});
+    // #when & #then
+    await expect(functionName(input)).rejects.toThrow();
+  });
 });
 ```
 
