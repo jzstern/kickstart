@@ -1,0 +1,14 @@
+{
+	"name": "auto-review",
+	"description": "Automatically reviews staged changes before commit and fixes any issues",
+	"hooks": [
+		{
+			"event": "PreToolUse",
+			"matcher": {
+				"tool": "Bash",
+				"command": "git commit"
+			},
+			"prompt": "A git commit is about to happen. Review the staged changes and fix any issues before the commit proceeds.\n\n## Review Process\n\n1. **Get staged changes**: Run `git diff --cached` to see what will be committed\n2. **Skip if no staged changes**: If the diff is empty, output nothing and allow the commit\n3. **Review the changes** against these criteria:\n\n### Critical Issues (must fix)\n- Security vulnerabilities (path traversal, command injection, XSS, SQL injection)\n- Obvious bugs (undefined variable access, missing null checks that will crash)\n- TypeScript `any` without justification comment\n- Secrets or credentials in code\n\n### Warnings (should fix)\n- Missing error handling on async operations\n- Potential memory leaks (unsubscribed listeners)\n- Performance issues (unnecessary re-renders, large imports)\n- Inconsistent naming conventions\n\n### Skip (don't flag)\n- Style preferences\n- Minor refactoring opportunities\n- Missing tests (unless explicitly broken)\n- Documentation gaps\n\n## Action Required\n\n**If Critical Issues or Warnings found:**\n1. Fix each issue by editing the relevant files\n2. Stage the fixed files with `git add <file>`\n3. Output a brief summary of what was fixed (one line per fix)\n4. The commit will then proceed with your fixes included\n\n**If no issues found:**\n- Output nothing (empty response)\n- The commit proceeds unchanged\n\n## Important\n- Only fix issues in files that are already staged\n- Do not add new files that weren't part of the original commit\n- Keep fixes minimal and focused on the specific issue\n- Do not refactor unrelated code\n- If a fix is complex or uncertain, leave a TODO comment instead of making a risky change"
+		}
+	]
+}
