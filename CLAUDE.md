@@ -83,6 +83,24 @@ Worktrees are automatically cleaned up at session start when their branches are 
 | `detect-conflicts` | PreToolUse | Checks for merge conflicts before push |
 <!-- kickstart:hooks:end -->
 
+## GitHub Workflows
+
+### Auto-Address PR Comments
+
+The `address-pr-comments.yml` workflow automatically responds to PR review comments:
+
+- **Triggers on:** Review comments from humans (not bots) on same-repo PRs
+- **Behavior:**
+  - If the comment flags an issue or requests a change, Claude implements the fix and replies
+  - If the requested change isn't valid, Claude replies explaining why
+  - Questions and discussions get brief responses without code changes
+- **Safety:**
+  - Skips bot comments to prevent infinite loops
+  - Only runs on same-repo PRs (not forks) to protect secrets
+  - Serializes runs per PR to prevent race conditions
+
+**Setup required:** Add `ANTHROPIC_API_KEY` secret to your GitHub repository (Settings > Secrets and variables > Actions).
+
 ## Commit Conventions
 
 Use conventional commits:

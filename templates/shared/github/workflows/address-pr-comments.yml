@@ -1,0 +1,58 @@
+name: Address PR Comments
+
+on:
+  pull_request_review_comment:
+    types: [created]
+
+concurrency:
+  group: address-pr-comments-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  address-comment:
+    runs-on: ubuntu-latest
+    if: >-
+      github.event.comment.user.type != 'Bot' &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            A reviewer left a comment on PR #${{ github.event.pull_request.number }}.
+
+            **File:** ${{ github.event.comment.path }}
+            **Line:** ${{ github.event.comment.line }}
+            **Reviewer:** ${{ github.event.comment.user.login }}
+            **Comment:**
+            ${{ github.event.comment.body }}
+
+            **Your task:**
+
+            1. First, determine if this comment is flagging an issue that needs to be addressed.
+               - If the comment is just a question, discussion, praise, or acknowledgment, reply briefly and do NOT make code changes.
+               - If the comment requests a change, improvement, or flags a bug/issue, proceed to step 2.
+
+            2. Evaluate whether the requested change is valid:
+               - Read the relevant code and understand the context
+               - Consider if the suggestion improves code quality, correctness, security, or maintainability
+               - Consider if implementing it would break other functionality
+
+            3. Take action:
+               - **If valid:** Implement the change, commit it, and reply to the comment explaining what you changed.
+               - **If not valid:** Reply to the comment explaining why you disagree, with technical reasoning. Be respectful but direct.
+
+            **Guidelines:**
+            - Keep changes focused on what the comment requested
+            - Don't refactor unrelated code
+            - If unsure about the intent, ask for clarification in your reply
+            - Use conventional commits (fix:, refactor:, etc.)

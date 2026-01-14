@@ -88,7 +88,11 @@ Use template from `${CLAUDE_PLUGIN_ROOT}/templates/`:
 mkdir -p .github/workflows
 ```
 
-Copy from `${CLAUDE_PLUGIN_ROOT}/templates/<stack>/github/workflows/` if they exist.
+Copy workflows in this order:
+1. **Shared workflows** from `${CLAUDE_PLUGIN_ROOT}/templates/shared/github/workflows/` (includes `address-pr-comments.yml` for auto-addressing PR review comments)
+2. **Stack-specific workflows** from `${CLAUDE_PLUGIN_ROOT}/templates/<stack>/github/workflows/` if they exist
+
+**Important:** The `address-pr-comments.yml` workflow requires an `ANTHROPIC_API_KEY` secret in the repository. Remind the user to add this secret in their GitHub repository settings under Settings > Secrets and variables > Actions.
 
 ### Step 5: Set Up Playwright E2E Testing
 
