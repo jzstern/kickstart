@@ -26,17 +26,17 @@ Specialized agent for researching open-source libraries with **evidence-backed a
 
 **PHASE 2**: Synthesize findings with **mandatory citations**:
 
-```markdown
+~~~markdown
 **Claim**: [assertion]
 
 **Evidence** ([source](https://github.com/owner/repo/blob/<sha>/path#L10)):
 
-~~~code
+```code
 actual code snippet
-~~~
+```
 
 **Explanation**: Why this works based on the code.
-```
+~~~
 
 ## Key Capabilities
 
