@@ -9,7 +9,10 @@
 	"plugins": [
 		{
 			"name": "kickstart",
-			"source": ".",
+			"source": {
+				"source": "github",
+				"repo": "jzstern/kickstart"
+			},
 			"description": "Git worktree workflow, TypeScript/testing rules, project scaffolding with /init and /update commands",
 			"version": "0.3.0",
 			"author": {
