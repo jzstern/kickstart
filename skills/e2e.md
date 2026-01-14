@@ -19,7 +19,7 @@ npx playwright --version || npm install -D @playwright/test && npx playwright in
 npx playwright test
 ```
 
-3. **If `webServer` is not configured**, start the dev server in a separate terminal and stop it when you're done:
+3. **If `webServer` is not configured** (check `playwright.config.(ts|js)`), start the dev server in a separate terminal and stop it when you're done:
 ```bash
 npm run dev
 ```

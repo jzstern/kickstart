@@ -34,8 +34,8 @@ Format output with repo-relative file paths (include absolute paths if a tool pr
 
 ## Key Requirements
 
-- All file paths should be repo-relative (e.g., `src/auth/login.ts`)
-- If a tool returns an absolute path, include both absolute and repo-relative when possible
+- All file paths must include a repo-relative form (e.g., `src/auth/login.ts`)
+- When an absolute path is available, include both the absolute and repo-relative path (clearly labeled)
 - Results must be comprehensive, not partial
 - Answers should enable immediate action without follow-up questions
 - Address the underlying problem, not just the literal question
