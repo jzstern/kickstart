@@ -166,8 +166,6 @@ Summarize what was updated:
 
 ## Merge Strategy
 
-When merging template updates with user customizations:
-
 ```
 Template Section     User Modified?     Action
 ─────────────────────────────────────────────────
@@ -176,30 +174,6 @@ Git Workflow         Yes                Ask user: keep theirs or take new?
 Commands             Always custom      Preserve user's
 Project Notes        Always custom      Preserve user's
 New Section          N/A                Add to end
-```
-
-## Example Merged Output
-
-```markdown
-# my-project
-
-Brief description here.
-
-## Tech Stack
-SvelteKit 5, Bun, Tailwind
-
-## Commands
-<!-- User's custom commands preserved -->
-- `bun run dev` - Dev server
-- `bun run build` - Production build
-
-<!-- NEW: Added from template update -->
-## Performance Guidelines
-New guidelines from kickstart update...
-
-## Project-Specific Notes
-<!-- User's custom notes preserved -->
-This project uses a specific API...
 ```
 
 ## If No Updates Available
