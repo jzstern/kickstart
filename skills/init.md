@@ -168,10 +168,11 @@ Additional variables (derive from detected package manager):
 - `{{BUILD_COMMAND}}` - `<pm> run build`
 - `{{DEV_COMMAND}}` - `<pm> run dev`
 
-For SvelteKit, also suggest:
-```bash
-<pm> add -D @sveltejs/adapter-vercel
-```
+For SvelteKit, also suggest installing the Vercel adapter (use "Add dev dep" command from PM mapping):
+- bun: `bun add -D @sveltejs/adapter-vercel`
+- pnpm: `pnpm add -D @sveltejs/adapter-vercel`
+- yarn: `yarn add -D @sveltejs/adapter-vercel`
+- npm: `npm install -D @sveltejs/adapter-vercel`
 
 If `--vercel` was not passed, skip this step entirely.
 
