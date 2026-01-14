@@ -54,7 +54,19 @@ cat package.json 2>/dev/null | head -50
 
 ### Step 2: Create Project Configuration
 
-Create `.claude/CLAUDE.md` using the appropriate template.
+**First, check for existing CLAUDE.md files:**
+
+```bash
+# Check for existing CLAUDE.md (case-insensitive)
+ls -la CLAUDE.md claude.md .claude/CLAUDE.md .claude/claude.md 2>/dev/null
+```
+
+**If a CLAUDE.md already exists** (in root or `.claude/`):
+- **Do NOT overwrite it** - the user has customized content
+- If it exists at the root but not in `.claude/`, move it: `mkdir -p .claude && mv CLAUDE.md .claude/CLAUDE.md`
+- Skip to Step 3
+
+**If no CLAUDE.md exists**, create `.claude/CLAUDE.md` using the appropriate template.
 
 **Project name**: Use the current directory name (do not ask).
 
