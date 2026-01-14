@@ -54,30 +54,31 @@ cat package.json 2>/dev/null | head -50
 
 ### Step 2: Create Project Configuration
 
-**First, check for existing CLAUDE.md files (case-insensitive):**
+**First, detect existing CLAUDE.md files (case-insensitive):**
 
 ```bash
-# Check .claude/ directory first (case-insensitive)
-find .claude -maxdepth 1 -type f -iname 'claude.md' 2>/dev/null
-
-# Check root directory (case-insensitive)
-find . -maxdepth 1 -type f -iname 'claude.md' 2>/dev/null
+# Detect existing files and store in variables
+CLAUDE_IN_DIR=$(find .claude -maxdepth 1 -type f -iname 'claude.md' -print -quit 2>/dev/null)
+CLAUDE_IN_ROOT=$(find . -maxdepth 1 -type f -iname 'claude.md' -print -quit 2>/dev/null)
 ```
 
-**If `.claude/CLAUDE.md` (any case) already exists:**
-- **Do NOT overwrite it** - the user has customized content
-- Skip to Step 3
+**Handle based on what was found:**
 
-**If root has a CLAUDE.md (any case) but `.claude/` does not:**
-- Move it into `.claude/` without overwriting:
 ```bash
-mkdir -p .claude
-ROOT_CLAUDE=$(find . -maxdepth 1 -type f -iname 'claude.md' -print -quit)
-if [ -n "$ROOT_CLAUDE" ]; then
-  mv "$ROOT_CLAUDE" .claude/CLAUDE.md
+if [ -n "$CLAUDE_IN_DIR" ]; then
+  # .claude/CLAUDE.md exists - preserve it, skip to Step 3
+  echo "Preserving existing $CLAUDE_IN_DIR"
+elif [ -n "$CLAUDE_IN_ROOT" ]; then
+  # Root has CLAUDE.md but .claude/ does not - move it
+  mkdir -p .claude
+  mv "$CLAUDE_IN_ROOT" .claude/CLAUDE.md
+  echo "Moved $CLAUDE_IN_ROOT to .claude/CLAUDE.md"
+  # Skip to Step 3
+else
+  # No CLAUDE.md exists - create from template (see below)
+  :
 fi
 ```
-- Skip to Step 3
 
 **If no CLAUDE.md exists**, create `.claude/CLAUDE.md` using the appropriate template.
 
