@@ -101,6 +101,7 @@ Workflows copied to `.github/workflows/` during `/init`:
 | `address-pr-comments.yml` | Auto-addresses PR review comments using Claude ([setup required](#anthropic-api-key-setup)) |
 <!-- kickstart:workflows:end -->
 
+<a id="anthropic-api-key-setup"></a>
 #### Anthropic API Key Setup
 
 The `address-pr-comments` workflow requires an Anthropic API key to call Claude:
