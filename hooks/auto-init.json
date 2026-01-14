@@ -1,0 +1,10 @@
+{
+	"name": "auto-init",
+	"description": "Automatically prompts /init for uninitialized projects",
+	"hooks": [
+		{
+			"event": "UserPromptSubmit",
+			"command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/lib/auto-init.sh\""
+		}
+	]
+}

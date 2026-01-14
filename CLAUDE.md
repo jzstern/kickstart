@@ -22,8 +22,8 @@ Opinionated Claude Code configuration for web development. This file is loaded a
 ### After Completing Work
 
 When you finish implementing a feature or fix:
-1. Run type checker and linter (if configured)
-2. Run tests (if configured)
+1. Run type checker and linter
+2. Run tests
 3. Commit all changes with a conventional commit message
 4. Push the branch to origin
 5. Open a pull request using `gh pr create` (skip if PR already exists)
@@ -31,17 +31,18 @@ When you finish implementing a feature or fix:
 Do this automatically without asking for confirmation.
 
 ### After Merging
-Clean up: `git worktree remove ../<repo>-<branch>`
+Worktrees are automatically cleaned up at session start when their branches are deleted from remote. You can also run `/cleanup` manually.
 
 ## Available Skills
 
 <!-- kickstart:skills:start -->
 | Skill | Description |
 |-------|-------------|
-| `/init` | Initialize project with kickstart config |
+| `/init` | Initialize project with kickstart config and companion plugins |
 | `/update` | Check for and apply config updates |
-| `/uninstall` | Uninstall plugin, keeping customizations |
-| `/docs` | (Developer) Regenerate documentation |
+| `/cleanup` | Remove stale worktrees (runs automatically at session start) |
+| `/uninstall` | Uninstall plugin, keeping project config |
+| `/docs` | Regenerate documentation tables (runs automatically) |
 | `/review` | Code review of staged/changed files |
 | `/security` | Security audit with OWASP Top 10 checks |
 | `/test` | Generate comprehensive unit tests |
@@ -70,11 +71,14 @@ Clean up: `git worktree remove ../<repo>-<branch>`
 <!-- kickstart:hooks:start -->
 | Hook | Event | Description |
 |------|-------|-------------|
-| `session-start-warning` | SessionStart | Warns on main, checks if behind origin |
+| `session-start-warning` | SessionStart | Auto-cleans stale worktrees, warns on main |
+| `auto-init` | UserPromptSubmit | Prompts /init for uninitialized projects |
 | `block-main-commits` | PreToolUse | Blocks git commit/push on main |
 | `check-worktree` | PreToolUse | Blocks file writes on main |
 | `format-on-save` | PostToolUse | Auto-formats after write/edit |
-| `auto-assign-pr` | PostToolUse | Assigns created PRs to the creator |
+| `auto-pr-update` | PreToolUse | Updates PR description before push |
+| `auto-assign-pr` | PostToolUse | Assigns created PRs to creator |
+| `auto-docs` | PostToolUse | Regenerates docs when components change |
 <!-- kickstart:hooks:end -->
 
 ## Commit Conventions
@@ -87,15 +91,7 @@ Use conventional commits:
 - `test:` - Test changes
 - `chore:` - Maintenance
 
-## Code Quality
-
-### Before Committing
-1. Run type checker
-2. Run linter
-3. Run tests
-4. Test manually
-
-### Security
+## Security
 - Never commit secrets
 - Validate input at boundaries
 - Sanitize filenames
