@@ -1,6 +1,6 @@
 {
 	"name": "auto-pr-update",
-	"description": "Automatically update PR description and testing instructions before pushing changes",
+	"description": "Automatically update PR title and description before pushing changes",
 	"hooks": [
 		{
 			"event": "PreToolUse",
@@ -8,7 +8,7 @@
 				"tool": "Bash",
 				"command": "git push"
 			},
-			"prompt": "A git push is about to happen. Check if there's an open PR for the current branch using the GitHub MCP tools. If a PR exists:\n\n1. Get the PR details and the list of files changed\n2. Analyze all commits on this branch (compared to the base branch)\n3. Update the PR description with:\n   - A clear summary of what changed (2-4 bullet points)\n   - Testing instructions based on the changes\n   - Keep any existing sections the user may have added manually\n\nUse this format for the PR body:\n\n## Summary\n- [bullet points describing changes]\n\n## Testing Instructions\n- [specific steps to test the changes]\n\n## Files Changed\n- [list key files with brief description of changes]\n\n---\n🤖 Auto-updated by Claude Code\n\nIf no PR exists for this branch, do nothing."
+			"prompt": "A git push is about to happen. Check if there's an open PR for the current branch using the GitHub MCP tools. If a PR exists:\n\n1. Get the PR details and the list of files changed\n2. Analyze all commits on this branch (compared to the base branch)\n3. Update the PR title if the scope of changes has evolved:\n   - Use conventional commit style (feat:, fix:, refactor:, etc.)\n   - Keep it concise but descriptive\n   - Only update if the current title no longer reflects the changes\n4. Update the PR description with:\n   - A clear summary of what changed (2-4 bullet points)\n   - Testing instructions based on the changes\n   - Keep any existing sections the user may have added manually\n\nUse this format for the PR body:\n\n## Summary\n- [bullet points describing changes]\n\n## Testing Instructions\n- [specific steps to test the changes]\n\n## Files Changed\n- [list key files with brief description of changes]\n\n---\n🤖 Auto-updated by Claude Code\n\nIf no PR exists for this branch, do nothing."
 		}
 	]
 }
