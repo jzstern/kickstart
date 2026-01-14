@@ -54,6 +54,20 @@ Clean up: `git worktree remove ../<repo>-<branch>`
 | `format-on-save` | PostToolUse | Auto-formats after write/edit |
 <!-- kickstart:hooks:end -->
 
+## GitHub Workflows
+
+### Auto-Address PR Comments
+
+The `address-pr-comments.yml` workflow automatically responds to PR review comments:
+
+- **Triggers on:** Any new review comment on a PR
+- **Behavior:**
+  - If the comment flags an issue or requests a change, Claude implements the fix and replies
+  - If the requested change isn't valid, Claude replies explaining why
+  - Questions and discussions get brief responses without code changes
+
+**Setup required:** Add `ANTHROPIC_API_KEY` secret to your GitHub repository (Settings > Secrets and variables > Actions).
+
 ## Commit Conventions
 
 Use conventional commits:

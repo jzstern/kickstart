@@ -71,7 +71,11 @@ Create `.github/workflows/` directory and copy workflow templates:
 mkdir -p .github/workflows
 ```
 
-Copy from `${CLAUDE_PLUGIN_ROOT}/templates/<stack>/github/workflows/` if they exist.
+Copy workflows in this order:
+1. **Shared workflows** from `${CLAUDE_PLUGIN_ROOT}/templates/shared/github/workflows/` (includes `address-pr-comments.yml` for auto-addressing PR review comments)
+2. **Stack-specific workflows** from `${CLAUDE_PLUGIN_ROOT}/templates/<stack>/github/workflows/` if they exist
+
+**Important:** The `address-pr-comments.yml` workflow requires an `ANTHROPIC_API_KEY` secret in the repository. Remind the user to add this secret in their GitHub repository settings under Settings > Secrets and variables > Actions.
 
 ### Step 5: Set Up Playwright E2E Testing
 
@@ -174,11 +178,13 @@ Continue to the next step. Remind the user they can install these later with `/p
 Summarize what was created:
 - `.claude/CLAUDE.md` - Project configuration
 - `.claude/settings.json` - Pre-approved commands for automatic execution
-- `.github/workflows/` - CI workflows (if copied)
+- `.github/workflows/ci.yml` - CI workflow for type checking, linting, and tests
+- `.github/workflows/address-pr-comments.yml` - Auto-addresses PR review comments using Claude
 - `playwright.config.ts` - Playwright E2E test configuration
 - `tests/` - E2E test directory with example test
 
 Remind the user:
+- **Required:** Add `ANTHROPIC_API_KEY` secret to GitHub repo (Settings > Secrets > Actions) to enable auto-addressing PR comments
 - Run `bun run test:e2e` (or equivalent) to run E2E tests
 - Run `/update` periodically to get config updates
 - Edit `.claude/CLAUDE.md` to add project-specific notes
