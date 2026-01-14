@@ -36,7 +36,7 @@ get_stale_worktrees() {
         if [ "$remote" = "origin" ]; then
           local ls_output
           if ls_output=$(git ls-remote --heads origin "$wt_branch" 2>/dev/null); then
-            if ! echo "$ls_output" | grep -Fq "$wt_branch"; then
+            if ! echo "$ls_output" | grep -Fq "refs/heads/$wt_branch"; then
               if [ -n "$stale" ]; then
                 stale="$stale"$'\n'"$wt_path"$'\t'"$wt_branch"
               else

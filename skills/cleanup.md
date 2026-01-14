@@ -1,6 +1,6 @@
 ---
 name: cleanup
-description: Remove git worktrees for branches that have been merged or deleted from remote.
+description: Remove git worktrees for branches that have been deleted from remote.
 ---
 
 # Cleanup Stale Worktrees
@@ -72,7 +72,7 @@ If a worktree cannot be removed:
 
 ```
 🧹 Cleaning up 1 stale worktree(s)...
-  Skipped: ../myproject-feat-wip (fatal: cannot remove: has changes)
+  Skipped: ../myproject-feat-wip (fatal: '../myproject-feat-wip' contains modified or untracked files, use --force to delete it)
 ```
 
 ## Notes
