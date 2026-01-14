@@ -4,9 +4,9 @@
 			"../"
 		],
 		"allow": [
-			"Read",
-			"Edit",
-			"Write",
+			"Read(./**)",
+			"Edit(./**)",
+			"Write(./**)",
 
 			"Bash(bun add:*)",
 			"Bash(bun install:*)",
