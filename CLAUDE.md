@@ -77,6 +77,7 @@ Worktrees are automatically cleaned up at session start when their branches are 
 | `block-main-commits` | PreToolUse | Blocks git commit/push on main |
 | `check-worktree` | PreToolUse | Blocks file writes on main |
 | `format-on-save` | PostToolUse | Auto-formats after write/edit |
+| `auto-review` | PreToolUse | Reviews staged changes before commit, auto-fixes issues |
 | `auto-pr-update` | PreToolUse | Derives PR titles from conventional commits when eligible and updates PR descriptions before push |
 | `auto-assign-pr` | PostToolUse | Assigns created PRs to creator |
 | `auto-docs` | PostToolUse | Regenerates docs when components change |
