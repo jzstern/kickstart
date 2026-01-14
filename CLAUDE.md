@@ -44,6 +44,11 @@ Worktrees are automatically cleaned up at session start when their branches are 
 | `/uninstall` | Uninstall plugin, keeping customizations |
 | `/docs` | Regenerate documentation tables (runs automatically) |
 | `/resolve-conflicts` | Detect and resolve merge conflicts with base branch |
+| `/review` | Code review of staged/changed files |
+| `/security` | Security audit with OWASP Top 10 checks |
+| `/test` | Generate comprehensive unit tests |
+| `/e2e` | E2E testing with Playwright |
+| `/compound` | Capture session learnings to improve future work |
 <!-- kickstart:skills:end -->
 
 ## Available Agents
@@ -56,6 +61,10 @@ Worktrees are automatically cleaned up at session start when their branches are 
 | `e2e-runner` | Playwright E2E testing specialist |
 | `security-auditor` | OWASP Top 10 vulnerability scanning |
 | `test-generator` | Generates comprehensive unit tests |
+| `code-reviewer` | Reviews code for quality, security, and standards |
+| `codebase-search` | Locates code and implementations with parallel search |
+| `media-interpreter` | Extracts data from PDFs, images, diagrams |
+| `open-source-librarian` | Researches libraries with GitHub permalinks |
 <!-- kickstart:agents:end -->
 
 ## Active Hooks

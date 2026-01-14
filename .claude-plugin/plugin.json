@@ -7,16 +7,27 @@
 	"skills": [
 		"../skills/init.md",
 		"../skills/update.md",
+		"../skills/cleanup.md",
 		"../skills/uninstall.md",
 		"../skills/docs.md",
-		"../skills/resolve-conflicts.md"
+		"../skills/resolve-conflicts.md",
+		"../skills/review.md",
+		"../skills/security.md",
+		"../skills/test.md",
+		"../skills/e2e.md",
+		"../skills/compound.md",
+		"../skills/planning-with-files/SKILL.md"
 	],
 	"agents": [
 		"../agents/debugger.md",
 		"../agents/security-auditor.md",
 		"../agents/test-generator.md",
 		"../agents/e2e-runner.md",
-		"../agents/conflict-resolver.md"
+		"../agents/conflict-resolver.md",
+		"../agents/code-reviewer.md",
+		"../agents/codebase-search.md",
+		"../agents/media-interpreter.md",
+		"../agents/open-source-librarian.md"
 	],
 	"hooks": [
 		"../hooks/session-start-warning.json",
