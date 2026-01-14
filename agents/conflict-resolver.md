@@ -111,25 +111,30 @@ git diff --check
 grep -rI "<<<<<<" . --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=dist --exclude-dir=build --exclude-dir=.next --exclude-dir=coverage 2>/dev/null || echo "Clean"
 ```
 
-Then run project verification if configured. **Capture exit codes to detect failures**:
+Then run project verification if configured. **Detect package manager first, then run tests only with that one** (don't fallback on test failure):
 
 ```bash
-# Run type checker if available (check exit code)
-if npm run check 2>/dev/null; then
-    echo "Type check passed"
-elif bun run check 2>/dev/null; then
-    echo "Type check passed"
-fi
-
-# Run tests if available (check exit code)
-if npm test 2>/dev/null; then
+# Detect package manager and run verification with it only
+if [ -f bun.lockb ] || [ -f bun.lock ]; then
+    # Bun project - run bun commands only
+    bun run check 2>/dev/null && echo "Type check passed"
+    if ! bun test 2>/dev/null; then
+        echo "Tests failed - aborting merge"
+        git merge --abort
+        exit 1
+    fi
     echo "Tests passed"
-elif bun test 2>/dev/null; then
+elif [ -f package-lock.json ] || [ -f package.json ]; then
+    # npm project - run npm commands only
+    npm run check 2>/dev/null && echo "Type check passed"
+    if ! npm test 2>/dev/null; then
+        echo "Tests failed - aborting merge"
+        git merge --abort
+        exit 1
+    fi
     echo "Tests passed"
-else
-    echo "Tests failed or not configured"
-    # If tests exist and failed, abort the merge
 fi
+# If no package manager detected, skip tests
 ```
 
 If tests fail after resolution:

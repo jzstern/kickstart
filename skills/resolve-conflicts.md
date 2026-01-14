@@ -58,25 +58,21 @@ If there are unmerged paths from a **merge** (`.git/MERGE_HEAD` exists):
    grep -rI "<<<<<<" . --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=dist --exclude-dir=build 2>/dev/null || echo "Clean"
    ```
 
-6. Run verification if available (check exit codes for failures):
+6. Run verification if available (detect package manager first, don't fallback on failure):
    ```bash
-   # Run type checker
-   if npm run check 2>/dev/null; then
-       echo "Type check passed"
-   elif bun run check 2>/dev/null; then
-       echo "Type check passed"
-   fi
-
-   # Run tests - capture result
-   if npm test 2>/dev/null; then
+   # Detect package manager and run verification with it only
+   if [ -f bun.lockb ] || [ -f bun.lock ]; then
+       # Bun project
+       bun run check 2>/dev/null && echo "Type check passed"
+       bun test || { echo "Tests failed - aborting merge"; git merge --abort; exit 1; }
        echo "Tests passed"
-   elif bun test 2>/dev/null; then
+   elif [ -f package-lock.json ] || [ -f package.json ]; then
+       # npm project
+       npm run check 2>/dev/null && echo "Type check passed"
+       npm test || { echo "Tests failed - aborting merge"; git merge --abort; exit 1; }
        echo "Tests passed"
-   else
-       echo "Tests failed - aborting merge"
-       git merge --abort
-       exit 1
    fi
+   # If no package manager detected, skip tests
    ```
 
 7. If verification passes, complete the merge:
