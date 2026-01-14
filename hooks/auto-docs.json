@@ -1,0 +1,14 @@
+{
+	"name": "auto-docs",
+	"description": "Automatically regenerate documentation when plugin components are modified",
+	"hooks": [
+		{
+			"event": "PostToolUse",
+			"matcher": {
+				"tool": ["Write", "Edit"],
+				"file_path": ["agents/*.md", "hooks/*.json", "skills/*.md"]
+			},
+			"prompt": "A kickstart plugin component was just modified. Regenerate the documentation tables in README.md and CLAUDE.md by:\n\n1. Parse all agents (agents/*.md), hooks (hooks/*.json), and skills (skills/*.md) to extract their name and description from frontmatter/JSON\n2. Update the tables between <!-- kickstart:*:start --> and <!-- kickstart:*:end --> markers in both README.md and CLAUDE.md\n3. Preserve all content outside the markers\n\nDo this silently without asking for confirmation."
+		}
+	]
+}

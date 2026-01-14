@@ -1,6 +1,13 @@
 {
 	"permissions": {
+		"additionalDirectories": [
+			"../"
+		],
 		"allow": [
+			"Read(./**)",
+			"Edit(./**)",
+			"Write(./**)",
+
 			"Bash(bun add:*)",
 			"Bash(bun install:*)",
 			"Bash(bun run dev:*)",
@@ -39,7 +46,9 @@
 			"Bash(gh issue:*)",
 			"Bash(gh repo view:*)",
 			"Bash(gh run:*)",
-			"Bash(gh workflow:*)"
+			"Bash(gh workflow:*)",
+
+			"Bash(mkdir:*)"
 		]
 	}
 }
