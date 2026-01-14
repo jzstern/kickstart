@@ -50,6 +50,24 @@
 			"marketplace": "claude-plugins-official",
 			"description": "TypeScript language server integration",
 			"author": "Anthropic"
+		},
+		{
+			"name": "pr-review-toolkit",
+			"marketplace": "claude-plugins-official",
+			"description": "PR review agents for comments, tests, error handling, type design, and code quality",
+			"author": "Anthropic"
+		},
+		{
+			"name": "playwright",
+			"marketplace": "claude-plugins-official",
+			"description": "Browser automation and E2E testing MCP server",
+			"author": "Microsoft"
+		},
+		{
+			"name": "security-guidance",
+			"marketplace": "claude-plugins-official",
+			"description": "Security hooks warning about command injection, XSS, and unsafe patterns",
+			"author": "Anthropic"
 		}
 	]
 }

@@ -13,14 +13,18 @@ Run these commands inside a Claude Code session:
 
 ### Companion Plugins
 
-Kickstart automatically installs these official plugins during `/init`:
+Kickstart installs these official plugins when you run `/init --plugins`:
 
 | Plugin | Purpose |
 |--------|---------|
+| `github` | GitHub MCP integration for PRs, issues, and repos |
 | `code-simplifier` | Simplifies and refines code for clarity |
 | `code-review` | Code review for pull requests |
 | `frontend-design` | High-quality frontend interface generation |
 | `typescript-lsp` | TypeScript language server integration |
+| `pr-review-toolkit` | PR review agents for tests, types, and code quality |
+| `playwright` | Browser automation and E2E testing MCP |
+| `security-guidance` | Security hooks for injection, XSS, unsafe patterns |
 
 ## Getting Started
 

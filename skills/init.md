@@ -170,6 +170,9 @@ claude plugin install code-simplifier@claude-plugins-official
 claude plugin install code-review@claude-plugins-official
 claude plugin install frontend-design@claude-plugins-official
 claude plugin install typescript-lsp@claude-plugins-official
+claude plugin install pr-review-toolkit@claude-plugins-official
+claude plugin install playwright@claude-plugins-official
+claude plugin install security-guidance@claude-plugins-official
 ```
 
 If `--plugins` was not passed, skip this step entirely.
