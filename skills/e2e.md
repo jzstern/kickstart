@@ -23,12 +23,24 @@ if ! command -v npx >/dev/null 2>&1; then
   exit 1
 fi
 
+install_playwright() {
+  if command -v bun >/dev/null 2>&1 && { [ -f bun.lockb ] || [ -f bun.lock ]; }; then
+    bun add -d @playwright/test
+  elif command -v pnpm >/dev/null 2>&1 && [ -f pnpm-lock.yaml ]; then
+    pnpm add -D @playwright/test
+  elif command -v yarn >/dev/null 2>&1 && [ -f yarn.lock ]; then
+    yarn add -D @playwright/test
+  else
+    npm install -D @playwright/test
+  fi
+}
+
 if ! npx playwright --version >/dev/null 2>&1; then
-  npm install -D @playwright/test && npx playwright install
+  install_playwright && npx playwright install
 fi
 ```
 
-Note: if `npx playwright` isn't available, this will install `@playwright/test` into the current project and update lockfiles. Run this from the project (or package) root where your Playwright tests live (i.e., where `package.json` exists), and verify `package.json` is present before installing.
+Note: if `npx playwright` isn't available, this will install `@playwright/test` into the current project and update lockfiles. Run this from the project (or package) root where your Playwright tests live (i.e., where `package.json` exists).
 
 2. **Ensure the app is running**:
    - Prefer configuring `webServer` in `playwright.config.(ts|js)` (see below). If it is configured, do not start the dev server manually.
