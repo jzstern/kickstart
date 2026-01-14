@@ -62,6 +62,7 @@ Worktrees are automatically cleaned up at session start when their branches are 
 | Hook | Event | Description |
 |------|-------|-------------|
 | `session-start-warning` | SessionStart | Auto-cleans stale worktrees, warns on main |
+| `auto-init` | UserPromptSubmit | Prompts /init for uninitialized projects |
 | `block-main-commits` | PreToolUse | Blocks git commit/push on main |
 | `check-worktree` | PreToolUse | Blocks file writes on main |
 | `format-on-save` | PostToolUse | Auto-formats after write/edit |

@@ -28,6 +28,17 @@ To install manually (in Claude Code):
 /plugin install code-simplifier@claude-plugins-official
 ```
 
+## Getting Started
+
+When you open a project that hasn't been initialized with Kickstart, you'll see a welcome message and be prompted to run `/init`. This sets up:
+
+- Project-specific `CLAUDE.md` with your project name and description
+- Git worktree workflow enforcement
+- TypeScript, testing, and comment rules
+- Companion plugins for code quality
+
+The prompt only appears once per project. After initialization, Kickstart works silently in the background.
+
 ## Features
 
 ### Git Worktree Workflow
@@ -64,6 +75,7 @@ git worktree add -b feat/my-feature ../repo-feat-my-feature main
 | Hook | Event | Description |
 |------|-------|-------------|
 | `session-start-warning` | SessionStart | Warns on main, checks if behind remote |
+| `auto-init` | UserPromptSubmit | Prompts /init for uninitialized projects |
 | `block-main-commits` | PreToolUse | Blocks git commit/push on main |
 | `check-worktree` | PreToolUse | Blocks file writes on main |
 | `format-on-save` | PostToolUse | Auto-formats after write/edit |
