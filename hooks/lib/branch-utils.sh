@@ -66,13 +66,22 @@ cleanup_stale_worktrees() {
   count=$(echo "$stale" | wc -l | tr -d ' ')
   printf '\n🧹 Cleaning up %s stale worktree(s)...\n' "$count"
 
+  local current_wt
+  current_wt=$(realpath "$PWD" 2>/dev/null || echo "$PWD")
+
   while IFS=$'\t' read -r wt_path wt_branch; do
     if [ -n "$wt_path" ]; then
-      local err
-      if err=$(git worktree remove "$wt_path" 2>&1); then
-        printf '  Removed: %s (branch %s deleted from remote)\n' "$wt_path" "$wt_branch"
+      local resolved_path
+      resolved_path=$(realpath "$wt_path" 2>/dev/null || echo "$wt_path")
+      if [ "$resolved_path" = "$current_wt" ]; then
+        printf '  Skipped: %s (current working directory)\n' "$wt_path"
       else
-        printf '  Skipped: %s (%s)\n' "$wt_path" "$err"
+        local err
+        if err=$(git worktree remove "$wt_path" 2>&1); then
+          printf '  Removed: %s (branch %s deleted from remote)\n' "$wt_path" "$wt_branch"
+        else
+          printf '  Skipped: %s (%s)\n' "$wt_path" "$err"
+        fi
       fi
     fi
   done <<< "$stale"
