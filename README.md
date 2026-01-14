@@ -22,12 +22,6 @@ Kickstart automatically installs these official plugins during `/init`:
 | `frontend-design` | High-quality frontend interface generation |
 | `typescript-lsp` | TypeScript language server integration |
 
-To install manually (in Claude Code):
-```
-/plugin marketplace add anthropics/claude-code-plugins
-/plugin install code-simplifier@claude-plugins-official
-```
-
 ## Getting Started
 
 When you open a project that hasn't been initialized with Kickstart, you'll see a welcome message and be prompted to run `/init`. This sets up:
