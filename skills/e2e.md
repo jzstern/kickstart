@@ -10,18 +10,26 @@ Run end-to-end tests for the full user journey.
 ## Instructions
 
 1. **Check Playwright installation**:
+
+Before installing anything, verify you're in a Node project (a `package.json` exists in the current directory) and `npx` is available. If either is missing, do not install dependencies; report the issue and stop.
 ```bash
 if ! npx playwright --version >/dev/null 2>&1; then
   npm install -D @playwright/test && npx playwright install
 fi
 ```
 
+Note: if `npx playwright` isn't available, this will install `@playwright/test` into the current project and update lockfiles. Run this from the project (or package) root where your Playwright tests live (i.e., where `package.json` exists), and verify `package.json` is present before installing.
+
 2. **Ensure the app is running**:
    - Prefer configuring `webServer` in `playwright.config.(ts|js)` (see below). If it is configured, do not start the dev server manually.
    - Otherwise, start the dev server in a separate terminal and stop it when you're done:
+
+To determine whether `webServer` is configured, open `playwright.config.(ts|js)` and look for a `webServer` property. In non-interactive environments, prefer relying on `webServer` rather than starting `npm run dev` in the foreground.
 ```bash
 npm run dev
 ```
+
+Stop the dev server when you're done (for example, with Ctrl+C).
 
 3. **Run E2E tests**:
 ```bash
