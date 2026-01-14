@@ -54,17 +54,13 @@ cat package.json 2>/dev/null | head -50
 
 ### Step 2: Create Project Configuration
 
-**First, detect existing CLAUDE.md files (case-insensitive):**
+**Detect existing CLAUDE.md files (case-insensitive) and handle accordingly:**
 
 ```bash
-# Detect existing files and store in variables
+# Detect existing files and handle in a single script
 CLAUDE_IN_DIR=$(find .claude -maxdepth 1 -type f -iname 'claude.md' -print -quit 2>/dev/null)
 CLAUDE_IN_ROOT=$(find . -maxdepth 1 -type f -iname 'claude.md' -print -quit 2>/dev/null)
-```
 
-**Handle based on what was found:**
-
-```bash
 if [ -n "$CLAUDE_IN_DIR" ]; then
   # .claude/CLAUDE.md exists - preserve it, skip to Step 3
   echo "Preserving existing $CLAUDE_IN_DIR"
