@@ -26,18 +26,18 @@ git worktree list --porcelain
 For each worktree (except the main one), check if:
 1. The branch no longer exists on remote (exit code 2 from `ls-remote`)
 2. The branch is an ancestor of the default branch (merged)
-3. The branch tip differs from the default branch tip (not newly created)
+3. The branch has commits beyond its merge-base (has actual work)
 
 ```bash
 git ls-remote --exit-code --heads origin <branch-name>  # exit 2 = not found
 git merge-base --is-ancestor <branch-name> origin/main
-git rev-parse <branch-name>  # compare with origin/main
+git merge-base <branch-name> origin/main  # compare with branch tip
 ```
 
 A worktree is "stale" if ALL conditions are met:
 - The branch no longer exists on the remote
 - The branch has been merged into the default branch
-- The branch tip is not at the same commit as the default branch (skips newly created branches)
+- The branch tip differs from its merge-base with main (has commits that were integrated)
 - It's not the main/master branch
 
 ### Step 3: Remove Stale Worktrees
@@ -84,7 +84,7 @@ If a worktree cannot be removed:
 
 - Only removes worktrees for branches that are merged AND deleted from remote
 - Works for branches pushed with or without `-u` flag
-- Newly created branches (at same commit as main) are never removed
+- Branches without commits (at merge-base) are never removed, even if main advances
 - Network errors during `ls-remote` are treated as "keep" (fail-safe)
 - Uncommitted work is never lost (worktrees with changes are skipped)
 - The main worktree is never removed

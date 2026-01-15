@@ -63,11 +63,11 @@ is_stale_branch() {
     return 1
   fi
 
-  local branch_sha default_sha
+  local branch_sha merge_base
   branch_sha=$(git rev-parse "$branch" 2>/dev/null) || return 1
-  default_sha=$(git rev-parse "origin/$default_branch" 2>/dev/null) || return 1
+  merge_base=$(git merge-base "$branch" "origin/$default_branch" 2>/dev/null) || return 1
 
-  [ "$branch_sha" != "$default_sha" ]
+  [ "$branch_sha" != "$merge_base" ]
 }
 
 get_stale_worktrees() {
