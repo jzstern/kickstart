@@ -49,13 +49,6 @@ get_default_branch() {
   printf '%s\n' main
 }
 
-was_tracking_origin() {
-  local branch="$1"
-  local remote
-  remote=$(git config --get "branch.$branch.remote" 2>/dev/null)
-  [ "$remote" = "origin" ]
-}
-
 is_branch_merged() {
   local branch="$1"
   local default_branch="$2"
@@ -65,7 +58,16 @@ is_branch_merged() {
 is_stale_branch() {
   local branch="$1"
   local default_branch="$2"
-  was_tracking_origin "$branch" && is_branch_merged "$branch" "$default_branch"
+
+  if ! is_branch_merged "$branch" "$default_branch"; then
+    return 1
+  fi
+
+  local branch_sha default_sha
+  branch_sha=$(git rev-parse "$branch" 2>/dev/null) || return 1
+  default_sha=$(git rev-parse "origin/$default_branch" 2>/dev/null) || return 1
+
+  [ "$branch_sha" != "$default_sha" ]
 }
 
 get_stale_worktrees() {
