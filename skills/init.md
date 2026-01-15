@@ -12,8 +12,6 @@ You are setting up a new project with kickstart configuration. This process is f
 
 - `--vercel` - Configure Vercel deployment
 
-Note: Companion plugins are automatically installed via the `auto-install-plugins` hook on every session start.
-
 ## Process
 
 ### Step 1: Auto-Detect Stack
@@ -158,7 +156,25 @@ Copy `${CLAUDE_PLUGIN_ROOT}/templates/shared/tests/example.spec.ts`.
 mkdir -p .claude/rules
 ```
 
-### Step 7: Configure Vercel (if --vercel flag)
+### Step 7: Install Companion Plugins
+
+Install recommended companion plugins from the official marketplace:
+
+```bash
+claude plugin marketplace add anthropics/claude-code-plugins
+claude plugin install github@claude-plugins-official
+claude plugin install code-simplifier@claude-plugins-official
+claude plugin install code-review@claude-plugins-official
+claude plugin install frontend-design@claude-plugins-official
+claude plugin install typescript-lsp@claude-plugins-official
+claude plugin install pr-review-toolkit@claude-plugins-official
+claude plugin install playwright@claude-plugins-official
+claude plugin install security-guidance@claude-plugins-official
+```
+
+These commands are idempotent (safe to run if already installed).
+
+### Step 8: Configure Vercel (if --vercel flag)
 
 **Skip this step for Node API or Node/Generic projects** (no Vercel framework preset available).
 
@@ -186,7 +202,7 @@ For SvelteKit, also suggest installing the Vercel adapter (use "Add dev dep" com
 
 If `--vercel` was not passed, skip this step entirely.
 
-### Step 8: Confirm Setup
+### Step 9: Confirm Setup
 
 Print a summary based on what happened:
 
@@ -231,6 +247,7 @@ Next steps:
 ```text
 Configured:
   Playwright E2E testing (if web project)
+  Companion plugins (8 official plugins)
   Vercel deployment (if --vercel)
 
 Next steps:
