@@ -8,14 +8,14 @@
 				"tool": "Bash",
 				"command": "(^|&& )gh pr create"
 			},
-			"command": "gh pr edit --add-assignee @me 2>/dev/null || true"
+			"command": "gh pr view --json number >/dev/null 2>&1 && gh pr edit --add-assignee @me || true"
 		},
 		{
 			"event": "PostToolUse",
 			"matcher": {
 				"tool": "mcp__github__create_pull_request"
 			},
-			"command": "gh pr edit --add-assignee @me 2>/dev/null || true"
+			"command": "pr=$(gh pr list --repo \"$TOOL_INPUT_owner/$TOOL_INPUT_repo\" --head \"$TOOL_INPUT_head\" --state open --json number --limit 1 --jq '.[0].number') && [ -n \"$pr\" ] && gh pr edit \"$pr\" --repo \"$TOOL_INPUT_owner/$TOOL_INPUT_repo\" --add-assignee @me || true"
 		}
 	]
 }
