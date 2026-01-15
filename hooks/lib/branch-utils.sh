@@ -30,7 +30,23 @@ is_kickstart_initialized() {
 }
 
 get_default_branch() {
-  git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@'
+  local ref
+  ref=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null) || true
+  if [ -n "$ref" ]; then
+    printf '%s\n' "${ref#refs/remotes/origin/}"
+    return 0
+  fi
+
+  if git show-ref --verify --quiet refs/remotes/origin/main 2>/dev/null; then
+    printf '%s\n' main
+    return 0
+  fi
+  if git show-ref --verify --quiet refs/remotes/origin/master 2>/dev/null; then
+    printf '%s\n' master
+    return 0
+  fi
+
+  printf '%s\n' main
 }
 
 was_tracking_origin() {
@@ -49,17 +65,7 @@ is_branch_merged() {
 is_stale_branch() {
   local branch="$1"
   local default_branch="$2"
-  if was_tracking_origin "$branch"; then
-    return 0
-  fi
-  if is_branch_merged "$branch" "$default_branch"; then
-    local merge_base branch_sha
-    merge_base=$(git merge-base "$branch" "origin/$default_branch" 2>/dev/null)
-    branch_sha=$(git rev-parse "$branch" 2>/dev/null)
-    [ "$merge_base" != "$branch_sha" ]
-  else
-    return 1
-  fi
+  was_tracking_origin "$branch" && is_branch_merged "$branch" "$default_branch"
 }
 
 get_stale_worktrees() {
@@ -69,7 +75,6 @@ get_stale_worktrees() {
   local wt_branch=""
   local default_branch
   default_branch=$(get_default_branch)
-  [ -z "$default_branch" ] && default_branch="main"
 
   while IFS= read -r line; do
     if [[ "$line" == "worktree "* ]]; then
@@ -77,14 +82,17 @@ get_stale_worktrees() {
     elif [[ "$line" == "branch "* ]]; then
       wt_branch="${line#branch refs/heads/}"
       if ! is_main_branch "$wt_branch"; then
-        local branch_on_remote
-        branch_on_remote=$(git ls-remote --heads origin "$wt_branch" 2>/dev/null | grep -F "refs/heads/$wt_branch")
+        local ls_exit_code
+        git ls-remote --exit-code --heads origin "$wt_branch" >/dev/null 2>&1
+        ls_exit_code=$?
 
-        if [ -z "$branch_on_remote" ] && is_stale_branch "$wt_branch" "$default_branch"; then
-          if [ -n "$stale" ]; then
-            stale="$stale"$'\n'"$wt_path"$'\t'"$wt_branch"
-          else
-            stale="$wt_path"$'\t'"$wt_branch"
+        if [ "$ls_exit_code" -eq 2 ]; then
+          if is_stale_branch "$wt_branch" "$default_branch"; then
+            if [ -n "$stale" ]; then
+              stale="$stale"$'\n'"$wt_path"$'\t'"$wt_branch"
+            else
+              stale="$wt_path"$'\t'"$wt_branch"
+            fi
           fi
         fi
       fi
