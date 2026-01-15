@@ -29,11 +29,54 @@ is_kickstart_initialized() {
   [ -f "$root/.claude/CLAUDE.md" ]
 }
 
+get_default_branch() {
+  local ref
+  ref=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null) || true
+  if [ -n "$ref" ]; then
+    printf '%s\n' "${ref#refs/remotes/origin/}"
+    return 0
+  fi
+
+  if git show-ref --verify --quiet refs/remotes/origin/main 2>/dev/null; then
+    printf '%s\n' main
+    return 0
+  fi
+  if git show-ref --verify --quiet refs/remotes/origin/master 2>/dev/null; then
+    printf '%s\n' master
+    return 0
+  fi
+
+  printf '%s\n' main
+}
+
+is_branch_merged() {
+  local branch="$1"
+  local default_branch="$2"
+  git merge-base --is-ancestor "$branch" "origin/$default_branch" 2>/dev/null
+}
+
+is_stale_branch() {
+  local branch="$1"
+  local default_branch="$2"
+
+  if ! is_branch_merged "$branch" "$default_branch"; then
+    return 1
+  fi
+
+  local branch_sha merge_base
+  branch_sha=$(git rev-parse "$branch" 2>/dev/null) || return 1
+  merge_base=$(git merge-base "$branch" "origin/$default_branch" 2>/dev/null) || return 1
+
+  [ "$branch_sha" != "$merge_base" ]
+}
+
 get_stale_worktrees() {
   git fetch --prune origin 2>/dev/null
   local stale=""
   local wt_path=""
   local wt_branch=""
+  local default_branch
+  default_branch=$(get_default_branch)
 
   while IFS= read -r line; do
     if [[ "$line" == "worktree "* ]]; then
@@ -41,17 +84,16 @@ get_stale_worktrees() {
     elif [[ "$line" == "branch "* ]]; then
       wt_branch="${line#branch refs/heads/}"
       if ! is_main_branch "$wt_branch"; then
-        local remote
-        remote=$(git config --get "branch.$wt_branch.remote" 2>/dev/null)
-        if [ "$remote" = "origin" ]; then
-          local ls_output
-          if ls_output=$(git ls-remote --heads origin "$wt_branch" 2>/dev/null); then
-            if ! echo "$ls_output" | grep -Fq "refs/heads/$wt_branch"; then
-              if [ -n "$stale" ]; then
-                stale="$stale"$'\n'"$wt_path"$'\t'"$wt_branch"
-              else
-                stale="$wt_path"$'\t'"$wt_branch"
-              fi
+        local ls_exit_code
+        git ls-remote --exit-code --heads origin "$wt_branch" >/dev/null 2>&1
+        ls_exit_code=$?
+
+        if [ "$ls_exit_code" -eq 2 ]; then
+          if is_stale_branch "$wt_branch" "$default_branch"; then
+            if [ -n "$stale" ]; then
+              stale="$stale"$'\n'"$wt_path"$'\t'"$wt_branch"
+            else
+              stale="$wt_path"$'\t'"$wt_branch"
             fi
           fi
         fi
@@ -88,7 +130,7 @@ cleanup_stale_worktrees() {
       else
         local err
         if err=$(git worktree remove "$wt_path" 2>&1); then
-          printf '  Removed: %s (branch %s deleted from remote)\n' "$wt_path" "$wt_branch"
+          printf '  Removed: %s (branch %s merged)\n' "$wt_path" "$wt_branch"
         else
           printf '  Skipped: %s (%s)\n' "$wt_path" "$err"
         fi

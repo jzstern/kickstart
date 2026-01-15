@@ -1,11 +1,11 @@
 ---
 name: cleanup
-description: Remove git worktrees for branches that have been deleted from remote.
+description: Remove git worktrees for merged branches no longer on remote.
 ---
 
 # Cleanup Stale Worktrees
 
-You are cleaning up git worktrees whose branches no longer exist on the remote (typically after a PR was merged and the branch was deleted).
+You are cleaning up git worktrees whose branches have been merged into the default branch and deleted from the remote.
 
 ## Process
 
@@ -17,22 +17,27 @@ git fetch --prune origin
 
 ### Step 2: Find Stale Worktrees
 
-List all worktrees and check if their branches still exist on remote:
+List all worktrees and check if their branches are stale:
 
 ```bash
 git worktree list --porcelain
 ```
 
-For each worktree (except the main one), check if its branch exists on remote:
+For each worktree (except the main one), check if:
+1. The branch no longer exists on remote (exit code 2 from `ls-remote`)
+2. The branch is an ancestor of the default branch (merged)
+3. The branch has commits beyond its merge-base (has actual work)
 
 ```bash
-git ls-remote --heads origin <branch-name>
+git ls-remote --exit-code --heads origin <branch-name>  # exit 2 = not found
+git merge-base --is-ancestor <branch-name> origin/main
+git merge-base <branch-name> origin/main  # compare with branch tip
 ```
 
-A worktree is "stale" if:
-- It tracks a branch (not detached HEAD)
-- The branch was set up to track origin (`git config --get branch.<name>.remote` returns "origin")
-- That branch no longer exists on the remote
+A worktree is "stale" if ALL conditions are met:
+- The branch no longer exists on the remote
+- The branch has been merged into the default branch
+- The branch tip differs from its merge-base with main (has commits that were integrated)
 - It's not the main/master branch
 
 ### Step 3: Remove Stale Worktrees
@@ -64,8 +69,8 @@ Summarize what was cleaned up:
 
 ```
 🧹 Cleaning up 2 stale worktree(s)...
-  Removed: ../myproject-feat-add-login (branch feat/add-login deleted from remote)
-  Removed: ../myproject-fix-typo (branch fix/typo deleted from remote)
+  Removed: ../myproject-feat-add-login (branch feat/add-login merged)
+  Removed: ../myproject-fix-typo (branch fix/typo merged)
 ```
 
 If a worktree cannot be removed:
@@ -77,7 +82,9 @@ If a worktree cannot be removed:
 
 ## Notes
 
-- This skill only removes worktrees for branches deleted from remote
-- Local-only branches are not touched
+- Only removes worktrees for branches that are merged AND deleted from remote
+- Works for branches pushed with or without `-u` flag
+- Branches without commits (at merge-base) are never removed, even if main advances
+- Network errors during `ls-remote` are treated as "keep" (fail-safe)
 - Uncommitted work is never lost (worktrees with changes are skipped)
 - The main worktree is never removed
