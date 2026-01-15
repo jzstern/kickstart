@@ -13,7 +13,7 @@ Run these commands inside a Claude Code session:
 
 ### Companion Plugins
 
-Kickstart installs these official plugins when you run `/init --plugins`:
+Kickstart installs these official plugins when you run `/init`:
 
 | Plugin | Purpose |
 |--------|---------|

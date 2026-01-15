@@ -1,7 +1,7 @@
 ---
 name: init
-description: Initialize project with kickstart config. Use --plugins to install companion plugins, --vercel for Vercel deployment config.
-args: "[--plugins] [--vercel]"
+description: Initialize project with kickstart config. Use --vercel for Vercel deployment config.
+args: "[--vercel]"
 ---
 
 # Initialize Kickstart Configuration
@@ -10,7 +10,6 @@ You are setting up a new project with kickstart configuration. This process is f
 
 ## Flags
 
-- `--plugins` - Install recommended companion plugins after setup
 - `--vercel` - Configure Vercel deployment
 
 ## Process
@@ -157,11 +156,9 @@ Copy `${CLAUDE_PLUGIN_ROOT}/templates/shared/tests/example.spec.ts`.
 mkdir -p .claude/rules
 ```
 
-### Step 7: Install Companion Plugins (if --plugins flag)
+### Step 7: Install Companion Plugins
 
-**Only if the user passed `--plugins`**, install recommended plugins.
-
-The marketplace add command is idempotent (safe to run if already added):
+Install recommended companion plugins from the official marketplace:
 
 ```bash
 claude plugin marketplace add anthropics/claude-code-plugins
@@ -175,7 +172,7 @@ claude plugin install playwright@claude-plugins-official
 claude plugin install security-guidance@claude-plugins-official
 ```
 
-If `--plugins` was not passed, skip this step entirely.
+These commands are idempotent (safe to run if already installed).
 
 ### Step 8: Configure Vercel (if --vercel flag)
 
@@ -250,7 +247,7 @@ Next steps:
 ```text
 Configured:
   Playwright E2E testing (if web project)
-  Companion plugins (if --plugins)
+  Companion plugins (8 official plugins)
   Vercel deployment (if --vercel)
 
 Next steps:
