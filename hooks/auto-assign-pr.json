@@ -9,6 +9,13 @@
 				"command": "(^|&& )gh pr create"
 			},
 			"command": "gh pr edit --add-assignee @me 2>/dev/null || true"
+		},
+		{
+			"event": "PostToolUse",
+			"matcher": {
+				"tool": "mcp__github__create_pull_request"
+			},
+			"command": "gh pr edit --add-assignee @me 2>/dev/null || true"
 		}
 	]
 }
